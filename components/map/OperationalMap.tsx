@@ -16,6 +16,9 @@ interface OperationalMapProps {
  */
 function createMarkerHtml(report: PublicReportItem, isSelected: boolean): string {
   const isSelectedClass = isSelected ? "ring-4 ring-[#172B3A] scale-110 z-50" : "shadow-md";
+  const staleBadge = report.isStale
+    ? `<span class="absolute -top-1 -right-1 w-3.5 h-3.5 bg-amber-500 border border-white rounded-full flex items-center justify-center text-[8px] text-white font-black shadow-xs" title="Perlu konfirmasi ulang (> 7 hari)">!</span>`
+    : "";
 
   if (report.type === "PEMANTAUAN") {
     // Bentuk geometris Belah Ketupat (Diamond) berkontur Navy tanpa latar penuh
@@ -29,6 +32,7 @@ function createMarkerHtml(report: PublicReportItem, isSelected: boolean): string
             </svg>
           </div>
         </div>
+        ${staleBadge}
       </div>
     `;
   }
@@ -69,6 +73,7 @@ function createMarkerHtml(report: PublicReportItem, isSelected: boolean): string
   return `
     <div class="relative flex items-center justify-center w-8 h-8 rounded-full border-2 border-white ${isSelectedClass} transition-transform" style="background-color: ${bgColor};" title="${report.title}">
       ${iconSvg}
+      ${staleBadge}
     </div>
   `;
 }
@@ -85,6 +90,7 @@ export default function OperationalMap({
   // Filter Lokal Peta
   const [categoryFilter, setCategoryFilter] = useState<string>("ALL");
   const [statusFilter, setStatusFilter] = useState<string>("ALL");
+  const [staleFilter, setStaleFilter] = useState<string>("ALL");
 
   // Filter laporan berdasarkan seleksi pengguna
   const filteredReports = useMemo(() => {
@@ -100,9 +106,15 @@ export default function OperationalMap({
           return false;
         }
       }
+      if (staleFilter === "FRESH_ONLY" && rep.isStale) {
+        return false;
+      }
+      if (staleFilter === "STALE_ONLY" && !rep.isStale) {
+        return false;
+      }
       return true;
     });
-  }, [reports, categoryFilter, statusFilter]);
+  }, [reports, categoryFilter, statusFilter, staleFilter]);
 
   // Inisialisasi Peta Leaflet
   useEffect(() => {
@@ -230,6 +242,18 @@ export default function OperationalMap({
             <option value="KEKURANGAN_SEDANG">Kekurangan Sedang (10%–50%)</option>
             <option value="HAMPIR_TERPENUHI">Hampir Terpenuhi (&lt;10%)</option>
             <option value="PEMANTAUAN">Pemantauan Lingkungan</option>
+          </select>
+
+          {/* Pemilih Kondisi Waktu / Basi */}
+          <select
+            value={staleFilter}
+            onChange={(e) => setStaleFilter(e.target.value)}
+            className="text-xs bg-[var(--color-bg)] border border-[var(--color-border)] rounded px-2 py-1 text-[var(--color-text)] font-medium focus:outline-none focus:ring-1 focus:ring-[var(--color-focus)] cursor-pointer"
+            aria-label="Filter berdasarkan kebaruan data"
+          >
+            <option value="ALL">Semua Waktu</option>
+            <option value="FRESH_ONLY">Hanya Terkini (&lt; 7 Hari)</option>
+            <option value="STALE_ONLY">Perlu Konfirmasi (&gt; 7 Hari)</option>
           </select>
 
           {/* Indikator Jumlah Titik Aktif */}

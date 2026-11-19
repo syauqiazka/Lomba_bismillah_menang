@@ -16,6 +16,7 @@ import {
   ExternalLink,
   ShieldCheck,
   ChevronRight,
+  Download,
 } from "lucide-react";
 import type { DashboardData } from "@/lib/dashboard-queries";
 
@@ -32,6 +33,48 @@ export function PublicDashboardView({ data }: PublicDashboardViewProps) {
     return item.itemCategory === selectedCategory;
   });
 
+  function handleExportPoskoCSV() {
+    const lines: string[] = [];
+
+    // Header Meta Posko
+    lines.push(`REKAPITULASI LOGISTIK POSKO KEMANUSIAAN NASIONAL (TRASEC)`);
+    lines.push(`Tanggal Cetak / Ekspor,${new Date().toISOString()}`);
+    lines.push(`Total Laporan Terverifikasi,${metrics.totalVerifiedReports}`);
+    lines.push(`Total Bantuan Terkonfirmasi,${metrics.totalConfirmedAidItems}`);
+    lines.push(`Total Selisih Kekurangan,${metrics.totalRemainingDeficitItems}`);
+    lines.push(``);
+
+    // Seksi 1: Rekap Kebutuhan vs Bantuan Logistik
+    lines.push(`=== RINCIAN REKAPITULASI SELISIH LOGISTIK ===`);
+    lines.push(`Kategori Logistik,Satuan Utama,Total Kebutuhan,Total Terkonfirmasi,Selisih Kekurangan,Persentase Terpenuhi`);
+    for (const item of logisticsStats) {
+      lines.push(
+        `"${item.itemCategory}","${item.primaryUnit}",${item.totalNeed},${item.totalConfirmed},${item.totalDeficit},${item.fulfillmentPercentage}%`
+      );
+    }
+    lines.push(``);
+
+    // Seksi 2: Pemeringkatan Prioritas Wilayah
+    lines.push(`=== INDEKS PRIORITAS WILAYAH DARURAT ===`);
+    lines.push(`Peringkat,Nama Wilayah,Provinsi,Kota/Kabupaten,Laporan Terverifikasi,Tingkat Urgensi,Status Selisih`);
+    regionPriorities.forEach((reg, idx) => {
+      lines.push(
+        `${idx + 1},"${reg.regionName}","${reg.province}","${reg.city}",${reg.verifiedReportsCount},"${reg.highestUrgency}","${reg.highestDeficitStatus}"`
+      );
+    });
+
+    const csvContent = lines.join("\r\n");
+    const blob = new Blob(["\uFEFF" + csvContent], { type: "text/csv;charset=utf-8;" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.setAttribute("download", `rekap-posko-trasec-${new Date().toISOString().slice(0, 10)}.csv`);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+  }
+
   return (
     <div className="min-h-screen bg-[var(--color-bg-base)] text-[var(--color-text-main)] py-6 sm:py-10 px-4 sm:px-6">
       <div className="max-w-6xl mx-auto space-y-8">
@@ -45,14 +88,23 @@ export function PublicDashboardView({ data }: PublicDashboardViewProps) {
               </span>
             </div>
             <h1 className="text-xl sm:text-2xl font-black text-[var(--color-text-main)] tracking-tight">
-              Dashboard Intelijen & Transparansi Bantuan
+              Dashboard Intelijen &amp; Transparansi Bantuan
             </h1>
             <p className="text-xs sm:text-sm text-[var(--color-text-muted)] max-w-2xl">
               Memantau selisih logistik riil antara kebutuhan yang dilaporkan dan bantuan yang telah terkonfirmasi secara terbuka per wilayah administratif.
             </p>
           </div>
 
-          <div className="flex items-center gap-2">
+          <div className="flex flex-wrap items-center gap-2">
+            <button
+              type="button"
+              onClick={handleExportPoskoCSV}
+              className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-md border border-[var(--color-border-subtle)] bg-white text-xs font-bold text-[var(--color-text-main)] hover:bg-gray-50 transition-colors shadow-xs cursor-pointer"
+              title="Unduh format spreadsheet untuk koordinasi posko luring"
+            >
+              <Download className="w-3.5 h-3.5 text-[var(--color-forest-main)]" />
+              <span>Ekspor Rekap Posko (CSV)</span>
+            </button>
             <Link
               href="/"
               className="inline-flex items-center gap-1.5 px-4 py-2 rounded-md bg-[var(--color-forest-main)] text-white text-xs font-bold hover:bg-[var(--color-forest-dark)] transition-colors shadow-xs"

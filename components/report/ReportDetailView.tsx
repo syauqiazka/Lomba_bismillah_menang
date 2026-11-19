@@ -16,6 +16,8 @@ import {
   HeartHandshake,
   Calendar,
   Layers,
+  Printer,
+  Download,
 } from "lucide-react";
 import type { PublicReportDetail } from "@/lib/public-queries";
 import type { SessionData } from "@/lib/session-options";
@@ -40,11 +42,69 @@ export function ReportDetailView({ report, session }: ReportDetailViewProps) {
     minute: "2-digit",
   });
 
+  function handlePrint() {
+    window.print();
+  }
+
+  function handleExportReportCSV() {
+    const lines: string[] = [];
+
+    lines.push(`LEMBAR BRIEFING LAPANGAN POSKO DARURAT (TRASEC)`);
+    lines.push(`ID Laporan,${report.id}`);
+    lines.push(`Judul Laporan,"${report.title.replace(/"/g, '""')}"`);
+    lines.push(`Tipe Laporan,${report.type}`);
+    lines.push(`Kategori,${report.category}`);
+    lines.push(`Tingkat Urgensi,${report.urgency}`);
+    lines.push(`Wilayah Administratif,"${report.region.name}, ${report.region.province}"`);
+    lines.push(`Tingkat Verifikasi,${report.verificationLevel || "Belum Diverifikasi"}`);
+    lines.push(`Skor Kepercayaan,${report.trustScore} / 100`);
+    lines.push(`Waktu Kejadian,"${new Date(report.when).toISOString()}"`);
+    lines.push(``);
+
+    lines.push(`=== KERANGKA LAPANGAN 5W + 1H ===`);
+    lines.push(`What (Kejadian),"${report.what.replace(/"/g, '""')}"`);
+    lines.push(`Who (Pihak Terdampak),"${report.who.replace(/"/g, '""')}"`);
+    lines.push(`Where (Patokan Lokasi),"${report.whereDescription.replace(/"/g, '""')}"`);
+    lines.push(`Why (Latar Belakang),"${report.why.replace(/"/g, '""')}"`);
+    lines.push(`How (Akses Jalur),"${report.how.replace(/"/g, '""')}"`);
+    lines.push(``);
+
+    if (isNeedsType && report.itemDeficits && report.itemDeficits.length > 0) {
+      lines.push(`=== RINCIAN KEBUTUHAN VS BANTUAN TERKONFIRMASI ===`);
+      lines.push(`Kategori Item,Satuan Ukur,Jumlah Kebutuhan,Bantuan Terkonfirmasi,Selisih Kekurangan,Persentase Terpenuhi,Status Selisih`);
+      for (const item of report.itemDeficits) {
+        const statusText = item.deficit === 0 ? "Terpenuhi" : item.percentageFulfilled < 50 ? "Kekurangan Besar" : "Kekurangan Sedang";
+        lines.push(
+          `"${item.itemCategory}","${item.unit}",${item.totalNeed},${item.totalConfirmedAid},${item.deficit},${item.percentageFulfilled}%,"${statusText}"`
+        );
+      }
+      lines.push(``);
+    }
+
+    if (report.coordinatorContact) {
+      lines.push(`=== KONTAK KOORDINATOR LAPANGAN ===`);
+      lines.push(`Nama Koordinator,"${report.coordinatorContact.name}"`);
+      lines.push(`Nomor Telepon,"${report.coordinatorContact.phone || "-"}"`);
+      lines.push(``);
+    }
+
+    const csvContent = lines.join("\r\n");
+    const blob = new Blob(["\uFEFF" + csvContent], { type: "text/csv;charset=utf-8;" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.setAttribute("download", `briefing-posko-${report.id.slice(0, 8)}.csv`);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+  }
+
   return (
     <div className="min-h-screen bg-[var(--color-bg)] pb-16">
       {/* Top Breadcrumb Bar */}
-      <div className="bg-white border-b border-[var(--color-border)] py-3 px-4 sm:px-6">
-        <div className="max-w-6xl mx-auto flex items-center justify-between">
+      <div className="bg-white border-b border-[var(--color-border)] py-3 px-4 sm:px-6 print:hidden">
+        <div className="max-w-6xl mx-auto flex flex-wrap items-center justify-between gap-3">
           <Link
             href="/"
             className="inline-flex items-center gap-1.5 text-xs font-bold text-[var(--color-text-secondary)] hover:text-[var(--color-primary)] transition-colors"
@@ -53,9 +113,26 @@ export function ReportDetailView({ report, session }: ReportDetailViewProps) {
             <span>Kembali ke Peta Operasional</span>
           </Link>
 
-          <span className="text-[11px] font-semibold text-[var(--color-text-muted)]">
-            ID Laporan: <code className="text-gray-700">{report.id}</code>
-          </span>
+          <div className="flex items-center gap-2">
+            <button
+              type="button"
+              onClick={handleExportReportCSV}
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-[var(--color-border)] text-xs font-bold text-[var(--color-text-secondary)] hover:bg-[var(--color-surface-hover)] cursor-pointer"
+              title="Unduh format spreadsheet untuk posko lapangan"
+            >
+              <Download className="w-3.5 h-3.5" />
+              <span className="hidden sm:inline">Unduh CSV Posko</span>
+            </button>
+            <button
+              type="button"
+              onClick={handlePrint}
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-[var(--color-border)] text-xs font-bold text-[var(--color-text-secondary)] hover:bg-[var(--color-surface-hover)] cursor-pointer"
+              title="Cetak lembar briefing posko lapangan"
+            >
+              <Printer className="w-3.5 h-3.5" />
+              <span>Cetak Lembar Posko</span>
+            </button>
+          </div>
         </div>
       </div>
 
@@ -310,7 +387,7 @@ export function ReportDetailView({ report, session }: ReportDetailViewProps) {
           <div className="lg:col-span-5 space-y-6">
             {/* AKSI PENYALURAN BANTUAN */}
             {isNeedsType && (
-              <div className="bg-white border-2 border-[var(--color-primary)] rounded-2xl p-5 shadow-sm space-y-3">
+              <div className="bg-white border-2 border-[var(--color-primary)] rounded-2xl p-5 shadow-sm space-y-3 print:hidden">
                 <div className="flex items-center gap-2 text-[var(--color-primary)]">
                   <HeartHandshake className="w-5 h-5" />
                   <h3 className="text-base font-bold text-[var(--color-text)]">

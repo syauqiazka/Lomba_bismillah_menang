@@ -13,11 +13,19 @@ import {
   Send,
   Loader2,
   Info,
+  Sparkles,
+  Camera,
+  UploadCloud,
+  ShieldCheck,
+  X,
+  Check,
 } from "lucide-react";
 import type { RegionOption } from "@/lib/fallback-data";
 import { createReportAction } from "@/app/actions/report-actions";
 import { generateClientId } from "@/lib/uuid";
 import { enqueueOfflineDraft } from "@/lib/offline-queue";
+import { compressAndSanitizeImage, type CompressionResult } from "@/lib/image-compression";
+import { extract5W1HFromNotesAction, type AIExtractionResult } from "@/app/actions/ai-actions";
 
 type ReportCategoryEnum = "BENCANA" | "LINGKUNGAN" | "LANSIA" | "KESEHATAN" | "PENDIDIKAN" | "SOSIAL_LAINNYA";
 type UrgencyLevelEnum = "DARURAT" | "MENDESAK" | "TERENCANA";
@@ -38,6 +46,13 @@ interface NeedDraft {
 const COMMON_CATEGORIES = ["MAKANAN", "MEDIS", "HUNIAN", "SANITASI", "LOGISTIK", "EVAKUASI", "PENDIDIKAN"];
 const COMMON_UNITS = ["kotak", "karung", "paket", "unit", "liter", "orang", "lembar"];
 
+function formatBytes(bytes: number): string {
+  if (bytes >= 1024 * 1024) {
+    return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
+  }
+  return `${Math.round(bytes / 1024)} KB`;
+}
+
 export function ReportForm({ regions, userSessionName }: ReportFormProps) {
   const [step, setStep] = useState<number>(1);
 
@@ -56,8 +71,19 @@ export function ReportForm({ regions, userSessionName }: ReportFormProps) {
   const [why, setWhy] = useState("");
   const [how, setHow] = useState("");
 
-  // Bukti Lapangan & Kebutuhan
+  // Bukti Lapangan & Unggah Foto (Sanitasi EXIF Klien)
   const [hasPhotoEvidence, setHasPhotoEvidence] = useState(false);
+  const [photoResult, setPhotoResult] = useState<CompressionResult | null>(null);
+  const [photoError, setPhotoError] = useState<string | null>(null);
+  const [isCompressingPhoto, setIsCompressingPhoto] = useState(false);
+
+  // Asisten AI 5W+1H (Modal & State)
+  const [isAiModalOpen, setIsAiModalOpen] = useState(false);
+  const [rawAiNotes, setRawAiNotes] = useState("");
+  const [isExtractingAi, setIsExtractingAi] = useState(false);
+  const [aiResult, setAiResult] = useState<AIExtractionResult | null>(null);
+  const [aiError, setAiError] = useState<string | null>(null);
+
   const [needs, setNeeds] = useState<NeedDraft[]>([
     {
       id: "init-need-1",
@@ -80,6 +106,89 @@ export function ReportForm({ regions, userSessionName }: ReportFormProps) {
   const totalSteps = type === "KEBUTUHAN" ? 4 : 3;
 
   const currentRegion = regions.find((r) => r.id === selectedRegionId) || regions[0];
+
+  async function handlePhotoFileChange(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    setIsCompressingPhoto(true);
+    setPhotoError(null);
+
+    try {
+      const res = await compressAndSanitizeImage(file);
+      setPhotoResult(res);
+      setHasPhotoEvidence(true);
+    } catch (err) {
+      setPhotoError(err instanceof Error ? err.message : "Gagal memproses gambar.");
+    } finally {
+      setIsCompressingPhoto(false);
+      e.target.value = "";
+    }
+  }
+
+  function handleRemovePhoto() {
+    setPhotoResult(null);
+    setHasPhotoEvidence(false);
+    setPhotoError(null);
+  }
+
+  async function handleExtractAi() {
+    if (!rawAiNotes || rawAiNotes.trim().length < 15) {
+      setAiError("Catatan lapangan minimal 15 karakter. Tuliskan ringkasan situasi lapangan.");
+      return;
+    }
+
+    setIsExtractingAi(true);
+    setAiError(null);
+
+    try {
+      const res = await extract5W1HFromNotesAction(rawAiNotes);
+      if (!res.ok) {
+        setAiError(res.message);
+      } else {
+        setAiResult(res.data);
+      }
+    } catch {
+      setAiError("Gagal menghubungi server untuk merapikan catatan lapangan.");
+    } finally {
+      setIsExtractingAi(false);
+    }
+  }
+
+  function handleApplyAiResult() {
+    if (!aiResult) return;
+
+    setTitle(aiResult.title);
+    setType(aiResult.type);
+    setCategory(aiResult.category);
+    setUrgency(aiResult.urgency);
+    setWhat(aiResult.what);
+    setWho(aiResult.who);
+    setWhereDescription(aiResult.whereDescription);
+    if (aiResult.when) {
+      setWhen(aiResult.when);
+    }
+    setWhy(aiResult.why);
+    setHow(aiResult.how);
+
+    if (aiResult.type === "KEBUTUHAN" && aiResult.suggestedNeeds && aiResult.suggestedNeeds.length > 0) {
+      setNeeds(
+        aiResult.suggestedNeeds.map((item, idx) => ({
+          id: `ai-need-${idx + 1}-${generateClientId()}`,
+          itemCategory: item.itemCategory,
+          unit: item.unit,
+          qty: item.qty,
+          kind: item.kind,
+        }))
+      );
+    }
+
+    setIsAiModalOpen(false);
+    setAiResult(null);
+    setRawAiNotes("");
+    setDraftSavedMessage("Format 5W+1H berhasil dirapikan dan diterapkan ke formulir pelaporan.");
+    setTimeout(() => setDraftSavedMessage(null), 4000);
+  }
 
   function validateStep(currentStep: number): boolean {
     setErrorMessage(null);
@@ -524,6 +633,34 @@ export function ReportForm({ regions, userSessionName }: ReportFormProps) {
         {/* ======================================================== */}
         {step === 2 && (
           <div className="space-y-4">
+            {/* Banner Pembantu AI 5W+1H */}
+            <div className="p-3.5 rounded-xl bg-gradient-to-r from-emerald-50 via-teal-50 to-blue-50 border border-emerald-200 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 shadow-xs">
+              <div className="flex items-start gap-2.5">
+                <div className="p-2 rounded-lg bg-[var(--color-primary)] text-white shrink-0 mt-0.5">
+                  <Sparkles className="w-4 h-4" />
+                </div>
+                <div>
+                  <strong className="block text-xs text-[var(--color-text)]">
+                    Punya Catatan Mentah WhatsApp atau Rekaman Lapangan?
+                  </strong>
+                  <span className="text-[11px] text-[var(--color-text-secondary)]">
+                    Gunakan Asisten Lapangan untuk menstrukturkan cerita bebas menjadi kerangka 5W+1H otomatis.
+                  </span>
+                </div>
+              </div>
+              <button
+                type="button"
+                onClick={() => {
+                  setIsAiModalOpen(true);
+                  setAiError(null);
+                }}
+                className="shrink-0 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[var(--color-primary)] text-white text-xs font-bold hover:bg-[var(--color-primary-hover)] cursor-pointer shadow-xs transition-colors"
+              >
+                <Sparkles className="w-3.5 h-3.5" />
+                <span>Bantu Rapikan Catatan (AI)</span>
+              </button>
+            </div>
+
             <div className="p-3 bg-[var(--color-bg)] border border-[var(--color-border)] rounded-xl text-xs text-[var(--color-text-secondary)] flex items-start gap-2">
               <Info className="w-4 h-4 shrink-0 text-[var(--color-primary)] mt-0.5" />
               <span>
@@ -768,23 +905,121 @@ export function ReportForm({ regions, userSessionName }: ReportFormProps) {
               </div>
             </div>
 
-            {/* Checkbox Bukti Lapangan (+30 Skor Kepercayaan) */}
-            <div className="p-3.5 rounded-xl border border-[var(--color-border)] bg-white flex items-start gap-3">
-              <input
-                id="photo-evidence"
-                type="checkbox"
-                checked={hasPhotoEvidence}
-                onChange={(e) => setHasPhotoEvidence(e.target.checked)}
-                className="mt-0.5 w-4 h-4 rounded text-[var(--color-primary)] border-gray-300 focus:ring-[var(--color-focus)] cursor-pointer"
-              />
-              <label htmlFor="photo-evidence" className="text-xs cursor-pointer">
-                <strong className="text-[var(--color-text)] block">
-                  Foto Bukti Lapangan Terverifikasi (+30 Poin Kepercayaan)
-                </strong>
-                <span className="text-[11px] text-[var(--color-text-secondary)]">
-                  Konfirmasi bahwa laporan ini didukung dokumentasi foto lapangan langsung dengan koordinat geolokasi valid.
-                </span>
-              </label>
+            {/* Kartu Unggah & Sanitasi Foto Lapangan */}
+            <div className="p-4 rounded-xl border border-[var(--color-border)] bg-white space-y-3">
+              <div className="flex items-center justify-between">
+                <div>
+                  <h4 className="text-xs font-bold text-[var(--color-text)] flex items-center gap-1.5">
+                    <Camera className="w-4 h-4 text-[var(--color-primary)]" />
+                    <span>Dokumentasi Foto Lapangan (+30 Skor Kepercayaan)</span>
+                  </h4>
+                  <span className="text-[11px] text-[var(--color-text-secondary)]">
+                    Foto otomatis dikompresi ringan &amp; disterilkan dari metadata privasi EXIF/GPS di browser.
+                  </span>
+                </div>
+              </div>
+
+              {photoError && (
+                <div className="p-2.5 rounded-lg bg-red-50 border border-red-200 text-xs text-red-700 font-medium flex items-center gap-2">
+                  <AlertCircle className="w-4 h-4 shrink-0 text-red-600" />
+                  <span>{photoError}</span>
+                </div>
+              )}
+
+              {/* Area Tampilan Foto yang Sudah Diunggah & Disterilkan */}
+              {photoResult ? (
+                <div className="p-3 rounded-lg border border-emerald-200 bg-emerald-50/50 space-y-2.5">
+                  <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+                    <div className="flex items-center gap-3">
+                      {/* Thumbnail Pratinjau */}
+                      <div className="w-16 h-16 rounded-lg overflow-hidden border border-emerald-300 shrink-0 bg-gray-100 flex items-center justify-center">
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                        <img
+                          src={photoResult.dataUrl}
+                          alt="Pratinjau Bukti Lapangan"
+                          className="w-full h-full object-cover"
+                        />
+                      </div>
+                      <div className="text-xs space-y-0.5">
+                        <strong className="block text-emerald-950 font-bold">
+                          Foto Lapangan Siap Dilampirkan
+                        </strong>
+                        <span className="text-[11px] text-emerald-800 block">
+                          Resolusi: {photoResult.width} &times; {photoResult.height}px &bull; Ukuran: {formatBytes(photoResult.compressedSizeBytes)}
+                          {" "}(Hemat {Math.max(0, Math.round((1 - photoResult.compressedSizeBytes / photoResult.originalSizeBytes) * 100))}%)
+                        </span>
+                        <span className="text-[10px] text-emerald-700 font-semibold inline-flex items-center gap-1">
+                          <ShieldCheck className="w-3 h-3 text-emerald-600" />
+                          Metadata EXIF &amp; GPS disanitasi demi privasi warga
+                        </span>
+                      </div>
+                    </div>
+
+                    <button
+                      type="button"
+                      onClick={handleRemovePhoto}
+                      className="px-2.5 py-1.5 rounded-md border border-red-300 text-red-700 hover:bg-red-100 text-xs font-semibold cursor-pointer shrink-0"
+                    >
+                      Hapus Foto
+                    </button>
+                  </div>
+                </div>
+              ) : (
+                /* Area Dropzone / Picker */
+                <div>
+                  <label
+                    htmlFor="field-photo-input"
+                    className={`border-2 border-dashed border-[var(--color-border-strong)] hover:border-[var(--color-primary)] rounded-xl p-4 flex flex-col items-center justify-center text-center cursor-pointer transition-colors bg-[var(--color-bg)]/50 ${
+                      isCompressingPhoto ? "opacity-50 pointer-events-none" : ""
+                    }`}
+                  >
+                    <input
+                      id="field-photo-input"
+                      type="file"
+                      accept="image/jpeg,image/png,image/webp"
+                      onChange={handlePhotoFileChange}
+                      className="sr-only"
+                    />
+                    {isCompressingPhoto ? (
+                      <div className="flex items-center gap-2 py-2">
+                        <Loader2 className="w-5 h-5 text-[var(--color-primary)] animate-spin" />
+                        <span className="text-xs font-semibold text-[var(--color-text)]">
+                          Mengompresi dan mensterilkan EXIF gambar...
+                        </span>
+                      </div>
+                    ) : (
+                      <>
+                        <UploadCloud className="w-6 h-6 text-[var(--color-primary)] mb-1" />
+                        <span className="text-xs font-bold text-[var(--color-text)]">
+                          Pilih atau Ambil Foto dari Kamera
+                        </span>
+                        <span className="text-[10px] text-[var(--color-text-secondary)] mt-0.5">
+                          Format JPG, PNG, atau WebP (Maks. 10 MB mentah &bull; Dikompresi otomatis ke resolusi darurat)
+                        </span>
+                      </>
+                    )}
+                  </label>
+                </div>
+              )}
+
+              {/* Checkbox Konfirmasi Manual sebagai Alternatif */}
+              <div className="pt-2 border-t border-gray-100 flex items-start gap-2.5">
+                <input
+                  id="photo-evidence"
+                  type="checkbox"
+                  checked={hasPhotoEvidence}
+                  onChange={(e) => setHasPhotoEvidence(e.target.checked)}
+                  className="mt-0.5 w-4 h-4 rounded text-[var(--color-primary)] border-gray-300 focus:ring-[var(--color-focus)] cursor-pointer"
+                />
+                <label htmlFor="photo-evidence" className="text-xs cursor-pointer">
+                  <span className="font-semibold text-[var(--color-text)]">
+                    Konfirmasi laporan ini didukung dokumentasi foto lapangan langsung
+                  </span>
+                  <span className="text-[10px] text-[var(--color-text-muted)] block">
+                    (Memberikan verifikator kepastian riil untuk menetapkan persetujuan resmi).
+                  </span>
+                </label>
+              </div>
             </div>
           </div>
         )}
@@ -839,6 +1074,175 @@ export function ReportForm({ regions, userSessionName }: ReportFormProps) {
           </div>
         </div>
       </form>
+
+      {/* ======================================================== */}
+      {/* MODAL ASISTEN AI: Rapikan Catatan Lapangan 5W+1H         */}
+      {/* ======================================================== */}
+      {isAiModalOpen && (
+        <div
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="ai-modal-title"
+          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs animate-in fade-in"
+        >
+          <div className="bg-white border border-[var(--color-border)] rounded-2xl w-full max-w-2xl max-h-[90vh] flex flex-col shadow-xl overflow-hidden">
+            {/* Header Modal */}
+            <div className="p-4 sm:p-5 border-b border-[var(--color-border)] flex items-center justify-between bg-gradient-to-r from-emerald-50 to-teal-50">
+              <div className="flex items-center gap-2.5">
+                <div className="p-2 rounded-xl bg-[var(--color-primary)] text-white shadow-xs">
+                  <Sparkles className="w-5 h-5" />
+                </div>
+                <div>
+                  <h3 id="ai-modal-title" className="text-sm font-bold text-[var(--color-text)]">
+                    Asisten Lapangan: Rapikan Catatan ke 5W+1H
+                  </h3>
+                  <span className="text-[11px] text-[var(--color-text-secondary)]">
+                    Mengekstrak pesan WhatsApp atau catatan suara bebas menjadi laporan terstruktur.
+                  </span>
+                </div>
+              </div>
+
+              <button
+                type="button"
+                onClick={() => setIsAiModalOpen(false)}
+                className="p-1.5 rounded-lg text-gray-500 hover:text-gray-900 hover:bg-gray-100 cursor-pointer"
+                aria-label="Tutup modal"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            {/* Konten Scrollable */}
+            <div className="p-5 sm:p-6 overflow-y-auto space-y-4 flex-1">
+              <div className="p-3 rounded-lg bg-[var(--color-bg)] border border-[var(--color-border)] text-xs text-[var(--color-text-secondary)] leading-relaxed">
+                <strong>Ketentuan Privasi &amp; Kontrol:</strong> Pemrosesan berjalan di server terisolasi. AI tidak pernah memutuskan status laporan atau mengubah fakta. Anda dapat meninjau hasil sebelum menerapkannya ke formulir.
+              </div>
+
+              <div>
+                <label htmlFor="ai-raw-notes" className="block text-xs font-bold text-[var(--color-text)] mb-1">
+                  Tempel Catatan Lapangan / Pesan Singkat Relawan <span className="text-red-500">*</span>
+                </label>
+                <textarea
+                  id="ai-raw-notes"
+                  rows={4}
+                  placeholder="Contoh: 'Banjir luapan sungai di desa sukamaju setinggi 1 meter merendam 35 rumah warga. Warga mengungsi di balai desa membutuhkan makanan siap saji 100 bungkus, selimut 40 buah, dan obat-obatan. Akses hanya bisa perahu karet atau jalan kaki...'"
+                  value={rawAiNotes}
+                  onChange={(e) => setRawAiNotes(e.target.value)}
+                  className="w-full text-xs bg-[var(--color-bg)] border border-[var(--color-border-strong)] rounded-lg p-3 text-[var(--color-text)] focus:outline-none focus:ring-2 focus:ring-[var(--color-focus)]"
+                />
+                <span className="text-[10px] text-[var(--color-text-muted)] block mt-1">
+                  Minimal 15 karakter teks catatan bebas.
+                </span>
+              </div>
+
+              {aiError && (
+                <div className="p-3 rounded-lg bg-red-50 border border-red-200 text-xs text-red-700 font-medium flex items-start gap-2">
+                  <AlertCircle className="w-4 h-4 shrink-0 text-red-600 mt-0.5" />
+                  <span>{aiError}</span>
+                </div>
+              )}
+
+              {/* Pratinjau Hasil Ekstraksi */}
+              {aiResult && (
+                <div className="p-4 rounded-xl border border-emerald-300 bg-emerald-50/40 space-y-3">
+                  <div className="flex items-center justify-between pb-2 border-b border-emerald-200">
+                    <span className="text-xs font-extrabold text-emerald-950 flex items-center gap-1.5">
+                      <Check className="w-4 h-4 text-emerald-600" />
+                      Hasil Analisis Struktur 5W+1H
+                    </span>
+                    <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-emerald-200 text-emerald-900 uppercase">
+                      {aiResult.category} &bull; {aiResult.urgency}
+                    </span>
+                  </div>
+
+                  <div className="text-xs space-y-2 text-gray-800">
+                    <div>
+                      <strong className="text-[var(--color-text)]">Judul Usulan:</strong> {aiResult.title}
+                    </div>
+                    <div>
+                      <strong className="text-[var(--color-text)]">What:</strong> {aiResult.what}
+                    </div>
+                    <div>
+                      <strong className="text-[var(--color-text)]">Who:</strong> {aiResult.who}
+                    </div>
+                    <div>
+                      <strong className="text-[var(--color-text)]">Where:</strong> {aiResult.whereDescription}
+                    </div>
+                    <div>
+                      <strong className="text-[var(--color-text)]">Why:</strong> {aiResult.why}
+                    </div>
+                    <div>
+                      <strong className="text-[var(--color-text)]">How:</strong> {aiResult.how}
+                    </div>
+                    {aiResult.suggestedNeeds.length > 0 && (
+                      <div className="pt-1">
+                        <strong className="text-[var(--color-text)] block mb-1">
+                          Rekomendasi Item Kebutuhan Logistik:
+                        </strong>
+                        <ul className="list-disc pl-5 space-y-0.5 text-[11px]">
+                          {aiResult.suggestedNeeds.map((need, idx) => (
+                            <li key={idx}>
+                              <strong>{need.itemCategory}</strong>: {need.qty} {need.unit} ({need.kind})
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* Footer Modal */}
+            <div className="p-4 sm:p-5 border-t border-[var(--color-border)] flex items-center justify-between gap-3 bg-[var(--color-bg)]">
+              <button
+                type="button"
+                onClick={() => {
+                  setAiResult(null);
+                  setRawAiNotes("");
+                  setAiError(null);
+                  setIsAiModalOpen(false);
+                }}
+                className="px-4 py-2 rounded-lg border border-[var(--color-border)] text-xs font-semibold text-[var(--color-text)] hover:bg-gray-100 cursor-pointer"
+              >
+                Tutup
+              </button>
+
+              <div className="flex items-center gap-2">
+                {!aiResult ? (
+                  <button
+                    type="button"
+                    onClick={handleExtractAi}
+                    disabled={isExtractingAi || rawAiNotes.trim().length < 15}
+                    className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg bg-[var(--color-primary)] hover:bg-[var(--color-primary-hover)] text-white text-xs font-bold transition-colors disabled:opacity-50 cursor-pointer shadow-xs"
+                  >
+                    {isExtractingAi ? (
+                      <>
+                        <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                        <span>Menganalisis Catatan...</span>
+                      </>
+                    ) : (
+                      <>
+                        <Sparkles className="w-3.5 h-3.5" />
+                        <span>Ekstrak Kerangka 5W+1H</span>
+                      </>
+                    )}
+                  </button>
+                ) : (
+                  <button
+                    type="button"
+                    onClick={handleApplyAiResult}
+                    className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg bg-emerald-700 hover:bg-emerald-800 text-white text-xs font-bold transition-colors cursor-pointer shadow-xs"
+                  >
+                    <Check className="w-4 h-4" />
+                    <span>Terapkan ke Formulir Pelaporan</span>
+                  </button>
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
