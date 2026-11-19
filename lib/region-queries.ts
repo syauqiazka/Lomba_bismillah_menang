@@ -35,3 +35,4 @@ export async function getAvailableRegions(): Promise<RegionOption[]> {
 
   return FALLBACK_REGIONS;
 }
+

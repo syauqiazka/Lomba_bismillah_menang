@@ -185,3 +185,56 @@ export const registerSchema = z.object({
 
 export type RegisterInput = z.infer<typeof registerSchema>;
 
+/**
+ * Skema validasi tinjauan laporan kemanusiaan oleh verifikator.
+ */
+export const reviewReportSchema = z
+  .object({
+    reportId: z.string().trim().min(1, { message: "Report ID wajib disertakan" }),
+    decision: z.enum(["APPROVE", "REJECT"], {
+      message: "Keputusan harus APPROVE atau REJECT",
+    }),
+    note: z.string().trim().optional(),
+  })
+  .refine(
+    (data) => {
+      if (data.decision === "REJECT") {
+        return Boolean(data.note && data.note.trim().length >= 10);
+      }
+      return true;
+    },
+    {
+      message: "Catatan alasan penolakan/permintaan revisi wajib diisi minimal 10 karakter",
+      path: ["note"],
+    }
+  );
+
+export type ReviewReportInput = z.infer<typeof reviewReportSchema>;
+
+/**
+ * Skema validasi tinjauan catatan bantuan oleh verifikator.
+ */
+export const reviewAidSchema = z
+  .object({
+    aidId: z.string().trim().min(1, { message: "Aid ID wajib disertakan" }),
+    decision: z.enum(["CONFIRM", "REJECT"], {
+      message: "Keputusan harus CONFIRM atau REJECT",
+    }),
+    note: z.string().trim().optional(),
+  })
+  .refine(
+    (data) => {
+      if (data.decision === "REJECT") {
+        return Boolean(data.note && data.note.trim().length >= 10);
+      }
+      return true;
+    },
+    {
+      message: "Catatan alasan penolakan bantuan wajib diisi minimal 10 karakter",
+      path: ["note"],
+    }
+  );
+
+export type ReviewAidInput = z.infer<typeof reviewAidSchema>;
+
+

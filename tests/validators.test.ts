@@ -5,6 +5,8 @@ import {
   aidItemSchema,
   verificationNoteSchema,
   createReportSchema,
+  reviewReportSchema,
+  reviewAidSchema,
 } from "@/lib/validators";
 
 describe("Domain Logic: Skema Validasi Zod (validators.ts)", () => {
@@ -128,5 +130,53 @@ describe("Domain Logic: Skema Validasi Zod (validators.ts)", () => {
       expect(invalidPantau.success).toBe(false);
     });
   });
+
+  describe("reviewReportSchema & reviewAidSchema (Validasi Keputusan Verifikator)", () => {
+    it("keputusan APPROVE laporan tidak wajib memiliki catatan", () => {
+      const result = reviewReportSchema.safeParse({
+        reportId: "rep-123",
+        decision: "APPROVE",
+      });
+      expect(result.success).toBe(true);
+    });
+
+    it("keputusan REJECT laporan wajib memiliki catatan minimal 10 karakter", () => {
+      const invalidNoNote = reviewReportSchema.safeParse({
+        reportId: "rep-123",
+        decision: "REJECT",
+      });
+      expect(invalidNoNote.success).toBe(false);
+
+      const invalidShortNote = reviewReportSchema.safeParse({
+        reportId: "rep-123",
+        decision: "REJECT",
+        note: "Kurang",
+      });
+      expect(invalidShortNote.success).toBe(false);
+
+      const validNote = reviewReportSchema.safeParse({
+        reportId: "rep-123",
+        decision: "REJECT",
+        note: "Mohon sertakan bukti foto dan estimasi jumlah warga terdampak.",
+      });
+      expect(validNote.success).toBe(true);
+    });
+
+    it("keputusan REJECT bantuan wajib memiliki catatan minimal 10 karakter", () => {
+      const invalid = reviewAidSchema.safeParse({
+        aidId: "aid-123",
+        decision: "REJECT",
+        note: "Batal",
+      });
+      expect(invalid.success).toBe(false);
+
+      const valid = reviewAidSchema.safeParse({
+        aidId: "aid-123",
+        decision: "CONFIRM",
+      });
+      expect(valid.success).toBe(true);
+    });
+  });
 });
+
 
