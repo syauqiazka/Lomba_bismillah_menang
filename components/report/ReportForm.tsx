@@ -17,6 +17,7 @@ import {
 import type { RegionOption } from "@/lib/fallback-data";
 import { createReportAction } from "@/app/actions/report-actions";
 import { generateClientId } from "@/lib/uuid";
+import { enqueueOfflineDraft } from "@/lib/offline-queue";
 
 type ReportCategoryEnum = "BENCANA" | "LINGKUNGAN" | "LANSIA" | "KESEHATAN" | "PENDIDIKAN" | "SOSIAL_LAINNYA";
 type UrgencyLevelEnum = "DARURAT" | "MENDESAK" | "TERENCANA";
@@ -177,29 +178,37 @@ export function ReportForm({ regions, userSessionName }: ReportFormProps) {
   }
 
   function handleSaveDraft() {
-    const draftPayload = {
-      title,
-      type,
-      category,
-      urgency,
-      regionId: selectedRegionId,
-      what,
-      who,
-      whereDescription,
-      when,
-      why,
-      how,
-      needs,
-      hasPhotoEvidence,
-      savedAt: new Date().toISOString(),
-    };
-
     try {
-      window.localStorage.setItem(
-        `trasec_draft_${selectedRegionId || "new"}`,
-        JSON.stringify(draftPayload)
-      );
-      setDraftSavedMessage("Draf berhasil disimpan secara lokal di perangkat Anda (siap diakses luring).");
+      enqueueOfflineDraft({
+        clientId: generateClientId(),
+        userId: userSessionName || "current-user",
+        userName: userSessionName || "Relawan Lapangan",
+        type: "REPORT",
+        reportData: {
+          title: title.trim() || "Draf Laporan Kemanusiaan",
+          type,
+          category,
+          urgency,
+          regionId: selectedRegionId,
+          regionName: currentRegion.name,
+          latitude: currentRegion.latitude,
+          longitude: currentRegion.longitude,
+          what: what.trim() || "(Belum diisi)",
+          who: who.trim() || "(Belum diisi)",
+          whereDescription: whereDescription.trim() || "(Belum diisi)",
+          when: new Date(when).toISOString(),
+          why: why.trim() || "(Belum diisi)",
+          how: how.trim() || "(Belum diisi)",
+          hasPhotoEvidence,
+          needs: needs.map((n) => ({
+            itemCategory: n.itemCategory.trim(),
+            unit: n.unit.trim(),
+            qty: Number(n.qty) || 1,
+            kind: n.kind,
+          })),
+        },
+      });
+      setDraftSavedMessage("Draf berhasil disimpan ke antrean luring perangkat (buka /antrean untuk mengelola).");
       setTimeout(() => setDraftSavedMessage(null), 4000);
     } catch {
       setErrorMessage("Penyimpanan lokal perangkat penuh atau tidak diizinkan.");
@@ -254,7 +263,26 @@ export function ReportForm({ regions, userSessionName }: ReportFormProps) {
         setSuccessInfo({ id: res.data.id, message: res.data.message });
       }
     } catch {
-      setErrorMessage("Terjadi galat koneksi jaringan saat mengajukan laporan.");
+      // Simpan otomatis ke antrean offline jika jaringan gagal
+      try {
+        enqueueOfflineDraft({
+          clientId,
+          userId: userSessionName || "current-user",
+          userName: userSessionName || "Relawan Lapangan",
+          type: "REPORT",
+          reportData: {
+            ...payload,
+            regionName: currentRegion.name,
+          },
+        });
+        setIsSuccess(true);
+        setSuccessInfo({
+          id: clientId,
+          message: "Koneksi terputus. Laporan berhasil diamankan di Antrean Pengiriman Luring (/antrean) dan siap disinkronkan saat sinyal kembali.",
+        });
+      } catch {
+        setErrorMessage("Terjadi galat koneksi jaringan dan penyimpanan lokal tidak dapat diakses.");
+      }
     } finally {
       setIsSubmitting(false);
     }

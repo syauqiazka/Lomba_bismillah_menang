@@ -115,6 +115,13 @@ export function Navbar({
                 <User className="w-3 h-3 text-[var(--color-text-muted)]" />
                 <span className="max-w-[100px] truncate">{session?.name}</span>
               </span>
+              <Link
+                href="/antrean"
+                className="px-2 py-1 text-[11px] font-bold rounded bg-slate-100 hover:bg-slate-200 text-[var(--color-text)] transition-colors"
+                title="Antrean Pengiriman Luring"
+              >
+                Antrean
+              </Link>
               {session?.role === "VERIFIKATOR" && (
                 <Link
                   href="/verifikasi"
