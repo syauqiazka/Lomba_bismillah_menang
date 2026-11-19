@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { HelpCircle, PlusCircle, List, PhoneCall, User, LogIn } from "lucide-react";
+import { HelpCircle, PlusCircle, List, PhoneCall, User, LogIn, BarChart3 } from "lucide-react";
 import type { SessionData } from "@/lib/session-options";
 
 interface NavbarProps {
@@ -85,6 +85,16 @@ export function Navbar({
               <span className="hidden md:inline">Daftar Teks</span>
             </button>
           )}
+
+          {/* Tautan Dashboard Statistik Publik */}
+          <Link
+            href="/dashboard"
+            className="inline-flex items-center gap-1.5 px-2.5 py-1.5 text-xs font-semibold rounded text-[var(--color-text-secondary)] hover:text-[var(--color-text)] hover:bg-[var(--color-surface-hover)] border border-[var(--color-border)] focus:outline-none focus:ring-2 focus:ring-[var(--color-focus)] transition-colors"
+            title="Dashboard Statistik Agregat Nasional"
+          >
+            <BarChart3 className="w-3.5 h-3.5 text-[var(--color-primary)]" />
+            <span className="hidden sm:inline">Statistik</span>
+          </Link>
 
           {/* Tautan Kontak Darurat */}
           <Link
