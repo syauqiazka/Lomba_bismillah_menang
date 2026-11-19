@@ -1,12 +1,51 @@
-export default function HomePage() {
+import { getPublicMapReports, getPublicAggregates } from "@/lib/public-queries";
+import { getSession } from "@/lib/session";
+import { RootOperationalView } from "@/components/map/RootOperationalView";
+import { FALLBACK_REPORTS, FALLBACK_AGGREGATES } from "@/lib/fallback-data";
+
+export default async function HomePage() {
+  let reports = FALLBACK_REPORTS;
+  let aggregates = FALLBACK_AGGREGATES;
+  let session = null;
+
+  const isPlaceholderDb =
+    !process.env.DATABASE_URL ||
+    process.env.DATABASE_URL.includes("ep-sample");
+
+  try {
+    if (!isPlaceholderDb) {
+      const [dbReports, dbAggregates] = await Promise.all([
+        getPublicMapReports().catch(() => null),
+        getPublicAggregates().catch(() => null),
+      ]);
+
+      if (dbReports && dbReports.length > 0) {
+        reports = dbReports;
+      }
+      if (dbAggregates) {
+        aggregates = dbAggregates;
+      }
+    }
+
+    const currentSession = await getSession().catch(() => null);
+    if (currentSession && currentSession.userId) {
+      session = {
+        userId: currentSession.userId,
+        name: currentSession.name,
+        email: currentSession.email,
+        role: currentSession.role,
+        isVerifiedVolunteer: currentSession.isVerifiedVolunteer,
+      };
+    }
+  } catch (err) {
+    console.warn("Menggunakan data demonstrasi kemanusiaan fallback:", err);
+  }
+
   return (
-    <main className="relative w-full h-screen flex flex-col items-center justify-center p-6 text-center">
-      <h1 className="text-2xl font-bold text-[var(--color-text)] mb-2">
-        Humanitarian Intelligence Platform
-      </h1>
-      <p className="text-[var(--color-text-secondary)] max-w-md text-sm">
-        Sistem transparansi kebutuhan logistik dan bantuan relawan di Indonesia.
-      </p>
-    </main>
+    <RootOperationalView
+      initialReports={reports}
+      aggregates={aggregates}
+      session={session}
+    />
   );
 }

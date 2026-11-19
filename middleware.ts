@@ -31,3 +31,4 @@ export async function middleware(request: NextRequest) {
 export const config = {
   matcher: ["/lapor/:path*", "/verifikasi/:path*", "/admin/:path*"],
 };
+

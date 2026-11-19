@@ -362,3 +362,4 @@ export async function getPublicEmergencyContacts(regionId?: string) {
     orderBy: [{ scope: "asc" }, { name: "asc" }],
   });
 }
+
