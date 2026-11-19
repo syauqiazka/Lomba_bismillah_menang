@@ -485,3 +485,4 @@ export function ReportDetailView({ report, session }: ReportDetailViewProps) {
     </div>
   );
 }
+

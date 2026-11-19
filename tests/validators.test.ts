@@ -4,6 +4,7 @@ import {
   needItemSchema,
   aidItemSchema,
   verificationNoteSchema,
+  createReportSchema,
 } from "@/lib/validators";
 
 describe("Domain Logic: Skema Validasi Zod (validators.ts)", () => {
@@ -71,6 +72,61 @@ describe("Domain Logic: Skema Validasi Zod (validators.ts)", () => {
   it("skema alasan verifikasi (note) wajib memiliki panjang minimal 10 karakter", () => {
     expect(verificationNoteSchema.safeParse({ note: "Deskripsi 5W1H sudah lengkap dan valid." }).success).toBe(true);
     expect(verificationNoteSchema.safeParse({ note: "Pendek" }).success).toBe(false);
+  });
+
+  describe("createReportSchema (Aturan Komposit KEBUTUHAN vs PEMANTAUAN)", () => {
+    const basePayload = {
+      clientId: "client-test-1",
+      title: "Laporan Gempa Susulan",
+      category: "BENCANA" as const,
+      urgency: "DARURAT" as const,
+      regionId: "reg-1",
+      latitude: -6.8,
+      longitude: 107.1,
+      what: "Gempa susulan berkekuatan M 4.2 menyebabkan warga mengungsi.",
+      who: "85 KK warga RW 04",
+      whereDescription: "Lapangan Balai Desa Cibulakan",
+      when: new Date().toISOString(),
+      why: "Tenda dan selimut sangat mendesak karena hujan.",
+      how: "Jalur darat dapat dilalui mobil logistik.",
+      hasPhotoEvidence: true,
+    };
+
+    it("tipe KEBUTUHAN wajib memiliki minimal 1 item kebutuhan", () => {
+      // Tanpa item kebutuhan -> gagal
+      const invalidNeeds = createReportSchema.safeParse({
+        ...basePayload,
+        type: "KEBUTUHAN" as const,
+        needs: [],
+      });
+      expect(invalidNeeds.success).toBe(false);
+
+      // Dengan item kebutuhan -> sukses
+      const validNeeds = createReportSchema.safeParse({
+        ...basePayload,
+        type: "KEBUTUHAN" as const,
+        needs: [{ itemCategory: "HUNIAN", unit: "unit", qty: 20, kind: "BARANG" as const }],
+      });
+      expect(validNeeds.success).toBe(true);
+    });
+
+    it("tipe PEMANTAUAN dilarang memiliki item kebutuhan logistik", () => {
+      // Tanpa item kebutuhan -> sukses
+      const validPantau = createReportSchema.safeParse({
+        ...basePayload,
+        type: "PEMANTAUAN" as const,
+        needs: [],
+      });
+      expect(validPantau.success).toBe(true);
+
+      // Dengan item kebutuhan -> gagal
+      const invalidPantau = createReportSchema.safeParse({
+        ...basePayload,
+        type: "PEMANTAUAN" as const,
+        needs: [{ itemCategory: "MAKANAN", unit: "paket", qty: 10, kind: "BARANG" as const }],
+      });
+      expect(invalidPantau.success).toBe(false);
+    });
   });
 });
 

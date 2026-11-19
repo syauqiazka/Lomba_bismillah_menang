@@ -1,6 +1,34 @@
 import type { PublicReportItem, PublicReportDetail, PublicAggregates } from "@/lib/public-queries";
 import type { SessionData } from "@/lib/session-options";
 
+export interface RegionOption {
+  id: string;
+  name: string;
+  province: string;
+  city: string;
+  latitude: number;
+  longitude: number;
+}
+
+export const FALLBACK_REGIONS: RegionOption[] = [
+  { id: "reg-jkt-pusat", name: "Jakarta Pusat", province: "DKI Jakarta", city: "Jakarta Pusat", latitude: -6.1805, longitude: 106.8284 },
+  { id: "reg-jkt-selatan", name: "Jakarta Selatan", province: "DKI Jakarta", city: "Jakarta Selatan", latitude: -6.2615, longitude: 106.8106 },
+  { id: "reg-cianjur", name: "Kabupaten Cianjur", province: "Jawa Barat", city: "Cianjur", latitude: -6.8222, longitude: 107.1394 },
+  { id: "reg-bandung", name: "Kota Bandung", province: "Jawa Barat", city: "Bandung", latitude: -6.9175, longitude: 107.6191 },
+  { id: "reg-semarang", name: "Kota Semarang", province: "Jawa Tengah", city: "Semarang", latitude: -6.9667, longitude: 110.4167 },
+  { id: "reg-lumajang", name: "Kabupaten Lumajang", province: "Jawa Timur", city: "Lumajang", latitude: -8.1331, longitude: 113.2246 },
+  { id: "reg-surabaya", name: "Kota Surabaya", province: "Jawa Timur", city: "Surabaya", latitude: -7.2575, longitude: 112.7521 },
+  { id: "reg-aceh-besar", name: "Kabupaten Aceh Besar", province: "Aceh", city: "Jantho", latitude: 5.3833, longitude: 95.5167 },
+  { id: "reg-padang", name: "Kota Padang", province: "Sumatera Barat", city: "Padang", latitude: -0.9492, longitude: 100.3543 },
+  { id: "reg-banjarmasin", name: "Kota Banjarmasin", province: "Kalimantan Selatan", city: "Banjarmasin", latitude: -3.3194, longitude: 114.5908 },
+  { id: "reg-samarinda", name: "Kota Samarinda", province: "Kalimantan Timur", city: "Samarinda", latitude: -0.5022, longitude: 117.1536 },
+  { id: "reg-denpasar", name: "Kota Denpasar", province: "Bali", city: "Denpasar", latitude: -8.6705, longitude: 115.2126 },
+  { id: "reg-kupang", name: "Kota Kupang", province: "Nusa Tenggara Timur", city: "Kupang", latitude: -10.1772, longitude: 123.6070 },
+  { id: "reg-makassar", name: "Kota Makassar", province: "Sulawesi Selatan", city: "Makassar", latitude: -5.1477, longitude: 119.4327 },
+  { id: "reg-palu", name: "Kota Palu", province: "Sulawesi Tengah", city: "Palu", latitude: -0.8917, longitude: 119.8707 },
+  { id: "reg-jayapura", name: "Kota Jayapura", province: "Papua", city: "Jayapura", latitude: -2.5916, longitude: 140.6690 },
+];
+
 export const FALLBACK_REPORTS: PublicReportItem[] = [
   {
     id: "rep-cianjur-sample",

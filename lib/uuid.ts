@@ -8,3 +8,4 @@ export function generateClientId(): string {
   }
   return `aid-${Date.now().toString(36)}-${Math.random().toString(36).substring(2, 9)}`;
 }
+

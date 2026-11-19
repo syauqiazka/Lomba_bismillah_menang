@@ -63,3 +63,4 @@ export default async function ReportDetailPage({
 
   return <ReportDetailView report={report} session={session} />;
 }
+

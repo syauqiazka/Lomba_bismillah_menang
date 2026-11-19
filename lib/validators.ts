@@ -84,6 +84,39 @@ export const needItemSchema = z.object({
 export type NeedItemInput = z.infer<typeof needItemSchema>;
 
 /**
+ * Skema validasi komposit pengajuan laporan lengkap.
+ * Menegakkan aturan:
+ * - Tipe KEBUTUHAN wajib memiliki minimal 1 item kebutuhan (Need).
+ * - Tipe PEMANTAUAN dilarang memiliki item kebutuhan.
+ */
+export const createReportSchema = report5W1HSchema
+  .extend({
+    clientId: z.string().trim().min(1, { message: "Client ID wajib disertakan" }),
+    latitude: z.number(),
+    longitude: z.number(),
+    needs: z.array(needItemSchema).optional().default([]),
+    hasPhotoEvidence: z.boolean().optional().default(false),
+  })
+  .refine(
+    (data) => {
+      if (data.type === "KEBUTUHAN" && data.needs.length === 0) {
+        return false;
+      }
+      if (data.type === "PEMANTAUAN" && data.needs.length > 0) {
+        return false;
+      }
+      return true;
+    },
+    {
+      message:
+        "Laporan bertipe KEBUTUHAN wajib memiliki minimal 1 item kebutuhan, sedangkan laporan bertipe PEMANTAUAN dilarang memiliki item kebutuhan.",
+      path: ["needs"],
+    }
+  );
+
+export type CreateReportInput = z.infer<typeof createReportSchema>;
+
+/**
  * Skema validasi catatan bantuan relawan (Aid).
  */
 export const aidItemSchema = z.object({
