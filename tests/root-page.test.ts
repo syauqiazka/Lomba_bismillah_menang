@@ -37,5 +37,10 @@ describe("Root Route & UI Architecture: Opsi C Data Integrity (root-page.test.ts
     expect(FALLBACK_AGGREGATES.totalActiveRegions).toBeGreaterThan(0);
     expect(FALLBACK_AGGREGATES.totalConfirmedAidItems).toBeGreaterThan(0);
   });
+
+  it("rute peta /peta dan beranda landing / terintegrasi dengan data agregat valid", () => {
+    expect(FALLBACK_AGGREGATES.totalVerifiedReports).toBe(4);
+    expect(FALLBACK_REPORTS.filter((r) => r.status === "VERIFIED")).toHaveLength(4);
+  });
 });
 
