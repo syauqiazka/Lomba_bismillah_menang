@@ -426,19 +426,18 @@ Penerapan gerak mengacu pada aturan performa `AGENTS.md` bagian 14.
 ### 14.1 Filosofi Anti-Slop
 Antarmuka Humanitarian Intelligence Platform harus mencerminkan kepedulian manusia dan ketepatan instrumen lapangan. Desain harus terlihat **dibuat berdasarkan keputusan desain yang matang**, bukan sekadar susunan template otomatis generator AI.
 
-### 14.2 Matriks skill kandidat untuk penjaminan kualitas visual (`BELUM DIVERIFIKASI`)
+### 14.2 Matriks skill penjamin kualitas visual yang terpasang dan aktif (TERVERIFIKASI)
 
 > [!NOTE]
-> Pustaka skill di bawah berstatus `BELUM DIVERIFIKASI` dan berfungsi sebagai alat bantu evaluasi (*advisor*), bukan penentu aturan baru. Jika saran skill bertentangan dengan token `DESIGN.md`, dokumen ini memegang kendali mutlak.
+> Skill telah terpasang di direktori `.agents/skills/` (proyek) dan `~/.gemini/config/skills/` (global). Skill berfungsi sebagai alat bantu evaluasi (*advisor*), bukan penentu aturan baru. Jika saran skill bertentangan dengan token `DESIGN.md`, dokumen ini memegang kendali mutlak.
 
-| Skill | Tanggung Jawab Evaluasi |
-|---|---|
-| `taste-skill` | Mengkritisi kualitas rasa visual, keunikan karakter, dan mendeteksi pola generik. |
-| `frontend-design` | Menghasilkan struktur antarmuka yang memiliki identitas kuat dan fungsional. |
-| `impeccable` | Mengaudit ketepatan copywriting mikro, ritme hierarki visual, dan polesan akhir UX. |
-| `ui-ux-pro-max-skill` | Menjaga konsistensi pola komponen dan penataan informasi padat data. |
-| `web-design-guidelines` | Memeriksa kepatuhan teknis DOM, standar CSS modern, dan performa peramban. |
-| `accessibility` | Mengaudit pemenuhan standar aksesibilitas WCAG 2.2 AA. |
+| Skill | Lokasi / Sumber | Tanggung Jawab Evaluasi | Status |
+|---|---|---|---|
+| `frontend-design` | `anthropics/skills` (`.agents/skills`) | Menghasilkan struktur antarmuka yang memiliki identitas kuat dan fungsional. | **TERPASANG (Proyek)** |
+| `web-design-guidelines` | `vercel-labs/agent-skills` (`.agents/skills`) | Memeriksa kepatuhan teknis DOM, standar CSS modern, dan performa peramban. | **TERPASANG (Proyek)** |
+| `accessibility-engineering` | `addyosmani/agent-skills` (`.agents/skills`) | Mengaudit pemenuhan standar aksesibilitas WCAG 2.2 AA. | **TERPASANG (Proyek)** |
+| `impeccable` | `pbakaus/impeccable` (`~/.gemini/config/skills`) | Mengaudit ketepatan copywriting mikro, ritme hierarki visual, dan polesan akhir UX. | **TERPASANG (Global)** |
+| `antislop` (Suite) | `~/.gemini/config/skills/antislop*` | Filter komprehensif pencegah generic AI-slop (UI, copywriting, layout mobile, human). | **TERPASANG (Global)** |
 
 ### 14.3 Daftar periksa Anti-Slop Design Review
 Sebelum suatu halaman antarmuka dinyatakan selesai dikerjakan, jalankan pemeriksaan 7 dimensi berikut:

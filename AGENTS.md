@@ -588,21 +588,21 @@ Agen AI hanya diperbolehkan menggunakan skill resmi yang telah dievaluasi fungsi
 - Skill bersifat **pemberi masukan teknis**, bukan pemegang keputusan bisnis atau visual. Jika instruksi skill bertentangan dengan `AGENTS.md` atau `DESIGN.md`, kedua dokumen ini adalah pemenang mutlak.
 - Dilarang memasang skill secara otomatis tanpa persetujuan tim.
 
-### 13.2 Matriks skill kandidat (`BELUM DIVERIFIKASI`)
+### 13.2 Matriks skill yang terpasang dan aktif (TERVERIFIKASI)
 
 > [!NOTE]
-> Seluruh pustaka skill di bawah berstatus `BELUM DIVERIFIKASI` pada lingkungan lokal saat ini. Tim wajib memeriksa isi skrip dan keamanannya sebelum dijalankan.
+> Skill telah diaudit keamanannya (bebas dari skrip berbahaya), dipasang ke direktori `.agents/skills/` (proyek) dan `~/.gemini/config/skills/` (global), serta terbukti kompatibel dengan Antigravity.
 
-| Nama Skill | Sumber Rujukan | Peran Kerja | Fase Penggunaan |
+| Nama Skill | Sumber / Lokasi | Peran Kerja | Status |
 |---|---|---|---|
-| `superpowers` | `obra/superpowers` | Alur kerja terstruktur (TDD, rencana, debugging, verifikasi). | Semua fase |
-| `frontend-design` | `anthropics/skills` | Arah desain visual antarmuka berkarakter, anti-template. | Desain & UI |
-| `taste-skill` | Komunitas | Audit rasa desain, kritik visual anti-slop. | Review Desain |
-| `impeccable` | `pbakaus/impeccable` | Penyempurnaan hierarki antarmuka, copywriting, dan detail UX. | Review UI |
-| `ui-ux-pro-max-skill`| `nextlevelbuilder` | Referensi sistem desain dan pola komponen kemanusiaan. | Desain Awal |
-| `web-design-guidelines`| `vercel-labs` | Audit standar web modern dan performa antarmuka. | Review UI |
-| `accessibility` | `addyosmani` | Audit kepatuhan standar WCAG 2.2 AA. | QA / Review |
-| `prisma` | `prisma/skills` | Optimasi kueri skema, relasi, dan penulisan agregasi Prisma. | Database |
+| `frontend-design` | `anthropics/skills` (`.agents/skills`) | Arah desain visual antarmuka berkarakter, anti-template. | **TERPASANG (Proyek)** |
+| `web-design-guidelines` | `vercel-labs/agent-skills` (`.agents/skills`) | Audit standar web modern, performa antarmuka, dan kepatuhan UI. | **TERPASANG (Proyek)** |
+| `vercel-react-best-practices` | `vercel-labs/agent-skills` (`.agents/skills`) | Optimasi performa React & Next.js App Router (RSC, paralel fetch). | **TERPASANG (Proyek)** |
+| `accessibility-engineering` | `addyosmani/agent-skills` (`.agents/skills`) | Audit kepatuhan standar WCAG 2.2 AA dan remedi aksesibilitas. | **TERPASANG (Proyek)** |
+| `prisma-client-api` | `prisma/skills` (`.agents/skills`) | Panduan kueri model, agregasi aman, dan transaksi Prisma. | **TERPASANG (Proyek)** |
+| `antislop` (Suite) | `~/.gemini/config/skills/antislop*` | Filter pencegah generic AI-slop (code, copywriting, human, layout, UI). | **TERPASANG (Global)** |
+| `impeccable` | `pbakaus/impeccable` (`~/.gemini/config/skills`) | Penyempurnaan hierarki antarmuka, copywriting, dan detail UX. | **TERPASANG (Global)** |
+| `superpowers` | Marketplace (`plugin/superpowers`) | Alur kerja terstruktur (TDD, rencana, debugging, verifikasi). | **Marketplace Plugin** |
 
 ---
 
