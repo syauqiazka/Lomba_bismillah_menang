@@ -74,3 +74,4 @@ describe("Domain Logic: Skor Kepercayaan Deterministik (trust-score.ts)", () => 
     expect(result.score).toBeGreaterThanOrEqual(0);
   });
 });
+

@@ -1,0 +1,241 @@
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+enum Role {
+  RELAWAN
+  VERIFIKATOR
+  ADMIN
+}
+
+enum ReportType {
+  KEBUTUHAN
+  PEMANTAUAN
+}
+
+enum ReportCategory {
+  BENCANA
+  LINGKUNGAN
+  LANSIA
+  KESEHATAN
+  PENDIDIKAN
+  SOSIAL_LAINNYA
+}
+
+enum UrgencyLevel {
+  DARURAT
+  MENDESAK
+  TERENCANA
+}
+
+enum ReportStatus {
+  PENDING
+  VERIFIED
+  NEEDS_REVISION
+  REJECTED_FINAL
+}
+
+enum VerificationLevel {
+  COMMUNITY
+  OFFICIAL
+}
+
+enum NeedKind {
+  BARANG
+  TENAGA
+}
+
+enum AidStatus {
+  PENDING
+  CONFIRMED
+  REJECTED
+}
+
+enum VerificationDecision {
+  APPROVE
+  REJECT
+}
+
+enum ContactScope {
+  NASIONAL
+  PROVINSI
+  KABUPATEN
+}
+
+enum OrgRole {
+  ORG_ADMIN
+  MEMBER
+}
+
+model User {
+  id                  String               @id @default(cuid())
+  name                String
+  email               String               @unique
+  phone               String?
+  password            String
+  role                Role                 @default(RELAWAN)
+  isVerifiedVolunteer Boolean              @default(false)
+  createdAt           DateTime             @default(now())
+  updatedAt           DateTime             @updatedAt
+  reports             Report[]
+  aids                Aid[]
+  verifications       Verification[]
+  orgMemberships      OrganizationMember[]
+}
+
+model Region {
+  id                String             @id @default(cuid())
+  name              String
+  province          String
+  city              String
+  latitude          Float
+  longitude         Float
+  reports           Report[]
+  emergencyContacts EmergencyContact[]
+}
+
+model Report {
+  id                 String             @id @default(cuid())
+  clientId           String             @unique // UUID v4 dari perangkat untuk mencegah duplikasi
+  title              String
+  type               ReportType
+  category           ReportCategory
+  urgency            UrgencyLevel
+  status             ReportStatus       @default(PENDING)
+  verificationLevel  VerificationLevel?
+  verificationCount  Int                @default(0)
+  revisionCount      Int                @default(0)
+  trustScore         Int                @default(0)
+  trustScoreReasons  String?            // JSON stringified array of reasons
+  aiSummary          String?            // Rangkuman opsional AI (Tingkat 2)
+  latitude           Float
+  longitude          Float
+  regionId           String
+  region             Region             @relation(fields: [regionId], references: [id])
+  reporterId         String
+  reporter           User               @relation(fields: [reporterId], references: [id])
+
+  // 6 Unsur 5W + 1H
+  what               String
+  who                String
+  whereDescription   String
+  when               DateTime
+  why                String
+  how                String
+
+  submittedOfflineAt DateTime?
+  createdAt          DateTime           @default(now())
+  updatedAt          DateTime           @updatedAt
+
+  needs              Need[]
+  aids               Aid[]
+  verifications      Verification[]
+
+  @@index([status])
+  @@index([regionId])
+  @@index([type, status])
+}
+
+model Need {
+  id           String   @id @default(cuid())
+  reportId     String
+  report       Report   @relation(fields: [reportId], references: [id], onDelete: Cascade)
+  itemCategory String   // Klasifikasi logistik (misal: MAKANAN, MEDIS, HUNIAN)
+  unit         String   // Satuan pengukuran (misal: kotak, karung, paket, orang)
+  qty          Int
+  kind         NeedKind
+  createdAt    DateTime @default(now())
+
+  @@index([reportId])
+  @@index([itemCategory, unit])
+}
+
+model Aid {
+  id                 String    @id @default(cuid())
+  clientId           String    @unique // UUID v4 idempoten
+  reportId           String
+  report             Report    @relation(fields: [reportId], references: [id], onDelete: Cascade)
+  userId             String
+  user               User      @relation(fields: [userId], references: [id])
+  itemCategory       String    // Klasifikasi logistik
+  unit               String    // Satuan pengukuran
+  qty                Int
+  status             AidStatus @default(PENDING)
+  rejectionNote      String?
+  organizationId     String?
+  submittedOfflineAt DateTime?
+  createdAt          DateTime  @default(now())
+  updatedAt          DateTime  @updatedAt
+
+  @@index([reportId])
+  @@index([status])
+  @@index([itemCategory, unit])
+}
+
+model Verification {
+  id        String               @id @default(cuid())
+  reportId  String
+  report    Report               @relation(fields: [reportId], references: [id], onDelete: Cascade)
+  userId    String
+  user      User                 @relation(fields: [userId], references: [id])
+  decision  VerificationDecision
+  note      String?
+  createdAt DateTime             @default(now())
+
+  @@index([reportId])
+  @@index([userId])
+}
+
+model EmergencyContact {
+  id        String       @id @default(cuid())
+  name      String
+  number    String
+  scope     ContactScope
+  regionId  String?
+  region    Region?      @relation(fields: [regionId], references: [id])
+  sourceUrl String?
+  checkedAt DateTime     @default(now())
+  createdAt DateTime     @default(now())
+
+  @@index([scope])
+  @@index([regionId])
+}
+
+model Organization {
+  id          String               @id @default(cuid())
+  name        String
+  type        String
+  isVerified  Boolean              @default(false)
+  verifiedAt  DateTime?
+  verifiedById String?
+  createdAt   DateTime             @default(now())
+  members     OrganizationMember[]
+}
+
+model OrganizationMember {
+  id             String       @id @default(cuid())
+  organizationId String
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  userId         String
+  user           User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  orgRole        OrgRole      @default(MEMBER)
+  createdAt      DateTime     @default(now())
+
+  @@unique([organizationId, userId])
+}
+
+model RateLimitRecord {
+  id        String   @id @default(cuid())
+  key       String   @unique
+  count     Int      @default(1)
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+
+  @@index([expiresAt])
+}

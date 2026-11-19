@@ -73,3 +73,4 @@ describe("Domain Logic: Skema Validasi Zod (validators.ts)", () => {
     expect(verificationNoteSchema.safeParse({ note: "Pendek" }).success).toBe(false);
   });
 });
+

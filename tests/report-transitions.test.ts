@@ -198,3 +198,4 @@ describe("Domain Logic: Mesin Transisi Status Laporan (report-transitions.ts)", 
     );
   });
 });
+
