@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { HelpCircle, PlusCircle, List, PhoneCall, User, LogIn, BarChart3 } from "lucide-react";
+import { HelpCircle, PlusCircle, List, PhoneCall, User, LogIn, BarChart3, MapPin } from "lucide-react";
 import type { SessionData } from "@/lib/session-options";
 
 interface NavbarProps {
@@ -9,6 +9,7 @@ interface NavbarProps {
   onOpenIntro?: () => void;
   onToggleTextView?: () => void;
   isTextViewOpen?: boolean;
+  isSticky?: boolean;
 }
 
 export function Navbar({
@@ -16,13 +17,14 @@ export function Navbar({
   onOpenIntro,
   onToggleTextView,
   isTextViewOpen = false,
+  isSticky = false,
 }: NavbarProps) {
   const isLoggedIn = Boolean(session && session.userId);
 
   return (
     <header
       role="banner"
-      className="absolute top-0 left-0 right-0 z-[1000] bg-white/95 backdrop-blur-sm border-b border-[var(--color-border)] px-4 py-2.5 transition-colors"
+      className={`${isSticky ? "sticky" : "absolute"} top-0 left-0 right-0 z-[1000] bg-white/95 backdrop-blur-sm border-b border-[var(--color-border)] px-4 py-2.5 transition-colors`}
       style={{ boxShadow: "var(--shadow-elevated)" }}
     >
       <div className="max-w-7xl mx-auto flex items-center justify-between gap-2">
@@ -85,6 +87,16 @@ export function Navbar({
               <span className="hidden md:inline">Daftar Teks</span>
             </button>
           )}
+
+          {/* Tautan Peta Operasional */}
+          <Link
+            href="/peta"
+            className="inline-flex items-center gap-1.5 px-2.5 py-1.5 text-xs font-semibold rounded text-[var(--color-text-secondary)] hover:text-[var(--color-text)] hover:bg-[var(--color-surface-hover)] border border-[var(--color-border)] focus:outline-none focus:ring-2 focus:ring-[var(--color-focus)] transition-colors"
+            title="Peta Operasional Selisih Kemanusiaan"
+          >
+            <MapPin className="w-3.5 h-3.5 text-[var(--color-primary)]" />
+            <span className="hidden sm:inline">Peta</span>
+          </Link>
 
           {/* Tautan Dashboard Statistik Publik */}
           <Link
