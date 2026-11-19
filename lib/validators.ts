@@ -114,3 +114,41 @@ export const verificationNoteSchema = z.object({
 });
 
 export type VerificationNoteInput = z.infer<typeof verificationNoteSchema>;
+
+/**
+ * Skema validasi masuk sistem (Login).
+ */
+export const loginSchema = z.object({
+  email: z.string().trim().email({ message: "Format email tidak valid" }),
+  password: z.string().min(8, { message: "Kata sandi minimal 8 karakter" }),
+});
+
+export type LoginInput = z.infer<typeof loginSchema>;
+
+/**
+ * Skema validasi pendaftaran akun relawan baru (Register).
+ */
+export const registerSchema = z.object({
+  name: z
+    .string()
+    .trim()
+    .min(3, { message: "Nama lengkap minimal 3 karakter" })
+    .max(100, { message: "Nama lengkap maksimal 100 karakter" }),
+  email: z.string().trim().email({ message: "Format email tidak valid" }),
+  phone: z
+    .string()
+    .trim()
+    .regex(/^(\+62|62|0)[0-9]{8,15}$/, {
+      message: "Format nomor telepon Indonesia tidak valid (contoh: 08123456789)",
+    })
+    .optional()
+    .or(z.literal("")),
+  password: z
+    .string()
+    .min(8, { message: "Kata sandi minimal 8 karakter" })
+    .regex(/[A-Z]/, { message: "Kata sandi harus mengandung minimal 1 huruf kapital" })
+    .regex(/[0-9]/, { message: "Kata sandi harus mengandung minimal 1 angka" }),
+});
+
+export type RegisterInput = z.infer<typeof registerSchema>;
+
