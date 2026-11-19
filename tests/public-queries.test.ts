@@ -5,6 +5,7 @@ vi.mock("@/lib/prisma", () => ({
     report: {
       findMany: vi.fn(),
       findFirst: vi.fn(),
+      findUnique: vi.fn(),
       count: vi.fn(),
       groupBy: vi.fn(),
     },
@@ -21,6 +22,7 @@ import { prisma } from "@/lib/prisma";
 import {
   getPublicMapReports,
   getPublicReportById,
+  getPublicReportDetail,
   getPublicAggregates,
 } from "@/lib/public-queries";
 
@@ -242,5 +244,67 @@ describe("Public Data Access & Privacy (public-queries.ts)", () => {
     expect(result?.id).toBe("rep-detail-1");
     expect(result?.title).toBe("Laporan Detail");
     expect(result?.itemDeficits[0].deficit).toBe(60);
+  });
+
+  it("getPublicReportDetail: merahasiakan kontak koordinator untuk pengunjung anonim", async () => {
+    const rawDetail = {
+      id: "rep-detail-2",
+      clientId: "cid-2",
+      title: "Laporan Detail 2",
+      type: "KEBUTUHAN" as const,
+      category: "BENCANA",
+      urgency: "MENDESAK",
+      status: "VERIFIED" as const,
+      verificationLevel: "OFFICIAL" as const,
+      trustScore: 85,
+      trustScoreReasons: JSON.stringify(["Foto (+30)"]),
+      latitude: -6.8,
+      longitude: 107.1,
+      what: "Banjir",
+      who: "Warga",
+      whereDescription: "Posko Utama",
+      when: new Date(),
+      why: "Tanggul jebol",
+      how: "Jalur darat",
+      createdAt: new Date(),
+      updatedAt: new Date(),
+      reporterId: "user-rep-1",
+      reporter: {
+        name: "Dewi Kartika",
+        phone: "081234567890",
+      },
+      region: { id: "reg-1", name: "Cianjur", province: "Jabar", city: "Cianjur" },
+      needs: [{ id: "n1", itemCategory: "MAKANAN", unit: "kotak", qty: 100, kind: "BARANG" }],
+      aids: [],
+      verifications: [
+        {
+          id: "v1",
+          decision: "APPROVE",
+          note: "Tervalidasi",
+          createdAt: new Date(),
+          user: { name: "Budi" },
+        },
+      ],
+    };
+
+    (prisma.report.findUnique as any).mockResolvedValue(rawDetail);
+
+    // Akses tanpa sesi (anonim)
+    const resultAnon = await getPublicReportDetail("rep-detail-2", null);
+    expect(resultAnon).not.toBeNull();
+    expect(resultAnon?.coordinatorContact).toBeNull();
+
+    // Akses dengan sesi login
+    const session = {
+      userId: "user-relawan-1",
+      name: "Ahmad",
+      email: "ahmad@trasec.id",
+      role: "RELAWAN" as const,
+    };
+    const resultAuth = await getPublicReportDetail("rep-detail-2", session);
+    expect(resultAuth).not.toBeNull();
+    expect(resultAuth?.coordinatorContact).not.toBeNull();
+    expect(resultAuth?.coordinatorContact?.name).toBe("Dewi Kartika");
+    expect(resultAuth?.coordinatorContact?.phone).toBe("081234567890");
   });
 });

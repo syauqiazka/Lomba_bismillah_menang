@@ -1,5 +1,7 @@
 import "server-only";
 import { prisma } from "@/lib/prisma";
+import { assertEntityAccessOr404, EntityNotFoundError } from "@/lib/access";
+import type { SessionData } from "@/lib/session-options";
 import {
   calculateDeficitPerItem,
   calculateOverallDeficitStatus,
@@ -40,6 +42,27 @@ export interface PublicReportItem {
   overallDeficitStatus: DeficitStatus | null;
   needsCount: number;
   confirmedAidsCount: number;
+}
+
+export interface PublicReportDetail extends PublicReportItem {
+  verifications: {
+    id: string;
+    decision: string;
+    note: string | null;
+    createdAt: Date;
+    verifierName: string;
+  }[];
+  coordinatorContact?: {
+    name: string;
+    phone: string | null;
+  } | null;
+  rawNeeds: {
+    id: string;
+    itemCategory: string;
+    unit: string;
+    qty: number;
+    kind: "BARANG" | "TENAGA";
+  }[];
 }
 
 export interface PublicAggregates {
@@ -306,6 +329,171 @@ export async function getPublicReportById(id: string): Promise<PublicReportItem 
     needsCount: rep.needs.length,
     confirmedAidsCount: confirmedAids.length,
   };
+}
+
+/**
+ * Mengambil detail lengkap laporan kemanusiaan termasuk riwayat verifikasi,
+ * daftar kebutuhan mentah, dan kontak koordinator (hanya jika pengguna login).
+ * Memvalidasi hak akses dan proteksi IDOR: jika tidak sah, mengembalikan null (404).
+ */
+export async function getPublicReportDetail(
+  id: string,
+  userSession?: SessionData | null
+): Promise<PublicReportDetail | null> {
+  try {
+    const rep = await prisma.report.findUnique({
+      where: { id },
+      select: {
+        id: true,
+        clientId: true,
+        title: true,
+        type: true,
+        category: true,
+        urgency: true,
+        status: true,
+        verificationLevel: true,
+        trustScore: true,
+        trustScoreReasons: true,
+        latitude: true,
+        longitude: true,
+        what: true,
+        who: true,
+        whereDescription: true,
+        when: true,
+        why: true,
+        how: true,
+        createdAt: true,
+        updatedAt: true,
+        reporterId: true,
+        reporter: {
+          select: {
+            name: true,
+            phone: true,
+          },
+        },
+        region: {
+          select: {
+            id: true,
+            name: true,
+            province: true,
+            city: true,
+          },
+        },
+        needs: {
+          select: {
+            id: true,
+            itemCategory: true,
+            unit: true,
+            qty: true,
+            kind: true,
+          },
+        },
+        aids: {
+          select: {
+            itemCategory: true,
+            unit: true,
+            qty: true,
+            status: true,
+            createdAt: true,
+          },
+        },
+        verifications: {
+          select: {
+            id: true,
+            decision: true,
+            note: true,
+            createdAt: true,
+            user: {
+              select: {
+                name: true,
+              },
+            },
+          },
+          orderBy: { createdAt: "desc" },
+        },
+      },
+    });
+
+    if (!rep) {
+      return null;
+    }
+
+    // Proteksi IDOR: pastikan hak akses entitas terpenuhi
+    assertEntityAccessOr404(rep, userSession);
+
+    const isSensitive = SENSITIVE_CATEGORIES.has(rep.category);
+    const confirmedAids = rep.aids.filter((a) => a.status === "CONFIRMED");
+
+    const latestAid = confirmedAids.reduce<Date | undefined>((latest, a) => {
+      return !latest || a.createdAt > latest ? a.createdAt : latest;
+    }, undefined);
+
+    const isStale = checkIsStale(rep.updatedAt, latestAid);
+
+    let itemDeficits: ItemDeficitResult[] = [];
+    let overallDeficitStatus: DeficitStatus | null = null;
+
+    if (rep.type === "KEBUTUHAN") {
+      itemDeficits = calculateDeficitPerItem(rep.needs, confirmedAids);
+      overallDeficitStatus = calculateOverallDeficitStatus(itemDeficits);
+    }
+
+    // Kontak koordinator HANYA diberikan jika pengguna login (Section 4.2 AGENTS.md)
+    const hasLoginSession = Boolean(userSession && userSession.userId);
+    const coordinatorContact = hasLoginSession
+      ? {
+          name: rep.reporter.name,
+          phone: rep.reporter.phone,
+        }
+      : null;
+
+    return {
+      id: rep.id,
+      clientId: rep.clientId,
+      title: rep.title,
+      type: rep.type,
+      category: rep.category,
+      urgency: rep.urgency,
+      status: rep.status as "VERIFIED",
+      verificationLevel: rep.verificationLevel,
+      trustScore: rep.trustScore,
+      trustScoreReasons: parseTrustScoreReasons(rep.trustScoreReasons),
+      latitude: isSensitive ? blurCoordinate(rep.latitude) : rep.latitude,
+      longitude: isSensitive ? blurCoordinate(rep.longitude) : rep.longitude,
+      isLocationBlurred: isSensitive,
+      region: rep.region,
+      what: rep.what,
+      who: rep.who,
+      whereDescription:
+        isSensitive && !hasLoginSession
+          ? "Lokasi presisi disamarkan untuk privasi penerima manfaat."
+          : rep.whereDescription,
+      when: rep.when,
+      why: rep.why,
+      how: rep.how,
+      isStale,
+      createdAt: rep.createdAt,
+      updatedAt: rep.updatedAt,
+      itemDeficits,
+      overallDeficitStatus,
+      needsCount: rep.needs.length,
+      confirmedAidsCount: confirmedAids.length,
+      verifications: rep.verifications.map((v) => ({
+        id: v.id,
+        decision: v.decision,
+        note: v.note,
+        createdAt: v.createdAt,
+        verifierName: v.user.name,
+      })),
+      coordinatorContact,
+      rawNeeds: rep.needs,
+    };
+  } catch (err) {
+    if (err instanceof EntityNotFoundError) {
+      return null;
+    }
+    throw err;
+  }
 }
 
 /**

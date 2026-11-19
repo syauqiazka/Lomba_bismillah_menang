@@ -34,3 +34,4 @@ const DynamicOperationalMap = dynamic(
 export function MapWrapper(props: MapWrapperProps) {
   return <DynamicOperationalMap {...props} />;
 }
+

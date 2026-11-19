@@ -1,4 +1,5 @@
-import type { PublicReportItem, PublicAggregates } from "@/lib/public-queries";
+import type { PublicReportItem, PublicReportDetail, PublicAggregates } from "@/lib/public-queries";
+import type { SessionData } from "@/lib/session-options";
 
 export const FALLBACK_REPORTS: PublicReportItem[] = [
   {
@@ -211,3 +212,40 @@ export const FALLBACK_AGGREGATES: PublicAggregates = {
   totalActiveRegions: 4,
   totalConfirmedAidItems: 960,
 };
+
+export function getFallbackReportDetail(
+  id: string,
+  userSession?: SessionData | null
+): PublicReportDetail | null {
+  const item = FALLBACK_REPORTS.find((r) => r.id === id);
+  if (!item) return null;
+
+  const hasLogin = Boolean(userSession && userSession.userId);
+
+  return {
+    ...item,
+    coordinatorContact: hasLogin
+      ? {
+          name: "Dewi Kartika (Koordinator Lapangan)",
+          phone: "08110000004",
+        }
+      : null,
+    verifications: [
+      {
+        id: "verif-1",
+        decision: "APPROVE",
+        note: "Data validasi lapangan telah dikonfirmasi melalui ketua RW dan bukti foto geolokasi.",
+        createdAt: new Date("2026-11-18T08:00:00Z"),
+        verifierName: "Budi Santoso (Verifikator Komunitas)",
+      },
+    ],
+    rawNeeds: item.itemDeficits.map((d, i) => ({
+      id: `need-${i}`,
+      itemCategory: d.itemCategory,
+      unit: d.unit,
+      qty: d.totalNeed,
+      kind: d.itemCategory === "EVAKUASI" ? "TENAGA" : "BARANG",
+    })),
+  };
+}
+
