@@ -1,12 +1,12 @@
 import { getPublicMapReports, getPublicAggregates } from "@/lib/public-queries";
 import { getSession } from "@/lib/session";
-import { LandingPageView } from "@/components/landing/LandingPageView";
+import { RootOperationalView } from "@/components/map/RootOperationalView";
 import { FALLBACK_REPORTS, FALLBACK_AGGREGATES } from "@/lib/fallback-data";
 
 export const metadata = {
-  title: "TRASEC | Humanitarian Intelligence Platform Indonesia",
+  title: "Peta Operasional Kebutuhan & Bantuan Relawan | TRASEC",
   description:
-    "Transparansi kebutuhan dan bantuan relawan di Indonesia. Menghitung dan menampilkan selisih riil logistik per lokasi dan per satuan tanpa penumpukan.",
+    "Peta interaktif transparansi selisih logistik kebutuhan vs bantuan terkonfirmasi di seluruh wilayah kemanusiaan Indonesia.",
 };
 
 export default async function HomePage() {
@@ -48,7 +48,7 @@ export default async function HomePage() {
   }
 
   return (
-    <LandingPageView
+    <RootOperationalView
       initialReports={reports}
       aggregates={aggregates}
       session={session}

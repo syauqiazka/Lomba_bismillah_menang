@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { HelpCircle, PlusCircle, List, PhoneCall, User, LogIn, BarChart3, MapPin } from "lucide-react";
+import { HelpCircle, PlusCircle, List, PhoneCall, User, LogIn, BarChart3, MapPin, Info } from "lucide-react";
 import type { SessionData } from "@/lib/session-options";
 
 interface NavbarProps {
@@ -88,14 +88,24 @@ export function Navbar({
             </button>
           )}
 
-          {/* Tautan Peta Operasional */}
+          {/* Tautan Peta Operasional (Root FINAL) */}
           <Link
-            href="/peta"
+            href="/"
             className="inline-flex items-center gap-1.5 px-2.5 py-1.5 text-xs font-semibold rounded text-[var(--color-text-secondary)] hover:text-[var(--color-text)] hover:bg-[var(--color-surface-hover)] border border-[var(--color-border)] focus:outline-none focus:ring-2 focus:ring-[var(--color-focus)] transition-colors"
             title="Peta Operasional Selisih Kemanusiaan"
           >
             <MapPin className="w-3.5 h-3.5 text-[var(--color-primary)]" />
             <span className="hidden sm:inline">Peta</span>
+          </Link>
+
+          {/* Tautan Tentang Platform (Editorial Landing Page) */}
+          <Link
+            href="/tentang"
+            className="inline-flex items-center gap-1.5 px-2.5 py-1.5 text-xs font-semibold rounded text-[var(--color-text-secondary)] hover:text-[var(--color-text)] hover:bg-[var(--color-surface-hover)] border border-[var(--color-border)] focus:outline-none focus:ring-2 focus:ring-[var(--color-focus)] transition-colors"
+            title="Tentang Platform Kemanusiaan TRASEC"
+          >
+            <Info className="w-3.5 h-3.5 text-[var(--color-secondary)]" />
+            <span className="hidden sm:inline">Tentang</span>
           </Link>
 
           {/* Tautan Dashboard Statistik Publik */}
