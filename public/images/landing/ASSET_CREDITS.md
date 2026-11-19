@@ -56,3 +56,31 @@ Dokumen ini mencatat seluruh atribusi dan lisensi aset foto dokumenter yang digu
 - **Penggunaan:** Kartu Kategori Tanggap Darurat Bencana Alam (`/tentang`).
 - **Atribusi:** Dokumentasi Tim Gabungan Tanggap Darurat Bencana Indonesia.
 
+---
+
+## 7. DISASTER-02 — Posko & Tenda Darurat Pengungsian PMI
+- **Lokasi Berkas:** `/images/landing/categories/tenda-pengungsian-relawan-pmi.jpg`
+- **Kategori:** BENCANA / SOSIAL / LANSIA
+- **Deskripsi:** Suasana posko kemanusiaan dan tenda pengungsian PMI bersama keluarga pengungsi, balita, ibu-ibu, lansia, dan relawan penanganan logistik darurat.
+- **Penggunaan:** Kartu Kategori Bencana Alam & Galeri Aksi Nyata (`/`).
+- **Atribusi:** Dokumentasi Operasi Tanggap Bencana Posko Pengungsian PMI Indonesia.
+
+---
+
+## 8. HEALTH-02 — Penyaluran Bantuan Paket Kebersihan (Hygiene Kit)
+- **Lokasi Berkas:** `/images/landing/categories/distribusi-bantuan-hygiene-kit.jpg`
+- **Kategori:** KESEHATAN / SANITASI
+- **Deskripsi:** Penyaluran logistik bantuan paket kebersihan dan sanitasi (Hygiene Kit) dalam wadah ember sanitasi bersama relawan kemanusiaan dan warga penerima manfaat.
+- **Penggunaan:** Kartu Kategori Kesehatan / Sanitasi & Berita Operasi Lapangan (`/`).
+- **Atribusi:** Dokumentasi Penyaluran Bantuan Logistik Sanitasi Kemanusiaan Indonesia.
+
+---
+
+## 9. ENV-04 — Aksi Relawan Penghijauan & Tanam Lingkungan Hidup
+- **Lokasi Berkas:** `/images/landing/field-activities/relawan-tanam-penghijauan-lingkungan.jpg`
+- **Kategori:** LINGKUNGAN HIDUP / RELAWAN
+- **Deskripsi:** Kelompok pemuda-pemudi relawan bergotong royong melakukan aksi penanaman bibit dan perawatan vegetasi di area konservasi terbuka.
+- **Penggunaan:** Kartu Kategori Lingkungan Hidup & Galeri Aksi Relawan (`/`).
+- **Atribusi:** Dokumentasi Gerakan Inisiatif Pemuda Relawan Lingkungan Hidup Indonesia.
+
+
