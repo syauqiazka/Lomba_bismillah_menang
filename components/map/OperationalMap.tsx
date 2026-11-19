@@ -142,11 +142,11 @@ export default function OperationalMap({
         zoomControl: false, // Zoom control dipindahkan ke pojok kanan atas
       });
 
-      // Ubin CartoDB Positron (Spesifikasi DESIGN.md Bagian 9.6)
-      L.tileLayer("https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png", {
+      // Ubin OpenStreetMap Standard (100% Gratis, Terbuka, Tanpa Watermark & Tanpa API Key)
+      L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
         attribution:
-          '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
-        subdomains: "abcd",
+          '&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener noreferrer">OpenStreetMap</a> contributors',
+        subdomains: ["a", "b", "c"],
         maxZoom: 19,
       }).addTo(map);
 

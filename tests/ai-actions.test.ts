@@ -82,3 +82,4 @@ Akses jalan tertutup lumpur dan jalur utama hanya bisa dilalui truk posko.`;
     }
   });
 });
+

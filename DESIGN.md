@@ -342,7 +342,7 @@ Setiap komponen dirancang dengan kelengkapan state: *Default, Hover, Focus, Acti
    - Di atas kanvas peta disediakan tombol yang selalu terlihat: *"Tampilkan data peta dalam format tabel teks"*. Tombol ini membuka daftar lokasi terurut tingkat kebutuhan untuk pembaca layar atau pengguna dengan koneksi data lambat.
 6. **Lisensi & Atribusi Ubin Peta**:
    - Menampilkan atribusi legal penyedia ubin peta di pojok kanan bawah kanvas peta.
-   - Penyedia yang direkomendasikan: **CartoDB Positron** (tampilan bersih, kontras tinggi terhadap penanda warna kemanusiaan) `[NEEDS DECISION: tile provider]`.
+   - Penyedia yang digunakan: **OpenStreetMap Standard** (bebas watermark, tanpa API key, 100% terbuka dan kaya detail wilayah Indonesia).
 
 ---
 
@@ -519,7 +519,7 @@ Sebelum suatu pekerjaan antarmuka diserahkan:
 |---|---|---|---|
 | 1 | Persetujuan token warna status tambahan | Menyetujui nilai heksa `--color-surface-hover`, `--color-warning-text`, dll. pada bagian 4.2. | **Setujui** (Telah terbukti lolos uji kontras WCAG 2.2 AA). |
 | 2 | Pilihan tumpukan font antarmuka | Tumpukan font sistem (gratis, instan, ringan) vs Font web Google Fonts (Inter / Plus Jakarta Sans). | **Font Sistem** (Performa terbaik pada jaringan 3G darurat). |
-| 3 | Penyedia ubin peta (Tile Provider) & atribusi | CartoDB Positron vs OpenStreetMap Standard vs Mapbox. | **CartoDB Positron** (Kontras penanda kemanusiaan paling optimal). |
+| 3 | Penyedia ubin peta (Tile Provider) & atribusi | CartoDB Positron vs OpenStreetMap Standard vs Mapbox. | **OpenStreetMap Standard** (100% Terbuka, Tanpa Watermark, Bebas API Key). |
 | 4 | Ambang persentase tingkat kekurangan penanda | Merah (>50% selisih), Kuning (10%-50%), Hijau (<10% selisih). | **Setujui** formula batas persentase selisih tersebut. |
 | 5 | Penandaan visual data basi (*stale data*) | Ambang waktu pembaruan: 3 hari, 5 hari, atau 7 hari. | **7 hari** (Laporan umum) / **48 jam** (Bencana darurat). |
 | 6 | Geometri penanda peta tipe `PEMANTAUAN` | Bentuk belah ketupat tanpa latar penuh vs bentuk heksagon. | **Belah ketupat kontur Navy** (Pembeda bentuk tegas tanpa warna). |
