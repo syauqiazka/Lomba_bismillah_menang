@@ -22,14 +22,17 @@ export default async function LaporPage() {
 
   return (
     <div className="min-h-screen bg-[var(--color-bg)] py-6 sm:py-10 px-4 sm:px-6">
-      <div className="max-w-[680px] mx-auto mb-4">
+      <div className="max-w-[680px] mx-auto mb-4 flex items-center justify-between">
         <Link
           href="/"
-          className="inline-flex items-center gap-1.5 text-xs font-bold text-[var(--color-text-secondary)] hover:text-[var(--color-primary)] transition-colors"
+          className="inline-flex items-center gap-1.5 text-xs font-bold text-slate-700 hover:text-emerald-800 transition-colors"
         >
           <ArrowLeft className="w-4 h-4" />
           <span>Kembali ke Peta Operasional</span>
         </Link>
+        <span className="px-2.5 py-1 rounded-full text-[10px] font-black uppercase tracking-wider bg-emerald-100 text-emerald-800 border border-emerald-300 shadow-2xs">
+          Formulir Standar 5W+1H
+        </span>
       </div>
 
       <ReportForm

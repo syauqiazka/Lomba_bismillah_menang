@@ -122,85 +122,85 @@ export function PublicDashboardView({ data }: PublicDashboardViewProps) {
           </div>
         </div>
 
-        {/* 5 Headline Metrics Cards (Our World in Data & UNHCR style) */}
+        {/* 5 Headline Metrics Cards (Our World in Data & UNHCR style with vibrant color personality) */}
         <section aria-label="Metrik Utama Nasional" className="grid grid-cols-2 lg:grid-cols-5 gap-3 sm:gap-4">
-          {/* Card 1: Laporan Terverifikasi */}
-          <div className="bg-white p-4 rounded-lg border border-[var(--color-border-subtle)] shadow-xs">
-            <div className="flex items-center justify-between text-[var(--color-forest-main)] mb-1">
-              <span className="text-[10px] font-bold uppercase tracking-wider text-[var(--color-text-muted)]">
+          {/* Card 1: Laporan Terverifikasi (Forest Emerald Theme) */}
+          <div className="bg-gradient-to-br from-emerald-50 via-white to-emerald-50/40 p-4 rounded-xl border-2 border-emerald-300 shadow-sm">
+            <div className="flex items-center justify-between text-emerald-800 mb-1">
+              <span className="text-[10px] font-black uppercase tracking-wider text-emerald-900">
                 Laporan Terverifikasi
               </span>
-              <CheckCircle2 className="w-4 h-4" />
+              <CheckCircle2 className="w-4 h-4 text-emerald-700" />
             </div>
-            <div className="text-2xl sm:text-3xl font-black font-mono text-[var(--color-forest-main)]">
+            <div className="text-2xl sm:text-3xl font-black font-mono text-emerald-950">
               {metrics.totalVerifiedReports}
             </div>
-            <div className="text-[11px] text-[var(--color-text-muted)] mt-1 flex items-center gap-1">
-              <ShieldCheck className="w-3 h-3 text-[var(--color-forest-main)]" />
+            <div className="text-[11px] text-emerald-800 mt-1 flex items-center gap-1 font-semibold">
+              <ShieldCheck className="w-3 h-3 text-emerald-700" />
               <span>Validasi berlapis resmi</span>
             </div>
           </div>
 
-          {/* Card 2: Antrean Kurasi (Agregat Total) */}
-          <div className="bg-white p-4 rounded-lg border border-[var(--color-border-subtle)] shadow-xs">
-            <div className="flex items-center justify-between text-[var(--color-amber-main)] mb-1">
-              <span className="text-[10px] font-bold uppercase tracking-wider text-[var(--color-text-muted)]">
+          {/* Card 2: Antrean Kurasi (Amber Warm Theme) */}
+          <div className="bg-gradient-to-br from-amber-50 via-white to-amber-50/40 p-4 rounded-xl border-2 border-amber-300 shadow-sm">
+            <div className="flex items-center justify-between text-amber-800 mb-1">
+              <span className="text-[10px] font-black uppercase tracking-wider text-amber-900">
                 Antrean Tinjauan
               </span>
-              <Clock className="w-4 h-4" />
+              <Clock className="w-4 h-4 text-amber-700" />
             </div>
-            <div className="text-2xl sm:text-3xl font-black font-mono text-[var(--color-amber-main)]">
+            <div className="text-2xl sm:text-3xl font-black font-mono text-amber-950">
               {metrics.totalPendingReports}
             </div>
-            <div className="text-[11px] text-[var(--color-text-muted)] mt-1">
+            <div className="text-[11px] text-amber-800 mt-1 font-semibold">
               <span>Sedang diproses verifikator</span>
             </div>
           </div>
 
-          {/* Card 3: Wilayah Aktif */}
-          <div className="bg-white p-4 rounded-lg border border-[var(--color-border-subtle)] shadow-xs">
-            <div className="flex items-center justify-between text-[var(--color-text-main)] mb-1">
-              <span className="text-[10px] font-bold uppercase tracking-wider text-[var(--color-text-muted)]">
+          {/* Card 3: Wilayah Aktif (Slate Navy Theme) */}
+          <div className="bg-gradient-to-br from-blue-50 via-white to-blue-50/40 p-4 rounded-xl border-2 border-blue-300 shadow-sm">
+            <div className="flex items-center justify-between text-blue-800 mb-1">
+              <span className="text-[10px] font-black uppercase tracking-wider text-blue-900">
                 Wilayah Terpantau
               </span>
-              <Building2 className="w-4 h-4 text-[var(--color-forest-main)]" />
+              <Building2 className="w-4 h-4 text-blue-700" />
             </div>
-            <div className="text-2xl sm:text-3xl font-black font-mono text-[var(--color-text-main)]">
+            <div className="text-2xl sm:text-3xl font-black font-mono text-blue-950">
               {metrics.totalActiveRegions}
             </div>
-            <div className="text-[11px] text-[var(--color-text-muted)] mt-1">
-              <span>Kabupaten & Kota aktif</span>
+            <div className="text-[11px] text-blue-800 mt-1 font-semibold">
+              <span>Kabupaten &amp; Kota aktif</span>
             </div>
           </div>
 
-          {/* Card 4: Bantuan Terkonfirmasi */}
-          <div className="bg-white p-4 rounded-lg border border-[var(--color-border-subtle)] shadow-xs">
-            <div className="flex items-center justify-between text-[var(--color-forest-main)] mb-1">
-              <span className="text-[10px] font-bold uppercase tracking-wider text-[var(--color-text-muted)]">
+          {/* Card 4: Bantuan Terkonfirmasi (Marine Teal Theme) */}
+          <div className="bg-gradient-to-br from-teal-50 via-white to-teal-50/40 p-4 rounded-xl border-2 border-teal-300 shadow-sm">
+            <div className="flex items-center justify-between text-teal-800 mb-1">
+              <span className="text-[10px] font-black uppercase tracking-wider text-teal-900">
                 Bantuan Terkonfirmasi
               </span>
-              <Package className="w-4 h-4" />
+              <Package className="w-4 h-4 text-teal-700" />
             </div>
-            <div className="text-2xl sm:text-3xl font-black font-mono text-[var(--color-forest-main)]">
+            <div className="text-2xl sm:text-3xl font-black font-mono text-teal-950">
               {metrics.totalConfirmedAidItems.toLocaleString("id-ID")}
             </div>
-            <div className="text-[11px] text-[var(--color-text-muted)] mt-1">
-              <span>Item logistik & relawan</span>
+            <div className="text-[11px] text-teal-800 mt-1 font-semibold">
+              <span>Item logistik &amp; relawan</span>
             </div>
           </div>
 
-          {/* Card 5: Selisih Kebutuhan Riil */}
-          <div className="col-span-2 lg:col-span-1 bg-white p-4 rounded-lg border-2 border-[var(--color-brick-border)] bg-[var(--color-brick-bg)]/20 shadow-xs">
-            <div className="flex items-center justify-between text-[var(--color-brick-main)] mb-1">
-              <span className="text-[10px] font-bold uppercase tracking-wider text-[var(--color-brick-main)]">
+          {/* Card 5: Selisih Kebutuhan Riil (Alert Crimson Theme) */}
+          <div className="col-span-2 lg:col-span-1 bg-gradient-to-br from-red-50 via-white to-red-100/50 p-4 rounded-xl border-2 border-red-400 shadow-sm">
+            <div className="flex items-center justify-between text-red-700 mb-1">
+              <span className="text-[10px] font-black uppercase tracking-wider text-red-900">
                 Selisih Belum Terpenuhi
               </span>
-              <AlertTriangle className="w-4 h-4" />
+              <AlertTriangle className="w-4 h-4 text-red-600" />
             </div>
-            <div className="text-2xl sm:text-3xl font-black font-mono text-[var(--color-brick-main)]">
+            <div className="text-2xl sm:text-3xl font-black font-mono text-red-950">
               {metrics.totalRemainingDeficitItems.toLocaleString("id-ID")}
             </div>
-            <div className="text-[11px] text-[var(--color-brick-main)] mt-1 font-semibold">
+            <div className="text-[11px] text-red-800 mt-1 font-bold">
               <span>Kekurangan riil lapangan</span>
             </div>
           </div>
@@ -301,22 +301,35 @@ export function PublicDashboardView({ data }: PublicDashboardViewProps) {
             </div>
 
             <div className="grid grid-cols-2 sm:grid-cols-3 gap-2.5 text-xs">
-              {Object.entries(metrics.byCategory).map(([cat, count]) => (
-                <div
-                  key={cat}
-                  className="p-3 rounded border border-[var(--color-border-subtle)] bg-[var(--color-bg-base)] flex flex-col justify-between"
-                >
-                  <span className="text-[11px] font-bold text-[var(--color-text-muted)] uppercase">
-                    {cat}
-                  </span>
-                  <div className="text-xl font-black font-mono text-[var(--color-text-main)] mt-1">
-                    {count}
+              {Object.entries(metrics.byCategory).map(([cat, count]) => {
+                // Skema warna per kategori sesuai standar visual
+                const colorStyles: Record<string, string> = {
+                  BENCANA: "bg-red-50/80 border-red-300 text-red-950",
+                  LINGKUNGAN: "bg-emerald-50/80 border-emerald-300 text-emerald-950",
+                  LANSIA: "bg-amber-50/80 border-amber-300 text-amber-950",
+                  KESEHATAN: "bg-teal-50/80 border-teal-300 text-teal-950",
+                  PENDIDIKAN: "bg-indigo-50/80 border-indigo-300 text-indigo-950",
+                  SOSIAL_LAINNYA: "bg-purple-50/80 border-purple-300 text-purple-950",
+                };
+                const themeClass = colorStyles[cat] || "bg-slate-50 border-slate-300 text-slate-900";
+
+                return (
+                  <div
+                    key={cat}
+                    className={`p-3 rounded-xl border-2 flex flex-col justify-between shadow-2xs transition-all hover:scale-[1.02] ${themeClass}`}
+                  >
+                    <span className="text-[10px] font-black uppercase tracking-wider">
+                      {cat.replace("_", " ")}
+                    </span>
+                    <div className="text-xl font-black font-mono mt-1">
+                      {count}
+                    </div>
+                    <span className="text-[10px] font-semibold opacity-80 mt-0.5">
+                      Titik Kebutuhan
+                    </span>
                   </div>
-                  <span className="text-[10px] text-[var(--color-text-muted)] mt-0.5">
-                    Titik Kebutuhan
-                  </span>
-                </div>
-              ))}
+                );
+              })}
             </div>
           </div>
         </div>

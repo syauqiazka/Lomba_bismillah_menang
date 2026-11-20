@@ -68,17 +68,17 @@ export function EmergencyDirectoryView({ contacts }: EmergencyDirectoryViewProps
           </span>
         </div>
 
-        {/* Header Title */}
-        <div>
-          <div className="flex items-center gap-2.5 mb-2">
-            <div className="w-9 h-9 rounded-full bg-[var(--color-brick-bg)] text-[var(--color-brick-main)] flex items-center justify-center shrink-0">
+        {/* Header Title with Bold Emergency Banner */}
+        <div className="p-5 sm:p-6 rounded-2xl bg-gradient-to-r from-red-800 via-red-900 to-amber-900 text-white shadow-md border border-red-700/60">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-xl bg-red-600 text-white flex items-center justify-center shrink-0 shadow-sm border border-red-400">
               <PhoneCall className="w-5 h-5" />
             </div>
             <div>
-              <h1 className="text-xl sm:text-2xl font-black text-[var(--color-text-main)] tracking-tight">
-                Direktori Kontak Darurat Resmi & Posko Bencana
+              <h1 className="text-xl sm:text-2xl font-black text-white tracking-tight">
+                Direktori Kontak Darurat Resmi &amp; Posko Bencana
               </h1>
-              <p className="text-xs sm:text-sm text-[var(--color-text-muted)]">
+              <p className="text-xs sm:text-sm text-red-100 mt-0.5">
                 Akses cepat panggilan darurat nasional bebas pulsa dan kontak pos komando daerah yang siap dihubungi secara luring.
               </p>
             </div>

@@ -36,21 +36,21 @@ export function Navbar({
             className="flex items-center gap-2 group focus:outline-none focus:ring-2 focus:ring-[var(--color-focus)] rounded"
             aria-label="TRASEC Beranda Peta"
           >
-            <div className="w-8 h-8 rounded bg-[var(--color-secondary)] flex items-center justify-center text-white font-bold text-sm tracking-wider">
+            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-emerald-700 to-emerald-900 flex items-center justify-center text-white font-black text-sm tracking-wider shadow-xs border border-emerald-600/40">
               TR
             </div>
             <div className="flex flex-col">
-              <span className="font-bold text-sm md:text-base text-[var(--color-text)] tracking-tight leading-none group-hover:text-[var(--color-primary)] transition-colors">
+              <span className="font-black text-sm md:text-base text-slate-900 tracking-tight leading-none group-hover:text-emerald-700 transition-colors">
                 TRASEC
               </span>
-              <span className="text-[10px] md:text-xs text-[var(--color-text-muted)] tracking-wider font-semibold uppercase">
+              <span className="text-[10px] md:text-xs text-emerald-800 tracking-wider font-bold uppercase">
                 Humanitarian Intel
               </span>
             </div>
           </Link>
 
           {/* Badge Pengingat Integritas */}
-          <span className="hidden lg:inline-flex items-center px-2 py-0.5 rounded text-[11px] font-medium bg-[var(--color-info-bg)] text-[var(--color-info-text)] border border-blue-200/60">
+          <span className="hidden lg:inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-emerald-50 text-emerald-800 border border-emerald-300">
             Transparansi Bantuan Riil
           </span>
         </div>
@@ -125,7 +125,7 @@ export function Navbar({
           <Link
             href="/darurat"
             data-tour="nav-emergency"
-            className="inline-flex items-center gap-1 px-2.5 py-1.5 text-xs font-semibold rounded text-[var(--color-danger-text)] bg-[var(--color-danger-bg)] hover:bg-red-100 border border-red-200 focus:outline-none focus:ring-2 focus:ring-[var(--color-focus)] transition-colors"
+            className="inline-flex items-center gap-1 px-2.5 py-1.5 text-xs font-bold rounded-lg text-white bg-red-600 hover:bg-red-700 border border-red-700 shadow-xs focus:outline-none focus:ring-2 focus:ring-red-400 transition-colors"
             title="Nomor Darurat Nasional & Posko"
           >
             <PhoneCall className="w-3.5 h-3.5" />
@@ -136,7 +136,7 @@ export function Navbar({
           <Link
             href="/lapor"
             data-tour="nav-report"
-            className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold rounded bg-[var(--color-primary)] hover:bg-[var(--color-primary-hover)] text-white focus:outline-none focus:ring-2 focus:ring-[var(--color-focus)] transition-colors shadow-sm"
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold rounded-lg bg-emerald-700 hover:bg-emerald-800 text-white focus:outline-none focus:ring-2 focus:ring-emerald-400 transition-colors shadow-xs"
           >
             <PlusCircle className="w-3.5 h-3.5" />
             <span>Lapor</span>

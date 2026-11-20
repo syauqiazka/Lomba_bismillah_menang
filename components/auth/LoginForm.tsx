@@ -119,30 +119,30 @@ export function LoginForm() {
 
       {/* Main Auth Card */}
       <div className="bg-white rounded-xl border border-[var(--color-border-subtle)] shadow-sm overflow-hidden">
-        {/* Header Title */}
-        <div className="p-6 border-b border-[var(--color-border-subtle)] bg-[var(--color-bg-base)] text-center">
-          <div className="w-10 h-10 rounded-full bg-[var(--color-forest-bg)] text-[var(--color-forest-main)] flex items-center justify-center mx-auto mb-2">
-            <Lock className="w-5 h-5" />
+        {/* Header Title with Rich Emerald Gradient */}
+        <div className="p-6 border-b border-emerald-900/20 bg-gradient-to-br from-emerald-800 via-emerald-900 to-slate-900 text-white text-center">
+          <div className="w-12 h-12 rounded-xl bg-emerald-600 text-white flex items-center justify-center mx-auto mb-2.5 shadow-md border border-emerald-400/40">
+            <Lock className="w-6 h-6" />
           </div>
-          <h1 className="text-lg font-black text-[var(--color-text-main)]">
+          <h1 className="text-xl font-black text-white tracking-tight">
             {mode === "LOGIN" ? "Masuk ke Sistem TRASEC" : "Daftar Akun Relawan"}
           </h1>
-          <p className="text-xs text-[var(--color-text-muted)] mt-1">
-            Humanitarian Intelligence Platform • Akses Terpadu
+          <p className="text-xs text-emerald-200 mt-1">
+            Humanitarian Intelligence Platform &bull; Akses Terpadu
           </p>
 
           {/* Mode Switcher Tabs */}
-          <div className="flex rounded-md p-1 bg-slate-200/60 mt-4 text-xs font-bold">
+          <div className="flex rounded-xl p-1 bg-black/30 backdrop-blur-xs mt-4 text-xs font-bold border border-white/10">
             <button
               type="button"
               onClick={() => {
                 setMode("LOGIN");
                 setErrorMessage(null);
               }}
-              className={`flex-1 py-1.5 rounded transition-all flex items-center justify-center gap-1.5 ${
+              className={`flex-1 py-2 rounded-lg transition-all flex items-center justify-center gap-1.5 cursor-pointer ${
                 mode === "LOGIN"
-                  ? "bg-white text-[var(--color-text-main)] shadow-xs"
-                  : "text-[var(--color-text-muted)] hover:text-[var(--color-text-main)]"
+                  ? "bg-white text-emerald-950 shadow-md font-black"
+                  : "text-emerald-200 hover:text-white"
               }`}
             >
               <LogIn className="w-3.5 h-3.5" />
@@ -154,10 +154,10 @@ export function LoginForm() {
                 setMode("REGISTER");
                 setErrorMessage(null);
               }}
-              className={`flex-1 py-1.5 rounded transition-all flex items-center justify-center gap-1.5 ${
+              className={`flex-1 py-2 rounded-lg transition-all flex items-center justify-center gap-1.5 cursor-pointer ${
                 mode === "REGISTER"
-                  ? "bg-white text-[var(--color-text-main)] shadow-xs"
-                  : "text-[var(--color-text-muted)] hover:text-[var(--color-text-main)]"
+                  ? "bg-white text-emerald-950 shadow-md font-black"
+                  : "text-emerald-200 hover:text-white"
               }`}
             >
               <UserPlus className="w-3.5 h-3.5" />
