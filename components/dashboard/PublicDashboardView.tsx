@@ -333,22 +333,39 @@ export function PublicDashboardView({ data }: PublicDashboardViewProps) {
               </p>
             </div>
 
-            {/* Filter Kategori Logistik */}
-            <div className="flex items-center gap-1.5 overflow-x-auto text-xs">
-              <span className="text-[10px] font-semibold text-[var(--color-text-muted)] mr-1">Filter:</span>
-              {["ALL", "MAKANAN", "HUNIAN", "MEDIS", "SANITASI", "LOGISTIK", "EVAKUASI"].map((cat) => (
-                <button
-                  key={cat}
-                  onClick={() => setSelectedCategory(cat)}
-                  className={`px-2.5 py-1 rounded text-[11px] font-semibold transition-colors ${
-                    selectedCategory === cat
-                      ? "bg-[var(--color-forest-main)] text-white"
-                      : "bg-[var(--color-bg-base)] text-[var(--color-text-muted)] hover:bg-slate-200"
-                  }`}
-                >
-                  {cat === "ALL" ? "Semua" : cat}
-                </button>
-              ))}
+            {/* Filter Kategori Logistik dengan Pembeda Aktif yang Sangat Jelas */}
+            <div className="flex flex-col sm:flex-row sm:items-center gap-2.5">
+              <div className="flex items-center gap-1.5 overflow-x-auto p-1 bg-slate-100 rounded-xl border border-slate-200 text-xs">
+                <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider px-2">Filter:</span>
+                {["ALL", "MAKANAN", "HUNIAN", "MEDIS", "SANITASI", "LOGISTIK", "EVAKUASI"].map((cat) => {
+                  const isActive = selectedCategory === cat;
+                  return (
+                    <button
+                      key={cat}
+                      type="button"
+                      onClick={() => setSelectedCategory(cat)}
+                      className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all duration-200 cursor-pointer flex items-center gap-1.5 ${
+                        isActive
+                          ? "bg-[var(--color-primary)] text-white shadow-sm ring-2 ring-emerald-600/30 scale-[1.02]"
+                          : "bg-white text-slate-700 hover:bg-slate-50 border border-slate-200/80 hover:border-slate-300"
+                      }`}
+                      aria-pressed={isActive}
+                    >
+                      {isActive && <span className="w-1.5 h-1.5 rounded-full bg-emerald-300 animate-pulse" />}
+                      <span>{cat === "ALL" ? "Semua" : cat}</span>
+                    </button>
+                  );
+                })}
+              </div>
+
+              {/* Status Badge Filter Aktif */}
+              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-50 border border-emerald-200 text-[11px] font-bold text-[var(--color-primary)] shrink-0 self-start sm:self-auto">
+                <span className="w-2 h-2 rounded-full bg-[var(--color-primary)]" />
+                <span>
+                  Menampilkan:{" "}
+                  <strong>{selectedCategory === "ALL" ? "Semua Kategori Logistik" : `Kategori ${selectedCategory}`}</strong>
+                </span>
+              </div>
             </div>
           </div>
 

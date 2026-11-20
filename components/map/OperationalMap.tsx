@@ -206,19 +206,23 @@ export default function OperationalMap({
       {/* Kanvas Leaflet */}
       <div ref={mapContainerRef} className="w-full h-full z-0" />
 
-      {/* Bar Filter Cepat di Atas Peta (Di Bawah Navbar) */}
-      <div className="absolute top-16 left-4 right-4 z-[900] pointer-events-none">
-        <div className="max-w-fit pointer-events-auto bg-white/95 backdrop-blur-xs border border-[var(--color-border)] rounded-lg p-2 flex flex-wrap items-center gap-2 shadow-xs">
-          <div className="flex items-center gap-1.5 text-xs font-bold text-[var(--color-text)] pr-2 border-r border-[var(--color-border)]">
+      {/* Bar Filter Cepat Peta: Berada di Posisi Tengah Atas yang Proporsional & Rapi */}
+      <div className="absolute top-3 left-1/2 -translate-x-1/2 z-[800] pointer-events-none w-auto max-w-[94vw]">
+        <div className="pointer-events-auto bg-white/98 backdrop-blur-md border border-slate-300 rounded-2xl sm:rounded-full px-3.5 py-2 flex flex-wrap items-center justify-center gap-2 shadow-md">
+          <div className="flex items-center gap-1.5 text-xs font-black text-slate-800 pr-2 border-r border-slate-200">
             <Filter className="w-3.5 h-3.5 text-[var(--color-primary)]" />
-            <span className="hidden sm:inline">Filter:</span>
+            <span className="hidden sm:inline">Filter Peta:</span>
           </div>
 
           {/* Pemilih Kategori */}
           <select
             value={categoryFilter}
             onChange={(e) => setCategoryFilter(e.target.value)}
-            className="text-xs bg-[var(--color-bg)] border border-[var(--color-border)] rounded px-2 py-1 text-[var(--color-text)] font-medium focus:outline-none focus:ring-1 focus:ring-[var(--color-focus)] cursor-pointer"
+            className={`text-xs rounded-lg px-2.5 py-1 font-bold focus:outline-none focus:ring-2 focus:ring-emerald-500 cursor-pointer transition-colors ${
+              categoryFilter !== "ALL"
+                ? "bg-emerald-50 text-emerald-800 border-2 border-emerald-500"
+                : "bg-slate-100 text-slate-700 border border-slate-200 hover:bg-slate-200"
+            }`}
             aria-label="Filter berdasarkan kategori laporan"
           >
             <option value="ALL">Semua Kategori ({reports.length})</option>
@@ -234,13 +238,17 @@ export default function OperationalMap({
           <select
             value={statusFilter}
             onChange={(e) => setStatusFilter(e.target.value)}
-            className="text-xs bg-[var(--color-bg)] border border-[var(--color-border)] rounded px-2 py-1 text-[var(--color-text)] font-medium focus:outline-none focus:ring-1 focus:ring-[var(--color-focus)] cursor-pointer"
+            className={`text-xs rounded-lg px-2.5 py-1 font-bold focus:outline-none focus:ring-2 focus:ring-emerald-500 cursor-pointer transition-colors ${
+              statusFilter !== "ALL"
+                ? "bg-amber-50 text-amber-900 border-2 border-amber-500"
+                : "bg-slate-100 text-slate-700 border border-slate-200 hover:bg-slate-200"
+            }`}
             aria-label="Filter berdasarkan tingkat selisih kebutuhan"
           >
             <option value="ALL">Semua Status Selisih</option>
-            <option value="KEKURANGAN_BESAR">Kekurangan Besar (&gt;50%)</option>
-            <option value="KEKURANGAN_SEDANG">Kekurangan Sedang (10%–50%)</option>
-            <option value="HAMPIR_TERPENUHI">Hampir Terpenuhi (&lt;10%)</option>
+            <option value="KEKURANGAN_BESAR">🔴 Kekurangan Besar (&gt;50%)</option>
+            <option value="KEKURANGAN_SEDANG">🟡 Kekurangan Sedang (10%–50%)</option>
+            <option value="HAMPIR_TERPENUHI">🟢 Hampir Terpenuhi (&lt;10%)</option>
             <option value="PEMANTAUAN">Pemantauan Lingkungan</option>
           </select>
 
@@ -248,18 +256,23 @@ export default function OperationalMap({
           <select
             value={staleFilter}
             onChange={(e) => setStaleFilter(e.target.value)}
-            className="text-xs bg-[var(--color-bg)] border border-[var(--color-border)] rounded px-2 py-1 text-[var(--color-text)] font-medium focus:outline-none focus:ring-1 focus:ring-[var(--color-focus)] cursor-pointer"
+            className={`text-xs rounded-lg px-2.5 py-1 font-bold focus:outline-none focus:ring-2 focus:ring-emerald-500 cursor-pointer transition-colors ${
+              staleFilter !== "ALL"
+                ? "bg-blue-50 text-blue-900 border-2 border-blue-500"
+                : "bg-slate-100 text-slate-700 border border-slate-200 hover:bg-slate-200"
+            }`}
             aria-label="Filter berdasarkan kebaruan data"
           >
             <option value="ALL">Semua Waktu</option>
             <option value="FRESH_ONLY">Hanya Terkini (&lt; 7 Hari)</option>
-            <option value="STALE_ONLY">Perlu Konfirmasi (&gt; 7 Hari)</option>
+            <option value="STALE_ONLY">⚠️ Perlu Konfirmasi (&gt; 7 Hari)</option>
           </select>
 
           {/* Indikator Jumlah Titik Aktif */}
-          <span className="text-[11px] font-semibold text-[var(--color-text-muted)] pl-1">
-            {filteredReports.length} lokasi aktif
-          </span>
+          <div className="flex items-center gap-1.5 pl-1.5 border-l border-slate-200 text-xs font-bold text-slate-700">
+            <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+            <span>{filteredReports.length} lokasi aktif</span>
+          </div>
         </div>
       </div>
     </div>

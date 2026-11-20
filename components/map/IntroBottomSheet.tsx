@@ -1,17 +1,57 @@
 "use client";
 
-import { useEffect, useRef } from "react";
-import { X, CheckCircle2, ArrowRight } from "lucide-react";
+import { useState, useEffect } from "react";
+import { X, BookOpen, ArrowRight, ArrowLeft, Check, Sparkles } from "lucide-react";
 
 interface IntroBottomSheetProps {
   isOpen: boolean;
   onClose: () => void;
 }
 
-export function IntroBottomSheet({ isOpen, onClose }: IntroBottomSheetProps) {
-  const sheetRef = useRef<HTMLDivElement>(null);
+interface StepItem {
+  title: string;
+  description: string;
+  tips: string;
+}
 
-  // Tangani penutupan via tombol Escape
+const TOUR_STEPS: StepItem[] = [
+  {
+    title: "Misi & Intelijen Logistik Kemanusiaan",
+    description:
+      "TRASEC adalah platform intelijen kemanusiaan terbuka yang memetakan kebutuhan nyata korban bencana dan kerentanan lingkungan dengan bantuan fisik terkonfirmasi. Platform ini 100% bebas donasi finansial dan bebas penumpukan bantuan.",
+    tips: "Gunakan peta interaktif ini untuk melihat sebaran posko bantuan dan mengidentifikasi titik wilayah yang belum tersentuh bantuan.",
+  },
+  {
+    title: "Memahami Skala Warna Marker Peta",
+    description:
+      "Warna setiap titik di peta mencerminkan persentase selisih kebutuhan logistik: Merah (Kekurangan Besar >50%), Kuning (Kekurangan Sedang 10%–50%), dan Hijau (Hampir Terpenuhi / Sisa <10%).",
+    tips: "Klik pin merah terlebih dahulu untuk memprioritaskan bantuan logistik ke lokasi yang paling membutuhkan.",
+  },
+  {
+    title: "Perhitungan Selisih Terbuka: max(0, Need - Aid)",
+    description:
+      "Sistem menghitung selisih matematis: max(0, Kebutuhan - Bantuan Terkonfirmasi) per satuan ukur spesifik tanpa mencampuradukkan satuan. Begitu kuota terpenuhi (selisih = 0), bantuan dialihkan ke lokasi lain.",
+    tips: "Setiap catatan bantuan yang berstatus CONFIRMED langsung memotong sisa selisih secara otomatis dan real-time.",
+  },
+  {
+    title: "Etika & Pengaburan Lokasi Korban Rentan",
+    description:
+      "Demi menjaga privasi dan keamanan warga lansia serta fasilitas kesehatan marjinal, titik koordinat GPS secara otomatis dikaburkan radius ~1,1 km di level server publik.",
+    tips: "Alamat presisi dan kontak koordinator lapangan hanya dapat diakses oleh relawan yang telah terverifikasi resmi.",
+  },
+  {
+    title: "Verifikasi 2 Lapis & Standar 5W+1H",
+    description:
+      "Laporan divalidasi dengan standar 5W+1H dan memerlukan minimal 2 verifikator independen (Komunitas) atau verifikator lembaga resmi (seperti PMI) sebelum dipublikasikan ke peta umum.",
+    tips: "Anda dapat berpartisipasi dengan menekan tombol 'Lapor' untuk mengajukan kebutuhan baru atau 'Masuk' sebagai relawan posko.",
+  },
+];
+
+export function IntroBottomSheet({ isOpen, onClose }: IntroBottomSheetProps) {
+  const [currentStep, setCurrentStep] = useState(1);
+  const totalSteps = TOUR_STEPS.length;
+
+  // Tangani penutupan via tombol Escape dan reset step saat dibuka
   useEffect(() => {
     function handleKeyDown(e: KeyboardEvent) {
       if (e.key === "Escape" && isOpen) {
@@ -24,126 +64,134 @@ export function IntroBottomSheet({ isOpen, onClose }: IntroBottomSheetProps) {
 
   if (!isOpen) return null;
 
+  const currentData = TOUR_STEPS[currentStep - 1];
+
+  const handleNext = () => {
+    if (currentStep < totalSteps) {
+      setCurrentStep((prev) => prev + 1);
+    } else {
+      onClose();
+    }
+  };
+
+  const handlePrev = () => {
+    if (currentStep > 1) {
+      setCurrentStep((prev) => prev - 1);
+    }
+  };
+
   return (
     <div
-      ref={sheetRef}
-      role="region"
-      aria-label="Pengantar Platform Humanitarian Intelligence"
-      className={`fixed z-[1100] transition-all duration-300 ease-out
-        /* Mobile layout: Bottom sheet menempel di bawah */
-        inset-x-0 bottom-0 max-h-[75vh] md:max-h-[60vh]
-        /* Desktop layout (>=1024px): Floating panel di kiri bawah */
-        lg:inset-x-auto lg:left-6 lg:bottom-6 lg:w-[420px] lg:max-h-[85vh]
-        bg-[var(--color-surface)] border border-[var(--color-border)]
-        rounded-t-2xl lg:rounded-xl flex flex-col overflow-hidden
-      `}
-      style={{ boxShadow: "var(--shadow-elevated)" }}
+      role="dialog"
+      aria-modal="true"
+      aria-label="Panduan Langkah demi Langkah Platform"
+      className="fixed inset-0 z-[1200] bg-black/60 backdrop-blur-xs flex items-center justify-center p-4 sm:p-6 animate-fade-in"
     >
-      {/* Mobile Drag Handle */}
-      <div className="flex lg:hidden justify-center pt-2.5 pb-1 cursor-grab active:cursor-grabbing">
-        <div className="w-9 h-1 rounded-full bg-[var(--color-border-strong)] opacity-60" />
-      </div>
+      {/* Modal Card Berfokus Langkah demi Langkah (Persis Gambar Referensi 3) */}
+      <div
+        className="w-full max-w-md sm:max-w-lg bg-white rounded-2xl border border-slate-200 shadow-2xl p-6 sm:p-7 space-y-5 animate-scale-in relative text-slate-900"
+        style={{ boxShadow: "0 20px 25px -5px rgba(0, 0, 0, 0.25), 0 8px 10px -6px rgba(0, 0, 0, 0.25)" }}
+      >
+        {/* Baris Atas: Indikator Langkah + Tombol Tutup */}
+        <div className="flex items-center justify-between pb-3 border-b border-slate-100">
+          <div className="flex items-center gap-2 text-xs font-black uppercase tracking-wider text-[var(--color-primary)]">
+            <BookOpen className="w-4 h-4" />
+            <span>Langkah {currentStep} dari {totalSteps}</span>
+          </div>
 
-      {/* Header Panel */}
-      <div className="flex items-start justify-between px-5 pt-3 pb-2 border-b border-[var(--color-border)]">
-        <div>
-          <span className="text-[10px] font-bold tracking-wider uppercase text-[var(--color-primary)]">
-            Panduan Cepat 3 Detik
-          </span>
-          <h2 className="text-base md:text-lg font-bold text-[var(--color-text)] leading-tight">
-            Humanitarian Intelligence Platform
+          <button
+            type="button"
+            onClick={onClose}
+            className="p-1 rounded-lg text-slate-400 hover:text-slate-800 hover:bg-slate-100 transition-colors cursor-pointer"
+            aria-label="Tutup panduan"
+          >
+            <X className="w-5 h-5" />
+          </button>
+        </div>
+
+        {/* Konten Langkah Terfokus */}
+        <div className="space-y-3">
+          <h2 className="text-lg sm:text-xl font-black text-slate-900 tracking-tight leading-snug">
+            {currentData.title}
           </h2>
-        </div>
-        <button
-          type="button"
-          onClick={onClose}
-          className="p-1 rounded-md text-[var(--color-text-muted)] hover:text-[var(--color-text)] hover:bg-[var(--color-surface-hover)] focus:outline-none focus:ring-2 focus:ring-[var(--color-focus)] cursor-pointer"
-          aria-label="Tutup pengantar"
-        >
-          <X className="w-5 h-5" />
-        </button>
-      </div>
 
-      {/* Body / Konten Orientasi */}
-      <div className="p-5 overflow-y-auto space-y-4 text-xs md:text-sm text-[var(--color-text-secondary)]">
-        <p className="leading-relaxed">
-          Platform operasional untuk memetakan kebutuhan kemanusiaan dan menghitung{" "}
-          <strong className="text-[var(--color-text)]">selisih transparan</strong> antara
-          kebutuhan lapangan dengan bantuan yang telah terkonfirmasi.{" "}
-          <span className="text-[var(--color-text-muted)] italic">
-            Bukan situs donasi finansial atau crowdfunding.
-          </span>
-        </p>
+          <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
+            {currentData.description}
+          </p>
 
-        {/* 3 Butir Panduan Cepat */}
-        <div className="space-y-2.5 pt-1">
-          {/* 1. Skala Penanda Peta */}
-          <div className="flex items-start gap-3 p-2.5 rounded-lg bg-[var(--color-bg)] border border-[var(--color-border)]">
-            <div className="flex flex-col gap-1 items-center shrink-0 pt-0.5">
-              <span className="w-3.5 h-3.5 rounded-full bg-[#B83E37] border-2 border-white shadow-xs" title="Kekurangan Besar" />
-              <span className="w-3.5 h-3.5 rounded-full bg-[#E5A13A] border-2 border-white shadow-xs" title="Kekurangan Sedang" />
-              <span className="w-3.5 h-3.5 rounded-full bg-[#246B50] border-2 border-white shadow-xs" title="Hampir Terpenuhi" />
+          {/* Kotak Tips Khas Gambar Referensi 3 */}
+          <div className="p-3.5 rounded-xl bg-slate-50 border border-slate-200/80 text-xs text-slate-700 space-y-1">
+            <div className="flex items-center gap-1.5 font-bold text-amber-700">
+              <Sparkles className="w-3.5 h-3.5 text-amber-600" />
+              <span>Tips Penggunaan:</span>
             </div>
-            <div>
-              <h3 className="font-bold text-[var(--color-text)] text-xs mb-0.5">
-                1. Skala Selisih Logistik
-              </h3>
-              <p className="text-[11px] leading-normal text-[var(--color-text-secondary)]">
-                <span className="font-semibold text-[#B83E37]">Merah</span>: Selisih &gt;50%
-                &bull; <span className="font-semibold text-[#8A5A00]">Kuning</span>: 10%–50%
-                &bull; <span className="font-semibold text-[#1B5440]">Hijau</span>: &lt;10%
-                terpenuhi.
-              </p>
-            </div>
-          </div>
-
-          {/* 2. Selisih Terhitung Terbuka */}
-          <div className="flex items-start gap-3 p-2.5 rounded-lg bg-[var(--color-bg)] border border-[var(--color-border)]">
-            <div className="w-6 h-6 rounded bg-[var(--color-info-bg)] text-[var(--color-info-text)] flex items-center justify-center shrink-0 font-bold text-xs">
-              &Delta;
-            </div>
-            <div>
-              <h3 className="font-bold text-[var(--color-text)] text-xs mb-0.5">
-                2. Selisih Terhitung Terbuka
-              </h3>
-              <p className="text-[11px] leading-normal text-[var(--color-text-secondary)]">
-                Selisih dihitung per satuan (kotak, karung, orang). Bantuan hanya dihitung jika
-                berstatus <code className="px-1 py-0.5 rounded bg-gray-200 text-[10px]">CONFIRMED</code>.
-              </p>
-            </div>
-          </div>
-
-          {/* 3. Verifikasi & Privasi */}
-          <div className="flex items-start gap-3 p-2.5 rounded-lg bg-[var(--color-bg)] border border-[var(--color-border)]">
-            <div className="w-6 h-6 rounded bg-[var(--color-success-bg)] text-[var(--color-success-text)] flex items-center justify-center shrink-0">
-              <CheckCircle2 className="w-4 h-4" />
-            </div>
-            <div>
-              <h3 className="font-bold text-[var(--color-text)] text-xs mb-0.5">
-                3. Verifikasi Faktual & Privasi
-              </h3>
-              <p className="text-[11px] leading-normal text-[var(--color-text-secondary)]">
-                Semua titik peta telah berstatus <strong className="text-[var(--color-text)]">VERIFIED</strong>.
-                Koordinat kelompok rentan (lansia/kesehatan) disamarkan untuk privasi keluarga.
-              </p>
-            </div>
+            <p className="text-[11px] text-slate-600 leading-normal pl-5">
+              {currentData.tips}
+            </p>
           </div>
         </div>
-      </div>
 
-      {/* Footer / Tombol Aksi Penutup */}
-      <div className="p-4 bg-[var(--color-bg)] border-t border-[var(--color-border)] flex items-center justify-between gap-3">
-        <span className="text-[11px] text-[var(--color-text-muted)]">
-          Tekan <kbd className="px-1 py-0.5 rounded bg-white border border-gray-300 text-[10px]">Esc</kbd> untuk menutup
-        </span>
-        <button
-          type="button"
-          onClick={onClose}
-          className="inline-flex items-center justify-center gap-2 px-5 py-2.5 text-xs md:text-sm font-bold rounded-lg bg-[var(--color-primary)] hover:bg-[var(--color-primary-hover)] text-white focus:outline-none focus:ring-2 focus:ring-[var(--color-focus)] transition-colors shadow-sm cursor-pointer"
-        >
-          <span>Jelajahi Peta Langsung</span>
-          <ArrowRight className="w-4 h-4" />
-        </button>
+        {/* Baris Bawah: Navigasi (Lewati - Titik Paginasi - Tombol Kembali & Lanjut) */}
+        <div className="pt-3 border-t border-slate-100 flex items-center justify-between gap-3">
+          {/* Tombol Lewati di Kiri */}
+          <button
+            type="button"
+            onClick={onClose}
+            className="text-xs font-bold text-slate-500 hover:text-slate-800 transition-colors cursor-pointer"
+          >
+            Lewati
+          </button>
+
+          {/* Titik Paginasi (Dots) di Tengah */}
+          <div className="flex items-center gap-1.5">
+            {TOUR_STEPS.map((_, idx) => {
+              const stepNumber = idx + 1;
+              const isActive = currentStep === stepNumber;
+              return (
+                <button
+                  key={stepNumber}
+                  type="button"
+                  onClick={() => setCurrentStep(stepNumber)}
+                  className={`h-2 rounded-full transition-all duration-300 cursor-pointer ${
+                    isActive
+                      ? "w-6 bg-[var(--color-primary)]"
+                      : "w-2 bg-slate-300 hover:bg-slate-400"
+                  }`}
+                  aria-label={`Lompat ke langkah ${stepNumber}`}
+                  aria-current={isActive ? "step" : undefined}
+                />
+              );
+            })}
+          </div>
+
+          {/* Tombol Aksi di Kanan (Kembali & Lanjut/Selesai) */}
+          <div className="flex items-center gap-2">
+            {currentStep > 1 && (
+              <button
+                type="button"
+                onClick={handlePrev}
+                className="p-2 rounded-lg border border-slate-300 hover:bg-slate-100 text-slate-700 transition-colors cursor-pointer"
+                aria-label="Langkah sebelumnya"
+                title="Langkah sebelumnya"
+              >
+                <ArrowLeft className="w-4 h-4" />
+              </button>
+            )}
+
+            <button
+              type="button"
+              onClick={handleNext}
+              className="px-4 py-2 rounded-xl bg-[var(--color-primary)] hover:bg-[var(--color-primary-hover)] text-white text-xs font-black shadow-sm transition-all duration-200 cursor-pointer flex items-center gap-1.5"
+            >
+              <span>{currentStep === totalSteps ? "Selesai" : "Lanjut"}</span>
+              {currentStep === totalSteps ? (
+                <Check className="w-3.5 h-3.5" />
+              ) : (
+                <ArrowRight className="w-3.5 h-3.5" />
+              )}
+            </button>
+          </div>
+        </div>
       </div>
     </div>
   );

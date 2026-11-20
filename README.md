@@ -298,3 +298,4 @@ trasec_lomba/
 - **Data Peta:** &copy; [OpenStreetMap](https://www.openstreetmap.org/copyright) contributors (ODbL).
 - **Aset Foto:** Dokumentasi aksi relawan kemanusiaan dan kebersihan lingkungan Indonesia (rincian lisensi tersedia di [ASSET_CREDITS.md](public/images/landing/ASSET_CREDITS.md)).
 - **Lisensi Perangkat Lunak:** MIT License.
+

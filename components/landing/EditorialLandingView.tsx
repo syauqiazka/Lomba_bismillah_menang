@@ -15,6 +15,9 @@ import {
   CheckCircle2,
   Send,
   Activity,
+  HeartHandshake,
+  GraduationCap,
+  Users,
 } from "lucide-react";
 import type { PublicAggregates } from "@/lib/public-queries";
 import type { SessionData } from "@/lib/session-options";
@@ -45,17 +48,17 @@ export function EditorialLandingView({
 
   return (
     <div className="min-h-screen bg-[#FDFDFD] text-[var(--color-text)] flex flex-col selection:bg-[var(--color-primary)] selection:text-white relative overflow-x-hidden font-sans">
-      {/* 1. Header Navigasi Melekat (Sticky Navbar) */}
+      {/* 1. Header Navigasi Melekat (Fixed Navbar) */}
       <Navbar session={session} isSticky />
 
       {/* ======================================================== */}
-      {/* SEKSI 1: HERO EDITORIAL KEMANUSIAAN (PERSIS KIN DORA)    */}
+      {/* SEKSI 1: HERO EDITORIAL KEMANUSIAAN                      */}
       {/* ======================================================== */}
-      <section className="relative pt-24 pb-16 md:pt-32 md:pb-24 px-4 sm:px-6 bg-[#FAFAFA] border-b border-[var(--color-border)] overflow-hidden">
-        {/* Giant Watermark Typography di Latar Belakang */}
+      <section className="relative pt-28 pb-16 md:pt-36 md:pb-24 px-4 sm:px-6 bg-[#FAFAFA] border-b border-[var(--color-border)] overflow-hidden">
+        {/* Watermark Tipografi Latar Belakang */}
         <div
           aria-hidden="true"
-          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-[120px] sm:text-[180px] md:text-[260px] font-black text-slate-200/60 tracking-[0.2em] select-none pointer-events-none -z-0 leading-none animate-watermark"
+          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-[120px] sm:text-[180px] md:text-[260px] font-black text-slate-200/50 tracking-[0.2em] select-none pointer-events-none -z-0 leading-none"
         >
           TRASEC
         </div>
@@ -78,9 +81,9 @@ export function EditorialLandingView({
             </div>
           </RevealOnScroll>
 
-          {/* 3-Column Hero Layout (Kiri: Teks & CTA, Tengah: Foto Vertikal, Kanan: Kutipan Faktual) */}
+          {/* 3-Column Hero Layout */}
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center max-w-5xl mx-auto">
-            {/* Kolom Kiri: Penjelasan Kunci & Tombol Masuk Peta (3.5 Kolom) */}
+            {/* Kolom Kiri: Penjelasan Kunci & Tombol Masuk Peta (4 Kolom) */}
             <div className="lg:col-span-4 space-y-4 text-left order-2 lg:order-1">
               <RevealOnScroll direction="up" delayMs={100}>
                 <div className="space-y-3">
@@ -89,7 +92,7 @@ export function EditorialLandingView({
                     <span>Real-time Logistik</span>
                   </div>
                   <p className="text-xs sm:text-sm text-[var(--color-text-secondary)] leading-relaxed">
-                    Bukan platform penggalangan dana. TRASEC menghitung dan menampilkan <strong>selisih terbuka</strong> antara kebutuhan warga di lapangan dan bantuan fisik terkonfirmasi per satuan barang dan relawan.
+                    Bukan platform donasi finansial. TRASEC menghitung dan menampilkan <strong>selisih terbuka</strong> antara kebutuhan warga di lapangan dan bantuan fisik terkonfirmasi per satuan barang dan tenaga relawan.
                   </p>
                   <div className="pt-1">
                     <Link
@@ -109,7 +112,7 @@ export function EditorialLandingView({
             <div className="lg:col-span-5 order-1 lg:order-2">
               <RevealOnScroll direction="scale" delayMs={200}>
                 <div className="relative group max-w-sm sm:max-w-md mx-auto">
-                  {/* Ornamen Kotak Sudut Geometris Khas KIN DORA */}
+                  {/* Ornamen Kotak Sudut Geometris Editorial */}
                   <div className="absolute -top-3 -left-3 w-8 h-8 border-t-4 border-l-4 border-amber-500 z-20 pointer-events-none" />
                   <div className="absolute -bottom-3 -right-3 w-8 h-8 border-b-4 border-r-4 border-amber-500 z-20 pointer-events-none" />
 
@@ -226,7 +229,7 @@ export function EditorialLandingView({
             </RevealOnScroll>
           </div>
 
-          {/* Kolom Kanan: Kolase Asimetris 3 Foto (6 Kolom - Sesuai KIN DORA Section 2) */}
+          {/* Kolom Kanan: Kolase Asimetris 3 Foto */}
           <div className="lg:col-span-6 space-y-4">
             {/* Foto 1: Lebar di Atas */}
             <RevealOnScroll direction="scale" delayMs={150}>
@@ -299,7 +302,7 @@ export function EditorialLandingView({
       </section>
 
       {/* ======================================================== */}
-      {/* SEKSI 3: KATEGORI KEBUTUHAN & KARTU BER-PROGRESS (KIN DORA)*/}
+      {/* SEKSI 3: 6 KATEGORI PENANGANAN DENGAN SATUAN UKUR RIIL    */}
       {/* ======================================================== */}
       <section id="kategori" className="py-16 sm:py-24 px-4 sm:px-6 bg-[#F8F9FA] border-b border-[var(--color-border)]">
         <div className="max-w-6xl mx-auto space-y-12">
@@ -317,11 +320,11 @@ export function EditorialLandingView({
             </div>
           </RevealOnScroll>
 
-          {/* 4 Kartu Kategori Utama Khas KIN DORA dengan Progress Bar & Thumbnail */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {/* Kartu 1: BENCANA ALAM */}
+          {/* Grid 6 Kategori Resmi Prisma (BENCANA, LINGKUNGAN, LANSIA, KESEHATAN, PENDIDIKAN, SOSIAL_LAINNYA) */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {/* 1. BENCANA */}
             <RevealOnScroll direction="up" delayMs={50}>
-              <div className="group h-full bg-white rounded-2xl overflow-hidden border border-slate-200 shadow-xs hover:shadow-xl hover:-translate-y-1.5 transition-all duration-300 flex flex-col justify-between">
+              <div className="group h-full bg-white rounded-2xl overflow-hidden border border-slate-200 shadow-xs hover:shadow-lg hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between">
                 <div>
                   <div className="relative aspect-[16/10] w-full bg-gray-100 overflow-hidden">
                     <Image
@@ -329,7 +332,7 @@ export function EditorialLandingView({
                       alt="Tenda pengungsian darurat PMI"
                       fill
                       className="object-cover transition-transform duration-700 ease-out group-hover:scale-105"
-                      sizes="(max-width: 768px) 100vw, 250px"
+                      sizes="(max-width: 768px) 100vw, 320px"
                     />
                     <div className="absolute top-2.5 left-2.5">
                       <span className="px-2 py-0.5 rounded text-[10px] font-black uppercase tracking-wider bg-red-600 text-white shadow-xs">
@@ -344,7 +347,6 @@ export function EditorialLandingView({
                     <p className="text-[11px] text-[var(--color-text-secondary)] line-clamp-2">
                       Kebutuhan mendesak tenda peleton, selimut hangat, dan makanan darurat.
                     </p>
-                    {/* Animated Progress Bar */}
                     <div className="space-y-1 pt-2">
                       <div className="flex items-center justify-between text-[11px] font-bold">
                         <span className="text-gray-500">Terpenuhi</span>
@@ -369,9 +371,9 @@ export function EditorialLandingView({
               </div>
             </RevealOnScroll>
 
-            {/* Kartu 2: LINGKUNGAN HIDUP */}
+            {/* 2. LINGKUNGAN */}
             <RevealOnScroll direction="up" delayMs={100}>
-              <div className="group h-full bg-white rounded-2xl overflow-hidden border border-slate-200 shadow-xs hover:shadow-xl hover:-translate-y-1.5 transition-all duration-300 flex flex-col justify-between">
+              <div className="group h-full bg-white rounded-2xl overflow-hidden border border-slate-200 shadow-xs hover:shadow-lg hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between">
                 <div>
                   <div className="relative aspect-[16/10] w-full bg-gray-100 overflow-hidden">
                     <Image
@@ -379,22 +381,21 @@ export function EditorialLandingView({
                       alt="Aksi tanam pohon relawan"
                       fill
                       className="object-cover transition-transform duration-700 ease-out group-hover:scale-105"
-                      sizes="(max-width: 768px) 100vw, 250px"
+                      sizes="(max-width: 768px) 100vw, 320px"
                     />
                     <div className="absolute top-2.5 left-2.5">
                       <span className="px-2 py-0.5 rounded text-[10px] font-black uppercase tracking-wider bg-emerald-600 text-white shadow-xs">
-                        LINGKUNGAN
+                        LINGKUNGAN HIDUP
                       </span>
                     </div>
                   </div>
                   <div className="p-4 space-y-2">
                     <h3 className="text-sm font-bold text-slate-900 line-clamp-1 group-hover:text-[var(--color-primary)] transition-colors">
-                      Normalisasi Sungai &amp; Bibit
+                      Normalisasi Sungai &amp; Bibit Pohon
                     </h3>
                     <p className="text-[11px] text-[var(--color-text-secondary)] line-clamp-2">
-                      Pengadaan karung sedimentasi, cangkul relawan, dan bibit mangrove.
+                      Pengadaan karung sedimentasi, cangkul relawan, dan bibit tanaman pelindung.
                     </p>
-                    {/* Animated Progress Bar */}
                     <div className="space-y-1 pt-2">
                       <div className="flex items-center justify-between text-[11px] font-bold">
                         <span className="text-gray-500">Terpenuhi</span>
@@ -419,9 +420,9 @@ export function EditorialLandingView({
               </div>
             </RevealOnScroll>
 
-            {/* Kartu 3: PENDAMPINGAN LANSIA */}
+            {/* 3. LANSIA (SENSITIF) */}
             <RevealOnScroll direction="up" delayMs={150}>
-              <div className="group h-full bg-white rounded-2xl overflow-hidden border border-slate-200 shadow-xs hover:shadow-xl hover:-translate-y-1.5 transition-all duration-300 flex flex-col justify-between">
+              <div className="group h-full bg-white rounded-2xl overflow-hidden border border-slate-200 shadow-xs hover:shadow-lg hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between">
                 <div>
                   <div className="relative aspect-[16/10] w-full bg-gray-100 overflow-hidden">
                     <Image
@@ -429,7 +430,7 @@ export function EditorialLandingView({
                       alt="Pendampingan lansia"
                       fill
                       className="object-cover transition-transform duration-700 ease-out group-hover:scale-105"
-                      sizes="(max-width: 768px) 100vw, 250px"
+                      sizes="(max-width: 768px) 100vw, 320px"
                     />
                     <div className="absolute top-2.5 left-2.5">
                       <span className="px-2 py-0.5 rounded text-[10px] font-black uppercase tracking-wider bg-amber-600 text-white shadow-xs">
@@ -444,7 +445,6 @@ export function EditorialLandingView({
                     <p className="text-[11px] text-[var(--color-text-secondary)] line-clamp-2">
                       Popok dewasa, kursi roda, dan obat tensi. Koordinat dikaburkan demi privasi.
                     </p>
-                    {/* Animated Progress Bar */}
                     <div className="space-y-1 pt-2">
                       <div className="flex items-center justify-between text-[11px] font-bold">
                         <span className="text-gray-500">Terpenuhi</span>
@@ -469,9 +469,9 @@ export function EditorialLandingView({
               </div>
             </RevealOnScroll>
 
-            {/* Kartu 4: KESEHATAN & SANITASI */}
+            {/* 4. KESEHATAN (SENSITIF) */}
             <RevealOnScroll direction="up" delayMs={200}>
-              <div className="group h-full bg-white rounded-2xl overflow-hidden border border-slate-200 shadow-xs hover:shadow-xl hover:-translate-y-1.5 transition-all duration-300 flex flex-col justify-between">
+              <div className="group h-full bg-white rounded-2xl overflow-hidden border border-slate-200 shadow-xs hover:shadow-lg hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between">
                 <div>
                   <div className="relative aspect-[16/10] w-full bg-gray-100 overflow-hidden">
                     <Image
@@ -479,7 +479,7 @@ export function EditorialLandingView({
                       alt="Distribusi hygiene kit"
                       fill
                       className="object-cover transition-transform duration-700 ease-out group-hover:scale-105"
-                      sizes="(max-width: 768px) 100vw, 250px"
+                      sizes="(max-width: 768px) 100vw, 320px"
                     />
                     <div className="absolute top-2.5 left-2.5">
                       <span className="px-2 py-0.5 rounded text-[10px] font-black uppercase tracking-wider bg-teal-600 text-white shadow-xs">
@@ -494,7 +494,6 @@ export function EditorialLandingView({
                     <p className="text-[11px] text-[var(--color-text-secondary)] line-clamp-2">
                       Ember disinfektan, perban steril, dan obat-obatan posko darurat.
                     </p>
-                    {/* Animated Progress Bar */}
                     <div className="space-y-1 pt-2">
                       <div className="flex items-center justify-between text-[11px] font-bold">
                         <span className="text-gray-500">Terpenuhi</span>
@@ -504,6 +503,102 @@ export function EditorialLandingView({
                       <div className="flex items-center justify-between text-[10px] text-gray-500 pt-0.5">
                         <span>Target: 250 dus</span>
                         <span>Sisa: 115 dus</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div className="p-4 pt-0">
+                  <Link
+                    href="/peta"
+                    className="w-full py-2 px-3 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-900 text-xs font-bold text-center block transition-colors"
+                  >
+                    Pantau di Peta
+                  </Link>
+                </div>
+              </div>
+            </RevealOnScroll>
+
+            {/* 5. PENDIDIKAN */}
+            <RevealOnScroll direction="up" delayMs={250}>
+              <div className="group h-full bg-white rounded-2xl overflow-hidden border border-slate-200 shadow-xs hover:shadow-lg hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between">
+                <div>
+                  <div className="relative aspect-[16/10] w-full bg-gray-100 overflow-hidden flex items-center justify-center p-6 text-center bg-gradient-to-br from-indigo-50 to-blue-50">
+                    <div className="space-y-2">
+                      <div className="w-12 h-12 mx-auto rounded-xl bg-indigo-100 text-indigo-700 flex items-center justify-center">
+                        <GraduationCap className="w-6 h-6" />
+                      </div>
+                      <span className="text-xs font-bold text-indigo-950 block">Pendidikan Darurat</span>
+                    </div>
+                    <div className="absolute top-2.5 left-2.5">
+                      <span className="px-2 py-0.5 rounded text-[10px] font-black uppercase tracking-wider bg-indigo-600 text-white shadow-xs">
+                        PENDIDIKAN
+                      </span>
+                    </div>
+                  </div>
+                  <div className="p-4 space-y-2">
+                    <h3 className="text-sm font-bold text-slate-900 line-clamp-1 group-hover:text-[var(--color-primary)] transition-colors">
+                      Perlengkapan Belajar &amp; Tenda Kelas
+                    </h3>
+                    <p className="text-[11px] text-[var(--color-text-secondary)] line-clamp-2">
+                      Buku tulis, seragam darurat, dan tenda kegiatan belajar mengajar anak penyintas.
+                    </p>
+                    <div className="space-y-1 pt-2">
+                      <div className="flex items-center justify-between text-[11px] font-bold">
+                        <span className="text-gray-500">Terpenuhi</span>
+                        <span className="text-slate-900 font-black">75%</span>
+                      </div>
+                      <AnimatedProgressBar percentage={75} barColorClass="bg-indigo-600" />
+                      <div className="flex items-center justify-between text-[10px] text-gray-500 pt-0.5">
+                        <span>Target: 120 paket</span>
+                        <span>Sisa: 30 paket</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div className="p-4 pt-0">
+                  <Link
+                    href="/peta"
+                    className="w-full py-2 px-3 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-900 text-xs font-bold text-center block transition-colors"
+                  >
+                    Pantau di Peta
+                  </Link>
+                </div>
+              </div>
+            </RevealOnScroll>
+
+            {/* 6. SOSIAL LAINNYA */}
+            <RevealOnScroll direction="up" delayMs={300}>
+              <div className="group h-full bg-white rounded-2xl overflow-hidden border border-slate-200 shadow-xs hover:shadow-lg hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between">
+                <div>
+                  <div className="relative aspect-[16/10] w-full bg-gray-100 overflow-hidden flex items-center justify-center p-6 text-center bg-gradient-to-br from-purple-50 to-pink-50">
+                    <div className="space-y-2">
+                      <div className="w-12 h-12 mx-auto rounded-xl bg-purple-100 text-purple-700 flex items-center justify-center">
+                        <Users className="w-6 h-6" />
+                      </div>
+                      <span className="text-xs font-bold text-purple-950 block">Dapur Umum &amp; Dampingan</span>
+                    </div>
+                    <div className="absolute top-2.5 left-2.5">
+                      <span className="px-2 py-0.5 rounded text-[10px] font-black uppercase tracking-wider bg-purple-600 text-white shadow-xs">
+                        SOSIAL LAINNYA
+                      </span>
+                    </div>
+                  </div>
+                  <div className="p-4 space-y-2">
+                    <h3 className="text-sm font-bold text-slate-900 line-clamp-1 group-hover:text-[var(--color-primary)] transition-colors">
+                      Dapur Umum &amp; Pendampingan Warga
+                    </h3>
+                    <p className="text-[11px] text-[var(--color-text-secondary)] line-clamp-2">
+                      Bahan pokok pangan segar, tabung gas, dan relawan trauma healing warga.
+                    </p>
+                    <div className="space-y-1 pt-2">
+                      <div className="flex items-center justify-between text-[11px] font-bold">
+                        <span className="text-gray-500">Terpenuhi</span>
+                        <span className="text-slate-900 font-black">60%</span>
+                      </div>
+                      <AnimatedProgressBar percentage={60} barColorClass="bg-purple-600" />
+                      <div className="flex items-center justify-between text-[10px] text-gray-500 pt-0.5">
+                        <span>Target: 300 porsi/hari</span>
+                        <span>Sisa: 120 porsi</span>
                       </div>
                     </div>
                   </div>
@@ -570,7 +665,7 @@ export function EditorialLandingView({
                   </div>
                   <div>
                     <h3 className="text-xs font-bold text-slate-900">
-                      Pengaburan Koordinat Radius 1,1 km
+                      Pengaburan Koordinat Radius ~1,1 km
                     </h3>
                     <p className="text-[11px] text-[var(--color-text-secondary)]">
                       Laporan kategori LANSIA dan KESEHATAN dibulatkan koordinat GPS-nya di server untuk menjaga privasi tempat tinggal.
@@ -629,127 +724,11 @@ export function EditorialLandingView({
       </section>
 
       {/* ======================================================== */}
-      {/* SEKSI 5: GALERI AKSI NYATA (TRANSFORMING LIVES IN KIN DORA) */}
+      {/* SEKSI 5: DAMPAK TERPADU & DATA DATABASE AKTUAL           */}
       {/* ======================================================== */}
-      <section id="galeri" className="py-16 sm:py-24 px-4 sm:px-6 bg-[#FAFAFA] border-b border-[var(--color-border)]">
-        <div className="max-w-6xl mx-auto space-y-10">
-          <RevealOnScroll direction="up">
-            <div className="text-center max-w-2xl mx-auto space-y-2">
-              <span className="text-xs font-black text-[var(--color-primary)] uppercase tracking-wider">
-                Dokumentasi Lapangan Nyata
-              </span>
-              <h2 className="text-2xl sm:text-3xl md:text-4xl font-black text-slate-900 tracking-tight uppercase">
-                AKSI NYATA RELAWAN &amp; GOTONG ROYONG INDONESIA
-              </h2>
-            </div>
-          </RevealOnScroll>
-
-          {/* 5-Card Horizontal Strip Khas KIN DORA */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
-            {/* 1. Bersih Sungai */}
-            <RevealOnScroll direction="up" delayMs={50}>
-              <div className="group rounded-2xl overflow-hidden border border-slate-200 bg-white shadow-xs hover:shadow-lg hover:-translate-y-1 transition-all duration-300 flex flex-col h-full">
-                <div className="relative aspect-square w-full bg-gray-100 overflow-hidden">
-                  <Image
-                    src="/images/landing/field-activities/bersih-sungai-cikapundung.jpg"
-                    alt="Bersih sungai"
-                    fill
-                    className="object-cover transition-transform duration-700 group-hover:scale-105"
-                    sizes="220px"
-                  />
-                </div>
-                <div className="p-3 space-y-1 flex-1 flex flex-col justify-between">
-                  <span className="text-[9px] font-black uppercase tracking-wider text-emerald-700">Bandung</span>
-                  <h4 className="text-xs font-bold text-slate-900 leading-tight">Normalisasi Aliran Sungai</h4>
-                </div>
-              </div>
-            </RevealOnScroll>
-
-            {/* 2. Tanam Pohon */}
-            <RevealOnScroll direction="up" delayMs={100}>
-              <div className="group rounded-2xl overflow-hidden border border-slate-200 bg-white shadow-xs hover:shadow-lg hover:-translate-y-1 transition-all duration-300 flex flex-col h-full">
-                <div className="relative aspect-square w-full bg-gray-100 overflow-hidden">
-                  <Image
-                    src="/images/landing/field-activities/relawan-tanam-penghijauan-lingkungan.jpg"
-                    alt="Tanam pohon"
-                    fill
-                    className="object-cover transition-transform duration-700 group-hover:scale-105"
-                    sizes="220px"
-                  />
-                </div>
-                <div className="p-3 space-y-1 flex-1 flex flex-col justify-between">
-                  <span className="text-[9px] font-black uppercase tracking-wider text-emerald-700">Konservasi</span>
-                  <h4 className="text-xs font-bold text-slate-900 leading-tight">Penanaman Bibit Pelindung</h4>
-                </div>
-              </div>
-            </RevealOnScroll>
-
-            {/* 3. Tenda Pengungsian */}
-            <RevealOnScroll direction="up" delayMs={150}>
-              <div className="group rounded-2xl overflow-hidden border border-slate-200 bg-white shadow-xs hover:shadow-lg hover:-translate-y-1 transition-all duration-300 flex flex-col h-full">
-                <div className="relative aspect-square w-full bg-gray-100 overflow-hidden">
-                  <Image
-                    src="/images/landing/categories/tenda-pengungsian-relawan-pmi.jpg"
-                    alt="Tenda pengungsian"
-                    fill
-                    className="object-cover transition-transform duration-700 group-hover:scale-105"
-                    sizes="220px"
-                  />
-                </div>
-                <div className="p-3 space-y-1 flex-1 flex flex-col justify-between">
-                  <span className="text-[9px] font-black uppercase tracking-wider text-red-700">Posko Bencana</span>
-                  <h4 className="text-xs font-bold text-slate-900 leading-tight">Tenda Ramah Lansia &amp; Balita</h4>
-                </div>
-              </div>
-            </RevealOnScroll>
-
-            {/* 4. Hygiene Kit */}
-            <RevealOnScroll direction="up" delayMs={200}>
-              <div className="group rounded-2xl overflow-hidden border border-slate-200 bg-white shadow-xs hover:shadow-lg hover:-translate-y-1 transition-all duration-300 flex flex-col h-full">
-                <div className="relative aspect-square w-full bg-gray-100 overflow-hidden">
-                  <Image
-                    src="/images/landing/categories/distribusi-bantuan-hygiene-kit.jpg"
-                    alt="Hygiene kit"
-                    fill
-                    className="object-cover transition-transform duration-700 group-hover:scale-105"
-                    sizes="220px"
-                  />
-                </div>
-                <div className="p-3 space-y-1 flex-1 flex flex-col justify-between">
-                  <span className="text-[9px] font-black uppercase tracking-wider text-teal-700">Sanitasi</span>
-                  <h4 className="text-xs font-bold text-slate-900 leading-tight">Paket Kebersihan Keluarga</h4>
-                </div>
-              </div>
-            </RevealOnScroll>
-
-            {/* 5. Karhutla PMI */}
-            <RevealOnScroll direction="up" delayMs={250}>
-              <div className="group rounded-2xl overflow-hidden border border-slate-200 bg-white shadow-xs hover:shadow-lg hover:-translate-y-1 transition-all duration-300 flex flex-col h-full">
-                <div className="relative aspect-square w-full bg-gray-100 overflow-hidden">
-                  <Image
-                    src="/images/landing/field-activities/relawan-pmi-karhutla.jpg"
-                    alt="Padam Karhutla"
-                    fill
-                    className="object-cover transition-transform duration-700 group-hover:scale-105"
-                    sizes="220px"
-                  />
-                </div>
-                <div className="p-3 space-y-1 flex-1 flex flex-col justify-between">
-                  <span className="text-[9px] font-black uppercase tracking-wider text-red-700">Lahan Gambut</span>
-                  <h4 className="text-xs font-bold text-slate-900 leading-tight">Pemadaman Api PMI</h4>
-                </div>
-              </div>
-            </RevealOnScroll>
-          </div>
-        </div>
-      </section>
-
-      {/* ======================================================== */}
-      {/* SEKSI 6: BANNER RELAWAN & STATISTIK (VOLUNTEERS IN KIN DORA)*/}
-      {/* ======================================================== */}
-      <section className="py-16 sm:py-24 px-4 sm:px-6 bg-white border-b border-[var(--color-border)]">
+      <section className="py-16 sm:py-24 px-4 sm:px-6 bg-[#FAFAFA] border-b border-[var(--color-border)]">
         <RevealOnScroll direction="scale">
-          <div className="max-w-5xl mx-auto rounded-3xl bg-[#F4F5F6] border-2 border-slate-200 p-8 sm:p-12 shadow-sm space-y-8 text-center">
+          <div className="max-w-5xl mx-auto rounded-3xl bg-white border border-slate-300 p-8 sm:p-12 shadow-sm space-y-8 text-center">
             <div className="max-w-2xl mx-auto space-y-2">
               <span className="text-xs font-black text-amber-600 uppercase tracking-widest">
                 Transparansi Integritas Kemanusiaan
@@ -763,7 +742,7 @@ export function EditorialLandingView({
             </div>
 
             {/* Foto Dokumentasi Terbingkai Tengah */}
-            <div className="relative rounded-2xl overflow-hidden border-2 border-slate-300 aspect-[21/9] max-w-3xl mx-auto shadow-md">
+            <div className="relative rounded-2xl overflow-hidden border border-slate-300 aspect-[21/9] max-w-3xl mx-auto shadow-md">
               <Image
                 src="/images/landing/categories/tenda-pengungsian-relawan-pmi.jpg"
                 alt="Relawan PMI berkoordinasi di posko pengungsian"
@@ -771,45 +750,45 @@ export function EditorialLandingView({
                 className="object-cover"
                 sizes="(max-width: 1024px) 100vw, 800px"
               />
-              <div className="absolute inset-0 bg-black/30 flex items-center justify-center">
+              <div className="absolute inset-0 bg-black/35 flex items-center justify-center">
                 <span className="px-4 py-2 rounded-full bg-white/95 text-slate-900 text-xs font-extrabold uppercase tracking-wider shadow-lg">
                   Posko Terpadu Selisih Terbuka
                 </span>
               </div>
             </div>
 
-            {/* 4 Counter Statistik Aktual Database */}
-            <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 pt-4 border-t border-slate-300">
-              <div className="p-3 rounded-xl bg-white border border-slate-200">
+            {/* 4 Counter Statistik Aktual Database (Format Strip Bersih, Bebas Card Soup) */}
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 pt-6 border-t border-slate-200">
+              <div className="p-3 text-center">
                 <span className="text-[10px] font-bold uppercase tracking-wider text-gray-500 block">Laporan Terverifikasi</span>
-                <div className="text-2xl sm:text-3xl font-black text-emerald-700 tabular-numbers mt-0.5">
+                <div className="text-3xl sm:text-4xl font-black text-emerald-700 tabular-numbers mt-1">
                   {aggregates.totalVerifiedReports}
                 </div>
-                <span className="text-[10px] text-gray-500">Standar 5W+1H</span>
+                <span className="text-[11px] text-gray-500">Standar 5W+1H</span>
               </div>
 
-              <div className="p-3 rounded-xl bg-white border border-slate-200">
+              <div className="p-3 text-center">
                 <span className="text-[10px] font-bold uppercase tracking-wider text-gray-500 block">Logistik Terkonfirmasi</span>
-                <div className="text-2xl sm:text-3xl font-black text-blue-700 tabular-numbers mt-0.5">
+                <div className="text-3xl sm:text-4xl font-black text-blue-700 tabular-numbers mt-1">
                   {aggregates.totalConfirmedAidItems}
                 </div>
-                <span className="text-[10px] text-gray-500">Tervalidasi posko</span>
+                <span className="text-[11px] text-gray-500">Tervalidasi posko</span>
               </div>
 
-              <div className="p-3 rounded-xl bg-white border border-slate-200">
+              <div className="p-3 text-center">
                 <span className="text-[10px] font-bold uppercase tracking-wider text-gray-500 block">Wilayah Koordinasi</span>
-                <div className="text-2xl sm:text-3xl font-black text-amber-700 tabular-numbers mt-0.5">
+                <div className="text-3xl sm:text-4xl font-black text-amber-700 tabular-numbers mt-1">
                   {aggregates.totalActiveRegions}
                 </div>
-                <span className="text-[10px] text-gray-500">Titik administratif</span>
+                <span className="text-[11px] text-gray-500">Titik administratif</span>
               </div>
 
-              <div className="p-3 rounded-xl bg-white border border-slate-200">
+              <div className="p-3 text-center">
                 <span className="text-[10px] font-bold uppercase tracking-wider text-gray-500 block">Non-Finansial</span>
-                <div className="text-2xl sm:text-3xl font-black text-slate-900 tabular-numbers mt-0.5">
+                <div className="text-3xl sm:text-4xl font-black text-slate-900 tabular-numbers mt-1">
                   100%
                 </div>
-                <span className="text-[10px] text-gray-500">0 rupiah diproses</span>
+                <span className="text-[11px] text-gray-500">0 rupiah diproses</span>
               </div>
             </div>
           </div>
@@ -817,142 +796,7 @@ export function EditorialLandingView({
       </section>
 
       {/* ======================================================== */}
-      {/* SEKSI 7: WILAYAH PRIORITAS OPERASI (UPCOMING IN KIN DORA) */}
-      {/* ======================================================== */}
-      <section className="py-16 sm:py-24 px-4 sm:px-6 bg-white border-b border-[var(--color-border)]">
-        <div className="max-w-6xl mx-auto space-y-10">
-          <RevealOnScroll direction="up">
-            <div className="text-center max-w-2xl mx-auto space-y-2">
-              <span className="text-xs font-black text-amber-600 uppercase tracking-wider">
-                Titik Koordinasi Aktif
-              </span>
-              <h2 className="text-2xl sm:text-3xl md:text-4xl font-black text-slate-900 tracking-tight uppercase">
-                WILAYAH PRIORITAS PANTAUAN LAPANGAN
-              </h2>
-            </div>
-          </RevealOnScroll>
-
-          {/* 3 Kartu dengan Pita Ornamen Khas KIN DORA */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {/* Kartu 1: Selat Sunda */}
-            <RevealOnScroll direction="up" delayMs={50}>
-              <div className="group rounded-2xl overflow-hidden border-2 border-slate-200 bg-white shadow-xs hover:shadow-xl hover:-translate-y-1.5 transition-all duration-300 flex flex-col justify-between">
-                <div>
-                  <div className="relative aspect-[4/3] w-full bg-gray-100 overflow-hidden">
-                    <Image
-                      src="/images/landing/categories/tenda-pengungsian-relawan-pmi.jpg"
-                      alt="Posko Selat Sunda"
-                      fill
-                      className="object-cover transition-transform duration-700 group-hover:scale-105"
-                      sizes="350px"
-                    />
-                    <div className="absolute top-3 left-3">
-                      <span className="px-2.5 py-1 rounded bg-red-600 text-white text-[10px] font-black uppercase tracking-wider shadow-sm">
-                        URGENSI DARURAT
-                      </span>
-                    </div>
-                  </div>
-                  {/* Pita Ornamen Kuning/Oranye Khas KIN DORA */}
-                  <div className="bg-amber-400 p-4 text-slate-950 font-black space-y-1">
-                    <span className="text-[10px] tracking-wider uppercase block text-amber-950">Selat Sunda &bull; Banten</span>
-                    <h3 className="text-sm font-black leading-tight">Posko Tanggap Banjir Pesisir</h3>
-                  </div>
-                  <div className="p-4 space-y-1 text-xs text-[var(--color-text-secondary)]">
-                    <p>Sisa Selisih: 45 unit tenda &bull; 120 selimut hangat.</p>
-                  </div>
-                </div>
-                <div className="p-4 pt-0">
-                  <Link
-                    href="/peta"
-                    className="w-full py-2.5 rounded-xl bg-slate-900 hover:bg-black text-white text-xs font-bold text-center block transition-colors"
-                  >
-                    Buka Titik di Peta
-                  </Link>
-                </div>
-              </div>
-            </RevealOnScroll>
-
-            {/* Kartu 2: Cikapundung */}
-            <RevealOnScroll direction="up" delayMs={150}>
-              <div className="group rounded-2xl overflow-hidden border-2 border-slate-200 bg-white shadow-xs hover:shadow-xl hover:-translate-y-1.5 transition-all duration-300 flex flex-col justify-between">
-                <div>
-                  <div className="relative aspect-[4/3] w-full bg-gray-100 overflow-hidden">
-                    <Image
-                      src="/images/landing/field-activities/bersih-sungai-cikapundung.jpg"
-                      alt="Sungai Cikapundung"
-                      fill
-                      className="object-cover transition-transform duration-700 group-hover:scale-105"
-                      sizes="350px"
-                    />
-                    <div className="absolute top-3 left-3">
-                      <span className="px-2.5 py-1 rounded bg-emerald-600 text-white text-[10px] font-black uppercase tracking-wider shadow-sm">
-                        AKSI TERENCANA
-                      </span>
-                    </div>
-                  </div>
-                  {/* Pita Ornamen Kuning/Oranye Khas KIN DORA */}
-                  <div className="bg-amber-400 p-4 text-slate-950 font-black space-y-1">
-                    <span className="text-[10px] tracking-wider uppercase block text-amber-950">Bandung &bull; Jawa Barat</span>
-                    <h3 className="text-sm font-black leading-tight">Normalisasi Aliran Sungai</h3>
-                  </div>
-                  <div className="p-4 space-y-1 text-xs text-[var(--color-text-secondary)]">
-                    <p>Sisa Selisih: 200 karung &bull; 40 pasang sepatu boot.</p>
-                  </div>
-                </div>
-                <div className="p-4 pt-0">
-                  <Link
-                    href="/peta"
-                    className="w-full py-2.5 rounded-xl bg-slate-900 hover:bg-black text-white text-xs font-bold text-center block transition-colors"
-                  >
-                    Buka Titik di Peta
-                  </Link>
-                </div>
-              </div>
-            </RevealOnScroll>
-
-            {/* Kartu 3: Cianjur */}
-            <RevealOnScroll direction="up" delayMs={250}>
-              <div className="group rounded-2xl overflow-hidden border-2 border-slate-200 bg-white shadow-xs hover:shadow-xl hover:-translate-y-1.5 transition-all duration-300 flex flex-col justify-between">
-                <div>
-                  <div className="relative aspect-[4/3] w-full bg-gray-100 overflow-hidden">
-                    <Image
-                      src="/images/landing/categories/evakuasi-bencana-gempa.png"
-                      alt="Cianjur"
-                      fill
-                      className="object-cover transition-transform duration-700 group-hover:scale-105"
-                      sizes="350px"
-                    />
-                    <div className="absolute top-3 left-3">
-                      <span className="px-2.5 py-1 rounded bg-red-600 text-white text-[10px] font-black uppercase tracking-wider shadow-sm">
-                        URGENSI MENDESAK
-                      </span>
-                    </div>
-                  </div>
-                  {/* Pita Ornamen Kuning/Oranye Khas KIN DORA */}
-                  <div className="bg-amber-400 p-4 text-slate-950 font-black space-y-1">
-                    <span className="text-[10px] tracking-wider uppercase block text-amber-950">Cianjur &bull; Jawa Barat</span>
-                    <h3 className="text-sm font-black leading-tight">Pemulihan Pascagempa</h3>
-                  </div>
-                  <div className="p-4 space-y-1 text-xs text-[var(--color-text-secondary)]">
-                    <p>Sisa Selisih: 60 paket perban steril &bull; 15 kursi roda.</p>
-                  </div>
-                </div>
-                <div className="p-4 pt-0">
-                  <Link
-                    href="/peta"
-                    className="w-full py-2.5 rounded-xl bg-slate-900 hover:bg-black text-white text-xs font-bold text-center block transition-colors"
-                  >
-                    Buka Titik di Peta
-                  </Link>
-                </div>
-              </div>
-            </RevealOnScroll>
-          </div>
-        </div>
-      </section>
-
-      {/* ======================================================== */}
-      {/* SEKSI 8: TICKER RIBBON KUNING EMAS (PERSIS KIN DORA)     */}
+      {/* SEKSI 6: TICKER RIBBON KUNING EMAS                       */}
       {/* ======================================================== */}
       <div className="py-4 bg-[#F59E0B] text-slate-950 overflow-hidden select-none border-y-2 border-amber-600 shadow-xs">
         <div className="animate-marquee">
@@ -978,182 +822,9 @@ export function EditorialLandingView({
       </div>
 
       {/* ======================================================== */}
-      {/* SEKSI 9: CATATAN VERIFIKATOR (WHAT SUPPORTERS SAY REF)   */}
+      {/* SEKSI 7: CATATAN LAPANGAN & DOKUMENTASI TERKINI          */}
       {/* ======================================================== */}
-      <section className="py-16 sm:py-24 px-4 sm:px-6 bg-[#FAFAFA] border-b border-[var(--color-border)]">
-        <div className="max-w-6xl mx-auto space-y-10">
-          <RevealOnScroll direction="up">
-            <div className="text-center max-w-2xl mx-auto space-y-2">
-              <span className="text-xs font-black text-[var(--color-primary)] uppercase tracking-wider">
-                Akuntabilitas Lapangan
-              </span>
-              <h2 className="text-2xl sm:text-3xl md:text-4xl font-black text-slate-900 tracking-tight uppercase">
-                CATATAN TINJAUAN &amp; VERIFIKATOR LAPANGAN
-              </h2>
-              <p className="text-xs sm:text-sm text-[var(--color-text-secondary)]">
-                Proses audit terbuka: Setiap persetujuan atau penolakan logistik wajib mencantumkan catatan verifikator yang dapat dipertanggungjawabkan.
-              </p>
-            </div>
-          </RevealOnScroll>
-
-          {/* 4 Feedback / Verification Review Cards Khas KIN DORA */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
-            {/* Card 1 */}
-            <RevealOnScroll direction="up" delayMs={50}>
-              <div className="p-5 rounded-2xl bg-white border border-slate-200 shadow-xs space-y-3 flex flex-col justify-between h-full">
-                <div className="space-y-2">
-                  <div className="flex items-center justify-between">
-                    <span className="text-[10px] font-black uppercase px-2 py-0.5 rounded bg-emerald-100 text-emerald-800">
-                      TERVERIFIKASI
-                    </span>
-                    <span className="text-[10px] text-gray-400">18 Nov</span>
-                  </div>
-                  <p className="text-xs text-[var(--color-text-secondary)] leading-relaxed italic">
-                    &ldquo;Foto kerusakan tanggul dan koordinat GPS di Jawa Barat telah dicocokkan dengan laporan warga lokal. Kuota 500 karung disetujui.&rdquo;
-                  </p>
-                </div>
-                <div className="pt-3 border-t border-gray-100 flex items-center gap-2.5">
-                  <div className="w-7 h-7 rounded-full bg-emerald-700 text-white font-bold text-xs flex items-center justify-center">
-                    VK
-                  </div>
-                  <div>
-                    <h4 className="text-xs font-bold text-slate-900">Verifikator Komunitas</h4>
-                    <span className="text-[10px] text-gray-500">Relawan Independen</span>
-                  </div>
-                </div>
-              </div>
-            </RevealOnScroll>
-
-            {/* Card 2 */}
-            <RevealOnScroll direction="up" delayMs={100}>
-              <div className="p-5 rounded-2xl bg-white border border-slate-200 shadow-xs space-y-3 flex flex-col justify-between h-full">
-                <div className="space-y-2">
-                  <div className="flex items-center justify-between">
-                    <span className="text-[10px] font-black uppercase px-2 py-0.5 rounded bg-blue-100 text-blue-800">
-                      TERKONFIRMASI
-                    </span>
-                    <span className="text-[10px] text-gray-400">17 Nov</span>
-                  </div>
-                  <p className="text-xs text-[var(--color-text-secondary)] leading-relaxed italic">
-                    &ldquo;Bantuan paket hygiene kit telah tiba di posko balai desa dan diserahterimakan kepada keluarga pengungsi sesuai daftar.&rdquo;
-                  </p>
-                </div>
-                <div className="pt-3 border-t border-gray-100 flex items-center gap-2.5">
-                  <div className="w-7 h-7 rounded-full bg-blue-700 text-white font-bold text-xs flex items-center justify-center">
-                    KL
-                  </div>
-                  <div>
-                    <h4 className="text-xs font-bold text-slate-900">Koordinator Lapangan</h4>
-                    <span className="text-[10px] text-gray-500">Posko Bencana PMI</span>
-                  </div>
-                </div>
-              </div>
-            </RevealOnScroll>
-
-            {/* Card 3 */}
-            <RevealOnScroll direction="up" delayMs={150}>
-              <div className="p-5 rounded-2xl bg-white border border-slate-200 shadow-xs space-y-3 flex flex-col justify-between h-full">
-                <div className="space-y-2">
-                  <div className="flex items-center justify-between">
-                    <span className="text-[10px] font-black uppercase px-2 py-0.5 rounded bg-emerald-100 text-emerald-800">
-                      LEMBAGA RESMI
-                    </span>
-                    <span className="text-[10px] text-gray-400">15 Nov</span>
-                  </div>
-                  <p className="text-xs text-[var(--color-text-secondary)] leading-relaxed italic">
-                    &ldquo;Data panti jompo telah diverifikasi. Koordinat presisi disamarkan ~1,1 km di API publik demi kenyamanan dan perlindungan lansia.&rdquo;
-                  </p>
-                </div>
-                <div className="pt-3 border-t border-gray-100 flex items-center gap-2.5">
-                  <div className="w-7 h-7 rounded-full bg-teal-700 text-white font-bold text-xs flex items-center justify-center">
-                    VR
-                  </div>
-                  <div>
-                    <h4 className="text-xs font-bold text-slate-900">Verifikator Lembaga</h4>
-                    <span className="text-[10px] text-gray-500">Organisasi Terakreditasi</span>
-                  </div>
-                </div>
-              </div>
-            </RevealOnScroll>
-
-            {/* Card 4 */}
-            <RevealOnScroll direction="up" delayMs={200}>
-              <div className="p-5 rounded-2xl bg-white border border-slate-200 shadow-xs space-y-3 flex flex-col justify-between h-full">
-                <div className="space-y-2">
-                  <div className="flex items-center justify-between">
-                    <span className="text-[10px] font-black uppercase px-2 py-0.5 rounded bg-purple-100 text-purple-800">
-                      AUDIT SISTEM
-                    </span>
-                    <span className="text-[10px] text-gray-400">14 Nov</span>
-                  </div>
-                  <p className="text-xs text-[var(--color-text-secondary)] leading-relaxed italic">
-                    &ldquo;Transaksi serializable berhasil mengunci kuota 120 tenda secara konkuren. Tidak ada double-allocation saat posko penuh.&rdquo;
-                  </p>
-                </div>
-                <div className="pt-3 border-t border-gray-100 flex items-center gap-2.5">
-                  <div className="w-7 h-7 rounded-full bg-purple-700 text-white font-bold text-xs flex items-center justify-center">
-                    AD
-                  </div>
-                  <div>
-                    <h4 className="text-xs font-bold text-slate-900">Administrator Sistem</h4>
-                    <span className="text-[10px] text-gray-500">Audit Arsitektur Database</span>
-                  </div>
-                </div>
-              </div>
-            </RevealOnScroll>
-          </div>
-        </div>
-      </section>
-
-      {/* ======================================================== */}
-      {/* SEKSI 10: BANNER CALL-TO-ACTION (EVERY GIFT IN KIN DORA) */}
-      {/* ======================================================== */}
-      <section className="py-14 sm:py-20 px-4 sm:px-6 bg-white border-b border-[var(--color-border)]">
-        <RevealOnScroll direction="scale">
-          <div className="max-w-5xl mx-auto rounded-3xl bg-[#F4F5F6] border-2 border-slate-200 p-8 sm:p-12 shadow-sm flex flex-col md:flex-row items-center justify-between gap-8">
-            <div className="space-y-4 max-w-xl text-left">
-              <span className="text-xs font-black text-[var(--color-primary)] uppercase tracking-wider block">
-                Partisipasi Gotong Royong
-              </span>
-              <h2 className="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight leading-snug uppercase">
-                SETIAP DATA SELISIH YANG TERCATAT MENCEGAH PEMBOROSAN LOGISTIK
-              </h2>
-              <p className="text-xs sm:text-sm text-[var(--color-text-secondary)] leading-relaxed">
-                Menghindari situasi di mana satu posko menimbun ratusan karung pakaian bekas, sementara posko di dusun sebelah tidak memiliki air minum.
-              </p>
-              <div className="pt-2 flex flex-wrap gap-3">
-                <Link
-                  href="/lapor"
-                  className="px-5 py-3 rounded-xl bg-slate-900 hover:bg-black text-white text-xs font-bold transition-all shadow-sm"
-                >
-                  Laporkan Kebutuhan (5W+1H)
-                </Link>
-                <Link
-                  href="/peta"
-                  className="px-5 py-3 rounded-xl border border-slate-300 bg-white hover:bg-slate-50 text-slate-900 text-xs font-bold transition-all shadow-2xs"
-                >
-                  Buka Peta Selisih
-                </Link>
-              </div>
-            </div>
-
-            <div className="relative w-full md:w-80 aspect-[4/3] rounded-2xl overflow-hidden border-2 border-slate-300 shadow-md shrink-0">
-              <Image
-                src="/images/landing/categories/distribusi-bantuan-hygiene-kit.jpg"
-                alt="Distribusi bantuan ke warga"
-                fill
-                className="object-cover"
-                sizes="(max-width: 768px) 100vw, 320px"
-              />
-            </div>
-          </div>
-        </RevealOnScroll>
-      </section>
-
-      {/* ======================================================== */}
-      {/* SEKSI 11: BERITA & DOKUMENTASI (LATEST NEWS IN KIN DORA) */}
-      {/* ======================================================== */}
-      <section id="berita" className="py-16 sm:py-24 px-4 sm:px-6 bg-[#FAFAFA] border-b border-[var(--color-border)]">
+      <section id="berita" className="py-16 sm:py-24 px-4 sm:px-6 bg-white border-b border-[var(--color-border)]">
         <div className="max-w-6xl mx-auto space-y-10">
           <RevealOnScroll direction="up">
             <div className="text-center max-w-2xl mx-auto space-y-2">
@@ -1192,7 +863,7 @@ export function EditorialLandingView({
                       Normalisasi Aliran Sungai Berhasil Mereduksi Titik Genangan Banjir
                     </h3>
                     <p className="text-xs sm:text-sm text-[var(--color-text-secondary)] leading-relaxed">
-                      Ratusan relawan gabungan bersama warga menuntaskan pengangkatan sampah pemicu sumbatan air. Sistem menandai kuota karung dan personil telah tercapai dan mengarahkan relawan baru ke titik berikutnya.
+                      Ratusan relawan gabungan bersama warga menuntaskan pengangkatan sampah pemicu sumbatan air. Sistem menandai kuota karung dan relawan telah tercapai dan mengarahkan relawan baru ke titik posko berikutnya.
                     </p>
                     <div className="pt-2">
                       <Link
@@ -1208,7 +879,7 @@ export function EditorialLandingView({
               </RevealOnScroll>
             </div>
 
-            {/* 3 Berita Stacked Kanan (5 Kolom) */}
+            {/* 2 Berita Stacked Kanan + CTA (5 Kolom) */}
             <div className="lg:col-span-5 space-y-4 flex flex-col justify-between">
               {/* Item 1 */}
               <RevealOnScroll direction="up" delayMs={100}>
@@ -1241,32 +912,6 @@ export function EditorialLandingView({
                 <div className="group p-4 rounded-xl border border-slate-200 bg-white hover:border-[var(--color-primary)] hover:shadow-md transition-all duration-300 flex gap-4 items-center">
                   <div className="relative w-20 h-20 rounded-lg overflow-hidden shrink-0 bg-gray-100">
                     <Image
-                      src="/images/landing/field-activities/relawan-tanam-penghijauan-lingkungan.jpg"
-                      alt="Penanaman pohon"
-                      fill
-                      className="object-cover transition-transform duration-500 group-hover:scale-105"
-                      sizes="80px"
-                    />
-                  </div>
-                  <div className="space-y-1">
-                    <span className="text-[9px] font-black text-emerald-700 uppercase tracking-wider">
-                      LINGKUNGAN &bull; 15 NOV 2026
-                    </span>
-                    <h4 className="text-xs font-bold text-slate-900 leading-tight group-hover:text-[var(--color-primary)] transition-colors">
-                      Gotong Royong Menanam 500 Bibit Pohon di Hulu Sungai
-                    </h4>
-                    <p className="text-[11px] text-[var(--color-text-secondary)] line-clamp-1">
-                      Partisipasi pemuda relawan berhasil menutup target bibit.
-                    </p>
-                  </div>
-                </div>
-              </RevealOnScroll>
-
-              {/* Item 3 */}
-              <RevealOnScroll direction="up" delayMs={300}>
-                <div className="group p-4 rounded-xl border border-slate-200 bg-white hover:border-[var(--color-primary)] hover:shadow-md transition-all duration-300 flex gap-4 items-center">
-                  <div className="relative w-20 h-20 rounded-lg overflow-hidden shrink-0 bg-gray-100">
-                    <Image
                       src="/images/landing/categories/distribusi-bantuan-hygiene-kit.jpg"
                       alt="Distribusi hygiene kit"
                       fill
@@ -1288,11 +933,19 @@ export function EditorialLandingView({
                 </div>
               </RevealOnScroll>
 
-              <RevealOnScroll direction="up" delayMs={350}>
-                <div className="pt-2">
+              {/* Box Aksi Sederhana Penutup */}
+              <RevealOnScroll direction="up" delayMs={300}>
+                <div className="p-5 rounded-2xl bg-[#F8F9FA] border border-slate-200 space-y-3">
+                  <div className="flex items-center gap-2 text-xs font-bold text-slate-900">
+                    <HeartHandshake className="w-4 h-4 text-[var(--color-primary)]" />
+                    <span>Transparansi Tanpa Uang</span>
+                  </div>
+                  <p className="text-[11px] text-[var(--color-text-secondary)] leading-relaxed">
+                    Setiap bantuan yang disalurkan dicatat secara real-time. Kuota logistik terproteksi dengan transaksi database serializable untuk mencegah alokasi ganda.
+                  </p>
                   <Link
                     href="/peta"
-                    className="w-full py-2.5 px-4 rounded-xl border border-slate-300 bg-white hover:bg-slate-100 text-slate-900 text-xs font-bold text-center block transition-colors shadow-2xs"
+                    className="w-full py-2.5 px-4 rounded-xl bg-slate-900 hover:bg-black text-white text-xs font-bold text-center block transition-colors shadow-2xs"
                   >
                     Buka Seluruh Laporan di Peta Interaktif
                   </Link>
@@ -1304,11 +957,11 @@ export function EditorialLandingView({
       </section>
 
       {/* ======================================================== */}
-      {/* SEKSI 12: DEEP BLACK FOOTER (PERSIS KIN DORA FOOTER)     */}
+      {/* SEKSI 8: DEEP BLACK FOOTER                               */}
       {/* ======================================================== */}
       <footer className="mt-auto bg-[#0A0E13] text-gray-400 text-xs pt-16 pb-12 border-t border-slate-900">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 space-y-12">
-          {/* Baris Atas Footer: Logo + Tombol Aksi Kanan (Persis KIN DORA) */}
+          {/* Baris Atas Footer: Logo + Tombol Aksi Kanan */}
           <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6 pb-10 border-b border-gray-800">
             <div className="flex items-center gap-3">
               <div className="w-9 h-9 rounded-xl bg-[var(--color-primary)] flex items-center justify-center text-white font-black text-base tracking-wider">
@@ -1342,7 +995,7 @@ export function EditorialLandingView({
             </div>
           </div>
 
-          {/* 4 Kolom Navigasi Khas KIN DORA */}
+          {/* 4 Kolom Navigasi */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
             {/* Kolom 1: Kategori Kebutuhan */}
             <div className="space-y-3">

@@ -24,7 +24,7 @@ export function Navbar({
   return (
     <header
       role="banner"
-      className={`${isSticky ? "sticky" : "absolute"} top-0 left-0 right-0 z-[1000] bg-white/95 backdrop-blur-sm border-b border-[var(--color-border)] px-4 py-2.5 transition-colors`}
+      className={`${isSticky ? "fixed" : "absolute"} top-0 left-0 right-0 z-[1000] bg-white/95 backdrop-blur-md border-b border-[var(--color-border)] px-4 py-2.5 transition-colors`}
       style={{ boxShadow: "var(--shadow-elevated)" }}
     >
       <div className="max-w-7xl mx-auto flex items-center justify-between gap-2">

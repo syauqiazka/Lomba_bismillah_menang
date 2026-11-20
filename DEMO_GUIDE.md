@@ -130,3 +130,4 @@ Skenario ini disusun untuk memaksimalkan poin penilaian (Total 100 Poin):
 | **"Kenapa aplikasinya tidak memproses donasi uang saja?"** | *"Platform crowdfunding uang sudah banyak (seperti Kitabisa). Namun masalah di lapangan saat ini adalah ketimpangan fisik logistik: uang ada, tapi barang salah kirim dan menumpuk di jalan utama. TRASEC fokus menyelesaikan selisih logistik fisik."* |
 | **"Bagaimana sistem mencegah laporan palsu (hoaks)?"** | *"Melalui verifikasi 2 lapis, validasi skema 5W+1H, foto bukti lapangan yang disanitasi, kalkulasi Trust Score deterministik, serta penolakan wajib beralasan tertulis minimal 10 karakter."* |
 | **"Bagaimana jika database down saat demo?"** | *"Kami menerapkan arsitektur Dual-Layer High-Fidelity Fallback di `lib/fallback-data.ts`. Jika koneksi database terputus, seluruh data operasional tetap tersaji utuh tanpa galat layar putih."* |
+

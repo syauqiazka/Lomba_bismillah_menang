@@ -18,6 +18,14 @@
   --color-secondary: #172B3A;
   --color-focus: #172B3A;            /* Cincin fokus 2px dengan offset 2px putih */
   
+  /* Alias Token Kompatibilitas Desain */
+  --color-forest-main: var(--color-primary);
+  --color-forest-dark: var(--color-primary-hover);
+  --color-forest-bg: #E4F0EA;
+  --color-bg-base: var(--color-bg);
+  --color-text-main: var(--color-text);
+  --color-border-subtle: var(--color-border);
+  
   /* Pembatas & Garis */
   --color-border: #D3D7D0;           /* Garis pemisah dekoratif */
   --color-border-strong: #8A8D86;    /* Batas input, radio, checkbox (Kontras 3,37:1 di atas White) */
