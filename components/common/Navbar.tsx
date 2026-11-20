@@ -32,6 +32,7 @@ export function Navbar({
         <div className="flex items-center gap-3">
           <Link
             href="/"
+            data-tour="brand-logo"
             className="flex items-center gap-2 group focus:outline-none focus:ring-2 focus:ring-[var(--color-focus)] rounded"
             aria-label="TRASEC Beranda Peta"
           >
@@ -60,6 +61,7 @@ export function Navbar({
           {onOpenIntro && (
             <button
               type="button"
+              data-tour="nav-panduan"
               onClick={onOpenIntro}
               className="inline-flex items-center gap-1.5 px-2.5 py-1.5 text-xs font-semibold rounded text-[var(--color-text-secondary)] hover:text-[var(--color-text)] hover:bg-[var(--color-surface-hover)] border border-[var(--color-border)] focus:outline-none focus:ring-2 focus:ring-[var(--color-focus)] transition-colors cursor-pointer"
               aria-label="Buka Panduan Platform"
@@ -74,6 +76,7 @@ export function Navbar({
           {onToggleTextView && (
             <button
               type="button"
+              data-tour="nav-text-view"
               onClick={onToggleTextView}
               className={`inline-flex items-center gap-1.5 px-2.5 py-1.5 text-xs font-semibold rounded border transition-colors cursor-pointer focus:outline-none focus:ring-2 focus:ring-[var(--color-focus)] ${
                 isTextViewOpen
@@ -121,6 +124,7 @@ export function Navbar({
           {/* Tautan Kontak Darurat */}
           <Link
             href="/darurat"
+            data-tour="nav-emergency"
             className="inline-flex items-center gap-1 px-2.5 py-1.5 text-xs font-semibold rounded text-[var(--color-danger-text)] bg-[var(--color-danger-bg)] hover:bg-red-100 border border-red-200 focus:outline-none focus:ring-2 focus:ring-[var(--color-focus)] transition-colors"
             title="Nomor Darurat Nasional & Posko"
           >
@@ -131,6 +135,7 @@ export function Navbar({
           {/* Tombol Buat Laporan */}
           <Link
             href="/lapor"
+            data-tour="nav-report"
             className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold rounded bg-[var(--color-primary)] hover:bg-[var(--color-primary-hover)] text-white focus:outline-none focus:ring-2 focus:ring-[var(--color-focus)] transition-colors shadow-sm"
           >
             <PlusCircle className="w-3.5 h-3.5" />

@@ -207,7 +207,10 @@ export default function OperationalMap({
       <div ref={mapContainerRef} className="w-full h-full z-0" />
 
       {/* Bar Filter Cepat Peta: Berada di Posisi Tengah Atas yang Proporsional & Rapi */}
-      <div className="absolute top-3 left-1/2 -translate-x-1/2 z-[800] pointer-events-none w-auto max-w-[94vw]">
+      <div
+        data-tour="map-filters"
+        className="absolute top-3 left-1/2 -translate-x-1/2 z-[800] pointer-events-none w-auto max-w-[94vw]"
+      >
         <div className="pointer-events-auto bg-white/98 backdrop-blur-md border border-slate-300 rounded-2xl sm:rounded-full px-3.5 py-2 flex flex-wrap items-center justify-center gap-2 shadow-md">
           <div className="flex items-center gap-1.5 text-xs font-black text-slate-800 pr-2 border-r border-slate-200">
             <Filter className="w-3.5 h-3.5 text-[var(--color-primary)]" />
