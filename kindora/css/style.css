@@ -1,0 +1,234 @@
+/* ==============================================================================
+   KINDORA - CUSTOM STYLESHEET & DECORATIVE ASSETS
+   ============================================================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;700;800;900&family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@1,500;1,600;1,700&display=swap');
+
+:root {
+  --color-gold: #F5B800;
+  --color-gold-hover: #E0A700;
+  --color-dark-green: #0F2A22;
+  --color-dark-green-hover: #173b31;
+  --color-cream: #F5F1E6;
+  --color-cream-border: #E6E0D2;
+  --color-gray-soft: #F3F3F3;
+  --color-text-main: #111111;
+  --color-text-muted: #555555;
+  --font-heading: 'Bricolage Grotesque', sans-serif;
+  --font-serif: 'Playfair Display', serif;
+  --font-body: 'Inter', sans-serif;
+}
+
+/* Base resets & typography */
+html {
+  scroll-behavior: smooth;
+  font-family: var(--font-body);
+  color: var(--color-text-main);
+  background-color: #FFFFFF;
+}
+
+body {
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+.font-heading {
+  font-family: var(--font-heading);
+  letter-spacing: -0.03em;
+}
+
+.font-serif-accent {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-weight: 600;
+}
+
+/* ==========================================================================
+   DECORATIVE ELEMENTS: CHECKERBOARD & WATERMARK
+   ========================================================================== */
+
+/* Geometric Checkerboard pattern for photo corner brackets */
+.checker-pattern {
+  background-image: 
+    linear-gradient(45deg, #111111 25%, transparent 25%), 
+    linear-gradient(-45deg, #111111 25%, transparent 25%), 
+    linear-gradient(45deg, transparent 75%, #111111 75%), 
+    linear-gradient(-45deg, transparent 75%, #111111 75%);
+  background-size: 10px 10px;
+  background-position: 0 0, 0 5px, 5px -5px, -5px 0px;
+}
+
+.checker-pattern-gold {
+  background-image: 
+    linear-gradient(45deg, #F5B800 25%, transparent 25%), 
+    linear-gradient(-45deg, #F5B800 25%, transparent 25%), 
+    linear-gradient(45deg, transparent 75%, #F5B800 75%), 
+    linear-gradient(-45deg, transparent 75%, #F5B800 75%);
+  background-size: 10px 10px;
+  background-position: 0 0, 0 5px, 5px -5px, -5px 0px;
+}
+
+/* Watermark typography */
+.watermark-text {
+  font-family: var(--font-heading);
+  color: #ECE7DC;
+  letter-spacing: 0.15em;
+  user-select: none;
+  pointer-events: none;
+  line-height: 0.8;
+}
+
+/* ==========================================================================
+   TORN PAPER EDGES & BRUSH STROKES
+   ========================================================================== */
+
+/* Torn paper edge SVG dividers */
+.torn-divider-cream-top {
+  position: absolute;
+  top: -1px;
+  left: 0;
+  width: 100%;
+  overflow: hidden;
+  line-height: 0;
+  z-index: 10;
+}
+
+.torn-divider-cream-bottom {
+  position: absolute;
+  bottom: -1px;
+  left: 0;
+  width: 100%;
+  overflow: hidden;
+  line-height: 0;
+  z-index: 10;
+}
+
+/* Jagged torn SVG fill */
+.torn-svg-fill-cream {
+  fill: #F5F1E6;
+}
+
+.torn-svg-fill-white {
+  fill: #FFFFFF;
+}
+
+.torn-svg-fill-green {
+  fill: #0F2A22;
+}
+
+.torn-svg-fill-gold {
+  fill: #F5B800;
+}
+
+/* Yellow brush ribbon badge */
+.brush-ribbon {
+  background-color: var(--color-gold);
+  mask-image: radial-gradient(ellipse at center, rgba(0,0,0,1) 80%, rgba(0,0,0,0.8) 100%);
+  -webkit-mask-image: radial-gradient(ellipse at center, rgba(0,0,0,1) 80%, rgba(0,0,0,0.8) 100%);
+}
+
+/* ==========================================================================
+   MARQUEE CONTINUOUS SCROLL
+   ========================================================================== */
+
+.marquee-container {
+  overflow: hidden;
+  display: flex;
+  user-select: none;
+  white-space: nowrap;
+}
+
+.marquee-content {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+  animation: marquee-scroll 24s linear infinite;
+}
+
+.marquee-container:hover .marquee-content {
+  animation-play-state: paused;
+}
+
+@keyframes marquee-scroll {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+/* ==========================================================================
+   ANIMATIONS & TRANSITIONS (INTERSECTION OBSERVER)
+   ========================================================================== */
+
+/* Fade-up reveal */
+.reveal-on-scroll {
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1), transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: opacity, transform;
+}
+
+.reveal-on-scroll.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Delayed staggered children */
+.delay-100 { transition-delay: 100ms; }
+.delay-200 { transition-delay: 200ms; }
+.delay-300 { transition-delay: 300ms; }
+.delay-400 { transition-delay: 400ms; }
+
+/* Interactive hover cards */
+.hover-lift {
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease;
+}
+
+.hover-lift:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 20px 25px -5px rgba(17, 17, 17, 0.08), 0 10px 10px -5px rgba(17, 17, 17, 0.04);
+}
+
+/* Pulsating Play Button for Video Section */
+@keyframes pulse-ring {
+  0% {
+    transform: scale(0.95);
+    box-shadow: 0 0 0 0 rgba(245, 184, 0, 0.7);
+  }
+  70% {
+    transform: scale(1);
+    box-shadow: 0 0 0 18px rgba(245, 184, 0, 0);
+  }
+  100% {
+    transform: scale(0.95);
+    box-shadow: 0 0 0 0 rgba(245, 184, 0, 0);
+  }
+}
+
+.pulse-play-btn {
+  animation: pulse-ring 2s infinite cubic-bezier(0.4, 0, 0.6, 1);
+}
+
+/* Accordion Smooth Height Transition */
+.accordion-content {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.35s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease;
+  opacity: 0;
+}
+
+.accordion-content.open {
+  max-height: 300px;
+  opacity: 1;
+}
+
+/* Custom Scrollbar for Carousel */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
