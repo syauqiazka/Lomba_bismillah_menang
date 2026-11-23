@@ -118,6 +118,98 @@ body {
   animation: fadeInUp 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
+/* ==========================================================================
+   KINDORA / HOPEFY EDITORIAL DECORATIVE STYLES
+   ========================================================================== */
+
+/* Geometric Checkerboard pattern for photo corner brackets */
+.checker-pattern {
+  background-image: 
+    linear-gradient(45deg, #172B3A 25%, transparent 25%), 
+    linear-gradient(-45deg, #172B3A 25%, transparent 25%), 
+    linear-gradient(45deg, transparent 75%, #172B3A 75%), 
+    linear-gradient(-45deg, transparent 75%, #172B3A 75%);
+  background-size: 10px 10px;
+  background-position: 0 0, 0 5px, 5px -5px, -5px 0px;
+}
+
+.checker-pattern-gold {
+  background-image: 
+    linear-gradient(45deg, #F5B800 25%, transparent 25%), 
+    linear-gradient(-45deg, #F5B800 25%, transparent 25%), 
+    linear-gradient(45deg, transparent 75%, #F5B800 75%), 
+    linear-gradient(-45deg, transparent 75%, #F5B800 75%);
+  background-size: 10px 10px;
+  background-position: 0 0, 0 5px, 5px -5px, -5px 0px;
+}
+
+/* Pulsating Play Button for Video Section */
+@keyframes pulseRing {
+  0% {
+    transform: scale(0.95);
+    box-shadow: 0 0 0 0 rgba(245, 184, 0, 0.7);
+  }
+  70% {
+    transform: scale(1);
+    box-shadow: 0 0 0 18px rgba(245, 184, 0, 0);
+  }
+  100% {
+    transform: scale(0.95);
+    box-shadow: 0 0 0 0 rgba(245, 184, 0, 0);
+  }
+}
+
+.pulse-play-btn {
+  animation: pulseRing 2s infinite cubic-bezier(0.4, 0, 0.6, 1);
+}
+
+/* Hover elevation lift */
+.hover-lift {
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease;
+}
+
+.hover-lift:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 20px 25px -5px rgba(23, 43, 58, 0.08), 0 10px 10px -5px rgba(23, 43, 58, 0.04);
+}
+
+/* Torn paper edge SVG dividers */
+.torn-divider-cream-top {
+  position: absolute;
+  top: -1px;
+  left: 0;
+  width: 100%;
+  overflow: hidden;
+  line-height: 0;
+  z-index: 10;
+}
+
+.torn-divider-cream-bottom {
+  position: absolute;
+  bottom: -1px;
+  left: 0;
+  width: 100%;
+  overflow: hidden;
+  line-height: 0;
+  z-index: 10;
+}
+
+.torn-svg-fill-cream {
+  fill: #F5F1E6;
+}
+
+.torn-svg-fill-white {
+  fill: #FFFFFF;
+}
+
+.torn-svg-fill-dark {
+  fill: #0F2A22;
+}
+
+.torn-svg-fill-gold {
+  fill: #F5B800;
+}
+
 /* Kepatuhan preferensi gerak (Reduced Motion) */
 @media (prefers-reduced-motion: reduce) {
   *, ::before, ::after {
