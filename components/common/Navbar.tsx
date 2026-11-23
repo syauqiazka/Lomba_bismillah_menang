@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { HelpCircle, PlusCircle, List, PhoneCall, User, LogIn, BarChart3, MapPin, Info } from "lucide-react";
+import { HelpCircle, PlusCircle, List, PhoneCall, User, LogIn, BarChart3, Info } from "lucide-react";
 import type { SessionData } from "@/lib/session-options";
 
 interface NavbarProps {
@@ -61,6 +61,7 @@ export function Navbar({
           {onOpenIntro && (
             <button
               type="button"
+              id="nav-panduan"
               data-tour="nav-panduan"
               onClick={onOpenIntro}
               className="inline-flex items-center gap-1.5 px-2.5 py-1.5 text-xs font-semibold rounded text-[var(--color-text-secondary)] hover:text-[var(--color-text)] hover:bg-[var(--color-surface-hover)] border border-[var(--color-border)] focus:outline-none focus:ring-2 focus:ring-[var(--color-focus)] transition-colors cursor-pointer"
@@ -91,24 +92,14 @@ export function Navbar({
             </button>
           )}
 
-          {/* Tautan Beranda / Tentang Platform */}
+          {/* Tautan Informasi & Prinsip Platform */}
           <Link
-            href="/"
+            href="/tentang"
             className="inline-flex items-center gap-1.5 px-2.5 py-1.5 text-xs font-semibold rounded text-[var(--color-text-secondary)] hover:text-[var(--color-text)] hover:bg-[var(--color-surface-hover)] border border-[var(--color-border)] focus:outline-none focus:ring-2 focus:ring-[var(--color-focus)] transition-colors"
-            title="Beranda & Informasi Platform TRASEC"
+            title="Tentang Misi & Transparansi TRASEC"
           >
             <Info className="w-3.5 h-3.5 text-[var(--color-secondary)]" />
             <span className="hidden sm:inline">Tentang</span>
-          </Link>
-
-          {/* Tautan Peta Operasional Layar Penuh */}
-          <Link
-            href="/peta"
-            className="inline-flex items-center gap-1.5 px-2.5 py-1.5 text-xs font-semibold rounded text-[var(--color-text-secondary)] hover:text-[var(--color-text)] hover:bg-[var(--color-surface-hover)] border border-[var(--color-border)] focus:outline-none focus:ring-2 focus:ring-[var(--color-focus)] transition-colors"
-            title="Peta Operasional Selisih Kemanusiaan"
-          >
-            <MapPin className="w-3.5 h-3.5 text-[var(--color-primary)]" />
-            <span className="hidden sm:inline">Peta</span>
           </Link>
 
           {/* Tautan Dashboard Statistik Publik */}

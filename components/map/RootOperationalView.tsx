@@ -72,7 +72,11 @@ export function RootOperationalView({
         />
 
         {/* Status Agregat Ringkas di Sudut Kiri Bawah Peta */}
-        <div className="hidden md:flex absolute bottom-4 left-4 z-[900] bg-white/90 backdrop-blur-xs border border-[var(--color-border)] rounded-lg px-3 py-1.5 shadow-xs text-[11px] font-medium text-[var(--color-text-secondary)] gap-3 tabular-numbers">
+        <div
+          className={`hidden md:flex absolute bottom-4 left-4 z-[900] bg-white/95 backdrop-blur-xs border border-[var(--color-border)] rounded-lg px-3 py-1.5 shadow-xs text-[11px] font-medium text-[var(--color-text-secondary)] gap-3 tabular-numbers transition-opacity duration-200 ${
+            isIntroOpen ? "opacity-0 pointer-events-none" : "opacity-100"
+          }`}
+        >
           <span>
             Laporan Terverifikasi: <strong className="text-[var(--color-text)]">{aggregates.totalVerifiedReports}</strong>
           </span>

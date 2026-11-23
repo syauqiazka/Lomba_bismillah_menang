@@ -124,7 +124,7 @@ export function EditorialLandingView({
                   </p>
                   <div className="pt-1 flex flex-col gap-2">
                     <Link
-                      href="/peta"
+                      href="/"
                       className="group inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-[#0F2A22] hover:bg-[#16382E] text-white text-xs font-bold shadow-md hover:shadow-lg transition-all duration-300 hover:-translate-y-0.5"
                     >
                       <MapPin className="w-4 h-4 text-amber-400 transition-transform group-hover:scale-110" />
@@ -288,7 +288,7 @@ export function EditorialLandingView({
             <RevealOnScroll direction="up" delayMs={350}>
               <div className="pt-2 flex flex-wrap gap-3">
                 <Link
-                  href="/peta"
+                  href="/"
                   className="group inline-flex items-center gap-2 px-6 py-3.5 rounded-full bg-[#0F2A22] hover:bg-[#16382E] text-white text-xs font-bold transition-all duration-300 shadow-sm hover:-translate-y-0.5"
                 >
                   <MapPin className="w-4 h-4 text-amber-400" />
@@ -409,7 +409,7 @@ export function EditorialLandingView({
               <p className="text-xs sm:text-sm text-slate-600 leading-relaxed mb-6">
                 Menghitung dan mempublikasikan selisih kuota logistik riil per lokasi. Bantuan yang cukup langsung dialihkan agar posko lain tidak terabaikan.
               </p>
-              <Link href="/peta" className="inline-flex items-center gap-1.5 text-xs font-bold uppercase text-[#0F2A22] hover:text-amber-600 transition-colors">
+              <Link href="/" className="inline-flex items-center gap-1.5 text-xs font-bold uppercase text-[#0F2A22] hover:text-amber-600 transition-colors">
                 Pantau Selisih di Peta &rarr;
               </Link>
             </div>
@@ -514,7 +514,7 @@ export function EditorialLandingView({
                 </div>
                 <div className="p-4 pt-0">
                   <Link
-                    href="/peta"
+                    href="/"
                     className="w-full py-2.5 px-3 rounded-xl bg-slate-900 hover:bg-black text-white text-xs font-bold text-center block transition-colors"
                   >
                     Pantau di Peta
@@ -564,7 +564,7 @@ export function EditorialLandingView({
                 </div>
                 <div className="p-4 pt-0">
                   <Link
-                    href="/peta"
+                    href="/"
                     className="w-full py-2.5 px-3 rounded-xl bg-slate-900 hover:bg-black text-white text-xs font-bold text-center block transition-colors"
                   >
                     Pantau di Peta
@@ -614,7 +614,7 @@ export function EditorialLandingView({
                 </div>
                 <div className="p-4 pt-0">
                   <Link
-                    href="/peta"
+                    href="/"
                     className="w-full py-2.5 px-3 rounded-xl bg-slate-900 hover:bg-black text-white text-xs font-bold text-center block transition-colors"
                   >
                     Pantau di Peta
@@ -664,7 +664,7 @@ export function EditorialLandingView({
                 </div>
                 <div className="p-4 pt-0">
                   <Link
-                    href="/peta"
+                    href="/"
                     className="w-full py-2.5 px-3 rounded-xl bg-slate-900 hover:bg-black text-white text-xs font-bold text-center block transition-colors"
                   >
                     Pantau di Peta
@@ -954,7 +954,7 @@ export function EditorialLandingView({
                   Dokumentasi Operasi Posko: Transparansi Alokasi Logistik Kemanusiaan
                 </span>
                 <Link
-                  href="/peta"
+                  href="/"
                   className="inline-flex items-center gap-2 bg-[#F5B800] hover:bg-amber-400 text-slate-950 font-bold text-xs uppercase px-5 py-2.5 rounded-full shadow transition-colors"
                 >
                   <span>Lihat Selisih Terbuka</span>
@@ -1048,7 +1048,7 @@ export function EditorialLandingView({
                 </div>
                 <div className="p-4 pt-0">
                   <Link
-                    href="/peta"
+                    href="/"
                     className="w-full py-2.5 rounded-xl bg-slate-900 hover:bg-black text-white text-xs font-bold text-center block transition-colors"
                   >
                     Buka Titik di Peta
@@ -1086,7 +1086,7 @@ export function EditorialLandingView({
                 </div>
                 <div className="p-4 pt-0">
                   <Link
-                    href="/peta"
+                    href="/"
                     className="w-full py-2.5 rounded-xl bg-slate-900 hover:bg-black text-white text-xs font-bold text-center block transition-colors"
                   >
                     Buka Titik di Peta
@@ -1124,7 +1124,7 @@ export function EditorialLandingView({
                 </div>
                 <div className="p-4 pt-0">
                   <Link
-                    href="/peta"
+                    href="/"
                     className="w-full py-2.5 rounded-xl bg-slate-900 hover:bg-black text-white text-xs font-bold text-center block transition-colors"
                   >
                     Buka Titik di Peta
@@ -1415,7 +1415,7 @@ export function EditorialLandingView({
                     </p>
                     <div className="pt-2">
                       <Link
-                        href="/peta"
+                        href="/"
                         className="inline-flex items-center gap-1.5 text-xs font-bold text-amber-600 hover:underline"
                       >
                         <span>Lihat Rincian Posko</span>
@@ -1510,7 +1510,7 @@ export function EditorialLandingView({
               <RevealOnScroll direction="up" delayMs={350}>
                 <div className="pt-2">
                   <Link
-                    href="/peta"
+                    href="/"
                     className="w-full py-2.5 px-4 rounded-xl border border-[#D9D3C7] bg-[#FAF8F5] hover:bg-white text-slate-900 text-xs font-bold text-center block transition-colors shadow-2xs"
                   >
                     Buka Seluruh Laporan di Peta Interaktif
@@ -1545,7 +1545,7 @@ export function EditorialLandingView({
                 Laporkan Kebutuhan (5W+1H)
               </Link>
               <Link
-                href="/peta"
+                href="/"
                 className="px-6 py-3.5 rounded-full border border-white/30 hover:border-white text-white text-xs font-bold uppercase transition-colors"
               >
                 Jelajahi Peta Selisih
@@ -1603,7 +1603,7 @@ export function EditorialLandingView({
                 <span>Panggilan Darurat: 112 / 115</span>
               </Link>
               <Link
-                href="/peta"
+                href="/"
                 className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-white hover:bg-gray-200 text-slate-950 text-xs font-black transition-colors"
               >
                 <span>Buka Peta Operasional</span>
@@ -1621,32 +1621,32 @@ export function EditorialLandingView({
               </span>
               <ul className="space-y-2 text-xs">
                 <li>
-                  <Link href="/peta" className="hover:text-amber-400 transition-colors">
+                  <Link href="/" className="hover:text-amber-400 transition-colors">
                     Bencana Alam (Darurat)
                   </Link>
                 </li>
                 <li>
-                  <Link href="/peta" className="hover:text-amber-400 transition-colors">
+                  <Link href="/" className="hover:text-amber-400 transition-colors">
                     Lingkungan Hidup &amp; Konservasi
                   </Link>
                 </li>
                 <li>
-                  <Link href="/peta" className="hover:text-amber-400 transition-colors">
+                  <Link href="/" className="hover:text-amber-400 transition-colors">
                     Pendampingan Lansia (Sensitif)
                   </Link>
                 </li>
                 <li>
-                  <Link href="/peta" className="hover:text-amber-400 transition-colors">
+                  <Link href="/" className="hover:text-amber-400 transition-colors">
                     Fasilitas Kesehatan &amp; Sanitasi
                   </Link>
                 </li>
                 <li>
-                  <Link href="/peta" className="hover:text-amber-400 transition-colors">
+                  <Link href="/" className="hover:text-amber-400 transition-colors">
                     Dukungan Pendidikan Darurat
                   </Link>
                 </li>
                 <li>
-                  <Link href="/peta" className="hover:text-amber-400 transition-colors">
+                  <Link href="/" className="hover:text-amber-400 transition-colors">
                     Sosial &amp; Dapur Umum
                   </Link>
                 </li>
@@ -1660,7 +1660,7 @@ export function EditorialLandingView({
               </span>
               <ul className="space-y-2 text-xs">
                 <li>
-                  <Link href="/peta" className="hover:text-amber-400 transition-colors">
+                  <Link href="/" className="hover:text-amber-400 transition-colors">
                     Peta Selisih Logistik
                   </Link>
                 </li>
