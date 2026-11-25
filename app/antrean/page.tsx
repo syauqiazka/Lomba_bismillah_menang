@@ -24,9 +24,9 @@ export default async function AntreanPage() {
   return (
     <div className="relative min-h-screen bg-[var(--color-bg-base)] flex flex-col">
       <Navbar session={session} />
-      <div className="pt-14 flex-1">
+      <main id="main-content" className="pt-14 flex-1">
         <OfflineQueueView currentUser={session} />
-      </div>
+      </main>
       <FloatingEmergencyButton />
     </div>
   );

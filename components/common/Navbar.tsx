@@ -1,12 +1,14 @@
 "use client";
 
 import Link from "next/link";
-import { HelpCircle, PlusCircle, List, PhoneCall, User, LogIn, BarChart3, MapPin, Info } from "lucide-react";
+import { HelpCircle, PlusCircle, List, PhoneCall, User, LogIn, BarChart3, Info } from "lucide-react";
 import type { SessionData } from "@/lib/session-options";
 
 interface NavbarProps {
   session?: SessionData | null;
   onOpenIntro?: () => void;
+  isIntroOpen?: boolean;
+  panduanButtonRef?: React.RefObject<HTMLButtonElement | null>;
   onToggleTextView?: () => void;
   isTextViewOpen?: boolean;
   isSticky?: boolean;
@@ -15,6 +17,8 @@ interface NavbarProps {
 export function Navbar({
   session,
   onOpenIntro,
+  isIntroOpen = false,
+  panduanButtonRef,
   onToggleTextView,
   isTextViewOpen = false,
   isSticky = false,
@@ -24,61 +28,60 @@ export function Navbar({
   return (
     <header
       role="banner"
-      className={`${isSticky ? "fixed" : "absolute"} top-0 left-0 right-0 z-[1000] bg-white/95 backdrop-blur-md border-b border-[var(--color-border)] px-4 py-2.5 transition-colors`}
+      className={`${isSticky ? "fixed" : "absolute"} top-0 left-0 right-0 z-[1000] bg-[var(--color-surface)] border-b border-[var(--color-border)] px-3 sm:px-4 py-1.5`}
       style={{ boxShadow: "var(--shadow-elevated)" }}
     >
-      <div className="max-w-7xl mx-auto flex items-center justify-between gap-2">
-        {/* Brand Logo & Identifier */}
-        <div className="flex items-center gap-3">
+      <div className="max-w-7xl mx-auto flex items-center justify-between gap-1.5 sm:gap-2">
+        {/* Identitas Brand (Logo menuju / Peta Operasional) */}
+        <div className="flex items-center gap-2.5 shrink-0">
           <Link
             href="/"
-            data-tour="brand-logo"
-            className="flex items-center gap-2 group focus:outline-none focus:ring-2 focus:ring-[var(--color-focus)] rounded"
-            aria-label="TRASEC Beranda Peta"
+            className="flex items-center gap-2 min-h-[44px] pr-1 group focus:outline-none focus:ring-2 focus:ring-[var(--color-focus)] rounded"
+            aria-label="TRASEC Peta Operasional"
           >
-            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-emerald-700 to-emerald-900 flex items-center justify-center text-white font-black text-sm tracking-wider shadow-xs border border-emerald-600/40">
+            <div className="w-8 h-8 rounded bg-[var(--color-primary)] flex items-center justify-center text-white font-bold text-sm tracking-wide">
               TR
             </div>
             <div className="flex flex-col">
-              <span className="font-black text-sm md:text-base text-slate-900 tracking-tight leading-none group-hover:text-emerald-700 transition-colors">
+              <span className="font-bold text-sm md:text-base text-[var(--color-text)] tracking-tight leading-none group-hover:text-[var(--color-primary)] transition-colors">
                 TRASEC
               </span>
-              <span className="text-[10px] md:text-xs text-emerald-800 tracking-wider font-bold uppercase">
+              <span className="hidden sm:block text-[11px] text-[var(--color-text-secondary)] font-semibold">
                 Humanitarian Intel
               </span>
             </div>
           </Link>
 
-          {/* Badge Pengingat Integritas */}
-          <span className="hidden lg:inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-emerald-50 text-emerald-800 border border-emerald-300">
+          <span className="hidden lg:inline-flex items-center px-2.5 py-0.5 rounded text-xs font-semibold bg-[var(--color-success-bg)] text-[var(--color-success-text)] border border-[var(--color-border)]">
             Transparansi Bantuan Riil
           </span>
         </div>
 
-        {/* Action Controls & Navigation */}
-        <div className="flex items-center gap-1.5 md:gap-2">
-          {/* Tombol Panduan (Mekanisme Buka Ulang Opsi C) */}
+        {/* Kontrol & Navigasi */}
+        <nav aria-label="Navigasi utama" className="flex items-center gap-1 sm:gap-1.5 overflow-x-auto no-scrollbar">
+          {/* Tombol Panduan (Buka Ulang Pengantar) */}
           {onOpenIntro && (
             <button
+              ref={panduanButtonRef}
               type="button"
-              data-tour="nav-panduan"
               onClick={onOpenIntro}
-              className="inline-flex items-center gap-1.5 px-2.5 py-1.5 text-xs font-semibold rounded text-[var(--color-text-secondary)] hover:text-[var(--color-text)] hover:bg-[var(--color-surface-hover)] border border-[var(--color-border)] focus:outline-none focus:ring-2 focus:ring-[var(--color-focus)] transition-colors cursor-pointer"
-              aria-label="Buka Panduan Platform"
+              aria-expanded={isIntroOpen}
+              className="inline-flex items-center justify-center gap-1.5 min-w-[44px] min-h-[44px] px-2.5 text-xs font-semibold rounded text-[var(--color-text-secondary)] hover:text-[var(--color-text)] hover:bg-[var(--color-surface-hover)] border border-[var(--color-border)] focus:outline-none focus:ring-2 focus:ring-[var(--color-focus)] transition-colors cursor-pointer shrink-0"
+              aria-label="Buka panduan peta"
               title="Panduan Membaca Peta & Selisih"
             >
-              <HelpCircle className="w-3.5 h-3.5 text-[var(--color-primary)]" />
-              <span className="hidden sm:inline">Panduan</span>
+              <HelpCircle className="w-4 h-4 text-[var(--color-primary)]" aria-hidden="true" />
+              <span className="hidden md:inline">Panduan</span>
             </button>
           )}
 
-          {/* Tombol Alternatif Tabel Teks (Aksesibilitas / Sinyal Lambat) */}
+          {/* Tombol Alternatif Tabel Teks */}
           {onToggleTextView && (
             <button
               type="button"
-              data-tour="nav-text-view"
               onClick={onToggleTextView}
-              className={`inline-flex items-center gap-1.5 px-2.5 py-1.5 text-xs font-semibold rounded border transition-colors cursor-pointer focus:outline-none focus:ring-2 focus:ring-[var(--color-focus)] ${
+              aria-expanded={isTextViewOpen}
+              className={`inline-flex items-center justify-center gap-1.5 min-w-[44px] min-h-[44px] px-2.5 text-xs font-semibold rounded border transition-colors cursor-pointer focus:outline-none focus:ring-2 focus:ring-[var(--color-focus)] shrink-0 ${
                 isTextViewOpen
                   ? "bg-[var(--color-secondary)] text-white border-[var(--color-secondary)]"
                   : "text-[var(--color-text-secondary)] hover:text-[var(--color-text)] hover:bg-[var(--color-surface-hover)] border-[var(--color-border)]"
@@ -86,75 +89,66 @@ export function Navbar({
               aria-label="Tampilkan data peta dalam format tabel teks"
               title="Daftar Teks Aksesibel"
             >
-              <List className="w-3.5 h-3.5" />
-              <span className="hidden md:inline">Daftar Teks</span>
+              <List className="w-4 h-4" aria-hidden="true" />
+              <span className="hidden lg:inline">Daftar Teks</span>
             </button>
           )}
 
-          {/* Tautan Beranda / Tentang Platform */}
+          {/* Tautan Tentang Platform */}
           <Link
-            href="/"
-            className="inline-flex items-center gap-1.5 px-2.5 py-1.5 text-xs font-semibold rounded text-[var(--color-text-secondary)] hover:text-[var(--color-text)] hover:bg-[var(--color-surface-hover)] border border-[var(--color-border)] focus:outline-none focus:ring-2 focus:ring-[var(--color-focus)] transition-colors"
-            title="Beranda & Informasi Platform TRASEC"
+            href="/tentang"
+            className="inline-flex items-center justify-center gap-1.5 min-w-[44px] min-h-[44px] px-2.5 text-xs font-semibold rounded text-[var(--color-text-secondary)] hover:text-[var(--color-text)] hover:bg-[var(--color-surface-hover)] border border-[var(--color-border)] focus:outline-none focus:ring-2 focus:ring-[var(--color-focus)] transition-colors shrink-0"
+            title="Tentang Platform TRASEC"
+            aria-label="Tentang TRASEC"
           >
-            <Info className="w-3.5 h-3.5 text-[var(--color-secondary)]" />
-            <span className="hidden sm:inline">Tentang</span>
-          </Link>
-
-          {/* Tautan Peta Operasional Layar Penuh */}
-          <Link
-            href="/peta"
-            className="inline-flex items-center gap-1.5 px-2.5 py-1.5 text-xs font-semibold rounded text-[var(--color-text-secondary)] hover:text-[var(--color-text)] hover:bg-[var(--color-surface-hover)] border border-[var(--color-border)] focus:outline-none focus:ring-2 focus:ring-[var(--color-focus)] transition-colors"
-            title="Peta Operasional Selisih Kemanusiaan"
-          >
-            <MapPin className="w-3.5 h-3.5 text-[var(--color-primary)]" />
-            <span className="hidden sm:inline">Peta</span>
+            <Info className="w-4 h-4 text-[var(--color-secondary)]" aria-hidden="true" />
+            <span className="hidden md:inline">Tentang</span>
           </Link>
 
           {/* Tautan Dashboard Statistik Publik */}
           <Link
             href="/dashboard"
-            className="inline-flex items-center gap-1.5 px-2.5 py-1.5 text-xs font-semibold rounded text-[var(--color-text-secondary)] hover:text-[var(--color-text)] hover:bg-[var(--color-surface-hover)] border border-[var(--color-border)] focus:outline-none focus:ring-2 focus:ring-[var(--color-focus)] transition-colors"
+            className="hidden sm:inline-flex items-center justify-center gap-1.5 min-w-[44px] min-h-[44px] px-2.5 text-xs font-semibold rounded text-[var(--color-text-secondary)] hover:text-[var(--color-text)] hover:bg-[var(--color-surface-hover)] border border-[var(--color-border)] focus:outline-none focus:ring-2 focus:ring-[var(--color-focus)] transition-colors shrink-0"
             title="Dashboard Statistik Agregat Nasional"
+            aria-label="Statistik Publik"
           >
-            <BarChart3 className="w-3.5 h-3.5 text-[var(--color-primary)]" />
-            <span className="hidden sm:inline">Statistik</span>
+            <BarChart3 className="w-4 h-4 text-[var(--color-primary)]" aria-hidden="true" />
+            <span className="hidden lg:inline">Statistik</span>
           </Link>
 
           {/* Tautan Kontak Darurat */}
           <Link
             href="/darurat"
-            data-tour="nav-emergency"
-            className="inline-flex items-center gap-1 px-2.5 py-1.5 text-xs font-bold rounded-lg text-white bg-red-600 hover:bg-red-700 border border-red-700 shadow-xs focus:outline-none focus:ring-2 focus:ring-red-400 transition-colors"
+            className="hidden sm:inline-flex items-center justify-center gap-1 min-w-[44px] min-h-[44px] px-2.5 text-xs font-semibold rounded text-white bg-[var(--color-danger-text)] hover:opacity-95 focus:outline-none focus:ring-2 focus:ring-[var(--color-focus)] transition-opacity shrink-0"
             title="Nomor Darurat Nasional & Posko"
+            aria-label="Direktori Darurat"
           >
-            <PhoneCall className="w-3.5 h-3.5" />
-            <span className="hidden sm:inline">Darurat</span>
+            <PhoneCall className="w-4 h-4" aria-hidden="true" />
+            <span className="hidden lg:inline">Darurat</span>
           </Link>
 
           {/* Tombol Buat Laporan */}
           <Link
             href="/lapor"
-            data-tour="nav-report"
-            className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold rounded-lg bg-emerald-700 hover:bg-emerald-800 text-white focus:outline-none focus:ring-2 focus:ring-emerald-400 transition-colors shadow-xs"
+            className="inline-flex items-center justify-center gap-1.5 min-h-[44px] px-3 text-xs font-semibold rounded bg-[var(--color-primary)] hover:bg-[var(--color-primary-hover)] text-white focus:outline-none focus:ring-2 focus:ring-[var(--color-focus)] transition-colors shrink-0"
           >
-            <PlusCircle className="w-3.5 h-3.5" />
+            <PlusCircle className="w-4 h-4" aria-hidden="true" />
             <span>Lapor</span>
           </Link>
 
           {/* Status Sesi & Masuk */}
           {isLoggedIn ? (
-            <div className="flex items-center gap-1.5 pl-1.5 border-l border-[var(--color-border)]">
+            <div className="flex items-center gap-1.5 pl-1.5 border-l border-[var(--color-border)] shrink-0">
               <span
-                className="hidden xl:inline-flex items-center gap-1 px-2 py-0.5 rounded text-[11px] font-semibold bg-[var(--color-surface-hover)] text-[var(--color-text)]"
+                className="hidden xl:inline-flex items-center gap-1 px-2 py-1 rounded text-xs font-semibold bg-[var(--color-surface-hover)] text-[var(--color-text)]"
                 title={`Masuk sebagai ${session?.name} (${session?.role})`}
               >
-                <User className="w-3 h-3 text-[var(--color-text-muted)]" />
+                <User className="w-3.5 h-3.5 text-[var(--color-text-secondary)]" aria-hidden="true" />
                 <span className="max-w-[100px] truncate">{session?.name}</span>
               </span>
               <Link
                 href="/antrean"
-                className="px-2 py-1 text-[11px] font-bold rounded bg-slate-100 hover:bg-slate-200 text-[var(--color-text)] transition-colors"
+                className="inline-flex items-center min-h-[44px] px-2.5 text-xs font-semibold rounded bg-[var(--color-surface-hover)] hover:bg-[var(--color-border)] text-[var(--color-text)] transition-colors"
                 title="Antrean Pengiriman Luring"
               >
                 Antrean
@@ -162,7 +156,7 @@ export function Navbar({
               {session?.role === "VERIFIKATOR" && (
                 <Link
                   href="/verifikasi"
-                  className="px-2 py-1 text-[11px] font-bold rounded bg-[var(--color-info-bg)] text-[var(--color-info-text)] hover:underline"
+                  className="inline-flex items-center min-h-[44px] px-2.5 text-xs font-semibold rounded bg-[var(--color-info-bg)] text-[var(--color-info-text)] hover:underline"
                 >
                   Verifikasi
                 </Link>
@@ -170,7 +164,7 @@ export function Navbar({
               {session?.role === "ADMIN" && (
                 <Link
                   href="/admin"
-                  className="px-2 py-1 text-[11px] font-bold rounded bg-purple-100 text-purple-900 hover:underline"
+                  className="inline-flex items-center min-h-[44px] px-2.5 text-xs font-semibold rounded bg-[var(--color-warning-bg)] text-[var(--color-warning-text)] hover:underline"
                 >
                   Admin
                 </Link>
@@ -179,15 +173,15 @@ export function Navbar({
           ) : (
             <Link
               href="/login"
-              className="inline-flex items-center gap-1 px-2.5 py-1.5 text-xs font-semibold rounded text-[var(--color-text-secondary)] hover:text-[var(--color-text)] hover:bg-[var(--color-surface-hover)] border border-[var(--color-border)] focus:outline-none focus:ring-2 focus:ring-[var(--color-focus)] transition-colors"
+              className="inline-flex items-center justify-center gap-1 min-w-[44px] min-h-[44px] px-2.5 text-xs font-semibold rounded text-[var(--color-text-secondary)] hover:text-[var(--color-text)] hover:bg-[var(--color-surface-hover)] border border-[var(--color-border)] focus:outline-none focus:ring-2 focus:ring-[var(--color-focus)] transition-colors shrink-0"
+              aria-label="Masuk akun relawan"
             >
-              <LogIn className="w-3.5 h-3.5" />
-              <span className="hidden xs:inline">Masuk</span>
+              <LogIn className="w-4 h-4" aria-hidden="true" />
+              <span className="hidden sm:inline">Masuk</span>
             </Link>
           )}
-        </div>
+        </nav>
       </div>
     </header>
   );
 }
-

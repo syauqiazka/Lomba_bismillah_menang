@@ -23,6 +23,7 @@ import {
   getOfflineQueue,
   removeOfflineDraft,
   updateOfflineDraftStatus,
+  loadDemoOfflineDraft,
   type OfflineDraftItem,
 } from "@/lib/offline-queue";
 import { createReportAction } from "@/app/actions/report-actions";
@@ -33,12 +34,9 @@ interface OfflineQueueViewProps {
 }
 
 export function OfflineQueueView({ currentUser }: OfflineQueueViewProps) {
-  const [isOnline, setIsOnline] = useState<boolean>(() =>
-    typeof navigator !== "undefined" ? navigator.onLine : true
-  );
-  const [queue, setQueue] = useState<OfflineDraftItem[]>(() =>
-    typeof window !== "undefined" ? getOfflineQueue(currentUser.userId) : []
-  );
+  // Inisialisasi statis agar SSR dan initial client render identik (mencegah hydration error #418)
+  const [isOnline, setIsOnline] = useState<boolean>(true);
+  const [queue, setQueue] = useState<OfflineDraftItem[]>([]);
   const [typeFilter, setTypeFilter] = useState<"ALL" | "REPORT" | "AID">("ALL");
   const [isSyncingAll, setIsSyncingAll] = useState(false);
   const [syncingItemId, setSyncingItemId] = useState<string | null>(null);
@@ -53,9 +51,14 @@ export function OfflineQueueView({ currentUser }: OfflineQueueViewProps) {
     }
   }, [currentUser.userId]);
 
-  // Pantau status konektivitas jaringan
+  // Muat status koneksi dan antrean lokal setelah mount agar bebas hydration mismatch
   useEffect(() => {
     if (typeof window === "undefined") return;
+
+    const timer = setTimeout(() => {
+      setIsOnline(navigator.onLine);
+      loadQueue();
+    }, 0);
 
     const handleOnline = () => {
       setIsOnline(true);
@@ -77,6 +80,7 @@ export function OfflineQueueView({ currentUser }: OfflineQueueViewProps) {
     window.addEventListener("offline", handleOffline);
 
     return () => {
+      clearTimeout(timer);
       window.removeEventListener("online", handleOnline);
       window.removeEventListener("offline", handleOffline);
     };
@@ -360,20 +364,34 @@ export function OfflineQueueView({ currentUser }: OfflineQueueViewProps) {
             <div className="w-12 h-12 rounded-full bg-[var(--color-forest-bg)] text-[var(--color-forest-main)] flex items-center justify-center mx-auto">
               <CheckCircle2 className="w-6 h-6" />
             </div>
-            <h3 className="text-base font-bold text-[var(--color-text-main)]">
+            <h2 className="text-base font-bold text-[var(--color-text-main)]">
               Antrean Luring Bersih
-            </h3>
+            </h2>
             <p className="text-xs text-[var(--color-text-muted)] max-w-sm mx-auto">
               Tidak ada draf laporan atau bantuan tertunda yang menunggu pengiriman di perangkat Anda.
             </p>
-            <div className="pt-2">
+            <div className="pt-2 flex flex-wrap items-center justify-center gap-2">
               <Link
                 href="/lapor"
-                className="inline-flex items-center gap-1.5 px-4 py-2 rounded-md bg-[var(--color-forest-main)] text-white text-xs font-bold hover:bg-[var(--color-forest-dark)] transition-colors shadow-xs"
+                className="inline-flex items-center gap-1.5 min-h-[44px] px-4 py-2 rounded-md bg-[var(--color-forest-main)] text-white text-xs font-bold hover:bg-[var(--color-forest-dark)] transition-colors shadow-xs"
               >
                 <PlusCircle className="w-3.5 h-3.5" />
                 <span>Buat Laporan Baru</span>
               </Link>
+              <button
+                type="button"
+                onClick={() => {
+                  loadDemoOfflineDraft(currentUser.userId || "demo-user", currentUser.name || "Relawan Lapangan");
+                  loadQueue();
+                  setNotification({
+                    type: "info",
+                    message: "Contoh draf simulasi demo dimuat ke antrean lokal Anda.",
+                  });
+                }}
+                className="inline-flex items-center gap-1.5 min-h-[44px] px-4 py-2 rounded-md border border-[var(--color-border-strong)] bg-[var(--color-surface)] text-xs font-semibold text-[var(--color-text-secondary)] hover:bg-[var(--color-surface-hover)] transition-colors cursor-pointer"
+              >
+                <span>Muat Contoh Draf Demo</span>
+              </button>
             </div>
           </div>
         ) : (

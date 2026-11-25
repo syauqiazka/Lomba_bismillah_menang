@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { X, HeartHandshake, CheckCircle2, AlertCircle, Loader2 } from "lucide-react";
 import type { ItemDeficitResult } from "@/lib/calculations";
 import { submitAidAction } from "@/app/actions/aid-actions";
@@ -31,6 +31,15 @@ export function RecordAidModal({
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (!isOpen) return;
+    function handleKeyDown(e: KeyboardEvent) {
+      if (e.key === "Escape") onClose();
+    }
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [isOpen, onClose]);
 
   if (!isOpen) return null;
 
@@ -96,7 +105,7 @@ export function RecordAidModal({
       role="dialog"
       aria-modal="true"
       aria-label="Catat Penyaluran Bantuan Relawan"
-      className="fixed inset-0 z-[1300] bg-black/50 backdrop-blur-xs flex items-center justify-center p-3 sm:p-4"
+      className="fixed inset-0 z-[1300] bg-black/50 flex items-center justify-center p-3 sm:p-4"
     >
       <div
         className="w-full max-w-md bg-white border border-[var(--color-border)] rounded-2xl sm:rounded-xl shadow-2xl overflow-hidden"
@@ -237,14 +246,14 @@ export function RecordAidModal({
                 type="button"
                 onClick={onClose}
                 disabled={isSubmitting}
-                className="px-3.5 py-2 rounded-lg border border-[var(--color-border)] text-xs font-semibold text-[var(--color-text-secondary)] hover:bg-[var(--color-surface-hover)] cursor-pointer"
+                className="min-h-[44px] px-3.5 py-2 rounded border border-[var(--color-border-strong)] text-xs font-semibold text-[var(--color-text-secondary)] hover:bg-[var(--color-surface-hover)] cursor-pointer"
               >
                 Batal
               </button>
               <button
                 type="submit"
                 disabled={isSubmitting || !!successMessage}
-                className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg bg-[var(--color-primary)] hover:bg-[var(--color-primary-hover)] text-white text-xs font-bold transition-colors shadow-sm disabled:opacity-50 cursor-pointer"
+                className="inline-flex items-center gap-1.5 min-h-[44px] px-4 py-2 rounded bg-[var(--color-primary)] hover:bg-[var(--color-primary-hover)] text-white text-xs font-bold transition-colors disabled:opacity-50 cursor-pointer"
               >
                 {isSubmitting && <Loader2 className="w-3.5 h-3.5 animate-spin" />}
                 <span>Simpan Penyaluran Bantuan</span>

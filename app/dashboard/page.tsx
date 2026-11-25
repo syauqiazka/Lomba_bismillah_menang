@@ -23,9 +23,9 @@ export default async function DashboardPage() {
   return (
     <div className="relative min-h-screen bg-[var(--color-bg-base)] flex flex-col">
       <Navbar session={session} />
-      <div className="pt-14 flex-1">
+      <main id="main-content" className="pt-14 flex-1">
         <PublicDashboardView data={dashboardData} />
-      </div>
+      </main>
       <FloatingEmergencyButton />
     </div>
   );

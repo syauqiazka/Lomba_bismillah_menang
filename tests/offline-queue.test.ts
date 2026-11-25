@@ -24,11 +24,39 @@ import {
   updateOfflineDraftStatus,
   removeOfflineDraft,
   clearOfflineDraftsForUser,
+  loadDemoOfflineDraft,
 } from "@/lib/offline-queue";
 
 describe("Offline Queue Utility (offline-queue.ts)", () => {
   beforeEach(() => {
     mockLocalStorage.clear();
+  });
+
+  it("mengembalikan array kosong jika localStorage kosong dan tidak menyisipkan data fiktif", () => {
+    const firstRead = getOfflineQueue("usr-baru-1");
+    expect(firstRead).toEqual([]);
+    expect(mockLocalStorage.getItem("trasec_offline_queue_v1")).toBeNull();
+
+    // Pemanggilan berulang tetap tidak mengubah localStorage
+    const secondRead = getOfflineQueue("usr-baru-1");
+    expect(secondRead).toEqual([]);
+    expect(mockLocalStorage.getItem("trasec_offline_queue_v1")).toBeNull();
+  });
+
+  it("menangani data antrean lama yang korup atau bukan array secara aman", () => {
+    mockLocalStorage.setItem("trasec_offline_queue_v1", "{corrupt-json");
+    expect(getOfflineQueue("usr-1")).toEqual([]);
+
+    mockLocalStorage.setItem("trasec_offline_queue_v1", JSON.stringify({ not: "array" }));
+    expect(getOfflineQueue("usr-1")).toEqual([]);
+  });
+
+  it("memuat contoh draf demo hanya ketika dipanggil secara eksplisit", () => {
+    expect(getOfflineQueue("usr-demo")).toEqual([]);
+    const demoItem = loadDemoOfflineDraft("usr-demo", "Relawan Demo");
+    expect(demoItem.userId).toBe("usr-demo");
+    expect(getOfflineQueue("usr-demo")).toHaveLength(1);
+    expect(getOfflineQueue("usr-lain")).toEqual([]);
   });
 
   it("menyimpan draf baru dengan status MENUNGGU dan ID unik", () => {

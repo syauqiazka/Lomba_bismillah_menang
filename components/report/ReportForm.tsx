@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import {
   ArrowLeft,
@@ -32,6 +32,7 @@ type UrgencyLevelEnum = "DARURAT" | "MENDESAK" | "TERENCANA";
 
 interface ReportFormProps {
   regions: RegionOption[];
+  userId: string;
   userSessionName: string;
 }
 
@@ -53,7 +54,7 @@ function formatBytes(bytes: number): string {
   return `${Math.round(bytes / 1024)} KB`;
 }
 
-export function ReportForm({ regions, userSessionName }: ReportFormProps) {
+export function ReportForm({ regions, userId, userSessionName }: ReportFormProps) {
   const [step, setStep] = useState<number>(1);
 
   // Field Data Laporan
@@ -104,6 +105,18 @@ export function ReportForm({ regions, userSessionName }: ReportFormProps) {
 
   // Navigasi Langkah
   const totalSteps = type === "KEBUTUHAN" ? 4 : 3;
+
+  // Tutup modal AI via tombol Escape
+  useEffect(() => {
+    if (!isAiModalOpen) return;
+    function handleKeyDown(e: KeyboardEvent) {
+      if (e.key === "Escape") {
+        setIsAiModalOpen(false);
+      }
+    }
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [isAiModalOpen]);
 
   const currentRegion = regions.find((r) => r.id === selectedRegionId) || regions[0];
 
@@ -290,7 +303,7 @@ export function ReportForm({ regions, userSessionName }: ReportFormProps) {
     try {
       enqueueOfflineDraft({
         clientId: generateClientId(),
-        userId: userSessionName || "current-user",
+        userId,
         userName: userSessionName || "Relawan Lapangan",
         type: "REPORT",
         reportData: {
@@ -376,7 +389,7 @@ export function ReportForm({ regions, userSessionName }: ReportFormProps) {
       try {
         enqueueOfflineDraft({
           clientId,
-          userId: userSessionName || "current-user",
+          userId,
           userName: userSessionName || "Relawan Lapangan",
           type: "REPORT",
           reportData: {
@@ -1030,10 +1043,10 @@ export function ReportForm({ regions, userSessionName }: ReportFormProps) {
             <button
               type="button"
               onClick={handleSaveDraft}
-              className="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg border border-[var(--color-border)] text-xs font-semibold text-[var(--color-text-secondary)] hover:bg-[var(--color-surface-hover)] cursor-pointer"
+              className="inline-flex items-center gap-1.5 min-h-[44px] px-3 py-2 rounded border border-[var(--color-border-strong)] text-xs font-semibold text-[var(--color-text-secondary)] hover:bg-[var(--color-surface-hover)] cursor-pointer"
               title="Simpan draf di perangkat lokal"
             >
-              <Save className="w-3.5 h-3.5 text-gray-600" />
+              <Save className="w-3.5 h-3.5" aria-hidden="true" />
               <span>Simpan Draf Luring</span>
             </button>
           </div>
@@ -1044,9 +1057,9 @@ export function ReportForm({ regions, userSessionName }: ReportFormProps) {
                 type="button"
                 onClick={handleBack}
                 disabled={isSubmitting}
-                className="inline-flex items-center gap-1 px-3.5 py-2 rounded-lg border border-[var(--color-border)] text-xs font-semibold text-[var(--color-text)] hover:bg-[var(--color-surface-hover)] cursor-pointer"
+                className="inline-flex items-center gap-1 min-h-[44px] px-3.5 py-2 rounded border border-[var(--color-border-strong)] text-xs font-semibold text-[var(--color-text)] hover:bg-[var(--color-surface-hover)] cursor-pointer"
               >
-                <ArrowLeft className="w-3.5 h-3.5" />
+                <ArrowLeft className="w-3.5 h-3.5" aria-hidden="true" />
                 <span>Sebelumnya</span>
               </button>
             )}
@@ -1055,19 +1068,19 @@ export function ReportForm({ regions, userSessionName }: ReportFormProps) {
               <button
                 type="button"
                 onClick={handleNext}
-                className="inline-flex items-center gap-1 px-4 py-2 rounded-lg bg-[var(--color-primary)] hover:bg-[var(--color-primary-hover)] text-white text-xs font-bold cursor-pointer"
+                className="inline-flex items-center gap-1 min-h-[44px] px-4 py-2 rounded bg-[var(--color-primary)] hover:bg-[var(--color-primary-hover)] text-white text-xs font-bold cursor-pointer"
               >
                 <span>Selanjutnya</span>
-                <ArrowRight className="w-3.5 h-3.5" />
+                <ArrowRight className="w-3.5 h-3.5" aria-hidden="true" />
               </button>
             ) : (
               <button
                 type="submit"
                 disabled={isSubmitting}
-                className="inline-flex items-center gap-1.5 px-5 py-2 rounded-lg bg-[var(--color-primary)] hover:bg-[var(--color-primary-hover)] text-white text-xs font-bold transition-colors shadow-sm disabled:opacity-50 cursor-pointer"
+                className="inline-flex items-center gap-1.5 min-h-[44px] px-5 py-2 rounded bg-[var(--color-primary)] hover:bg-[var(--color-primary-hover)] text-white text-xs font-bold transition-colors disabled:opacity-50 cursor-pointer"
               >
-                {isSubmitting && <Loader2 className="w-3.5 h-3.5 animate-spin" />}
-                <Send className="w-3.5 h-3.5" />
+                {isSubmitting && <Loader2 className="w-3.5 h-3.5 animate-spin" aria-hidden="true" />}
+                <Send className="w-3.5 h-3.5" aria-hidden="true" />
                 <span>Ajukan Laporan Kemanusiaan</span>
               </button>
             )}
@@ -1083,11 +1096,11 @@ export function ReportForm({ regions, userSessionName }: ReportFormProps) {
           role="dialog"
           aria-modal="true"
           aria-labelledby="ai-modal-title"
-          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs animate-in fade-in"
+          className="fixed inset-0 z-[1300] flex items-center justify-center p-4 bg-black/60"
         >
-          <div className="bg-white border border-[var(--color-border)] rounded-2xl w-full max-w-2xl max-h-[90vh] flex flex-col shadow-xl overflow-hidden">
+          <div className="bg-[var(--color-surface)] border border-[var(--color-border)] rounded-lg w-full max-w-2xl max-h-[90vh] flex flex-col overflow-hidden" style={{ boxShadow: "var(--shadow-elevated)" }}>
             {/* Header Modal */}
-            <div className="p-4 sm:p-5 border-b border-[var(--color-border)] flex items-center justify-between bg-gradient-to-r from-emerald-50 to-teal-50">
+            <div className="p-4 sm:p-5 border-b border-[var(--color-border)] flex items-center justify-between bg-[var(--color-bg)]">
               <div className="flex items-center gap-2.5">
                 <div className="p-2 rounded-xl bg-[var(--color-primary)] text-white shadow-xs">
                   <Sparkles className="w-5 h-5" />
