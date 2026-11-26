@@ -8,7 +8,7 @@ import type { Metadata } from "next";
 export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
-  title: "Antrean Pengiriman Luring (Offline Queue) | TRASEC",
+  title: "Antrean Pengiriman Luring (Offline Queue) | TILARA",
   description:
     "Manajemen antrean draf laporan dan catatan bantuan tersimpan di perangkat lokal untuk sinkronisasi saat sinyal kembali.",
   robots: { index: false, follow: false },

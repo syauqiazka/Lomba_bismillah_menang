@@ -37,7 +37,7 @@ export function PublicDashboardView({ data }: PublicDashboardViewProps) {
     const lines: string[] = [];
 
     // Header Meta Posko
-    lines.push(`REKAPITULASI LOGISTIK POSKO KEMANUSIAAN NASIONAL (TRASEC)`);
+    lines.push(`REKAPITULASI LOGISTIK POSKO KEMANUSIAAN NASIONAL (TILARA)`);
     lines.push(`Tanggal Cetak / Ekspor,${new Date().toISOString()}`);
     lines.push(`Total Laporan Terverifikasi,${metrics.totalVerifiedReports}`);
     lines.push(`Total Bantuan Terkonfirmasi,${metrics.totalConfirmedAidItems}`);
@@ -68,7 +68,7 @@ export function PublicDashboardView({ data }: PublicDashboardViewProps) {
     const url = URL.createObjectURL(blob);
     const link = document.createElement("a");
     link.href = url;
-    link.setAttribute("download", `rekap-posko-trasec-${new Date().toISOString().slice(0, 10)}.csv`);
+    link.setAttribute("download", `rekap-posko-tilara-${new Date().toISOString().slice(0, 10)}.csv`);
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);

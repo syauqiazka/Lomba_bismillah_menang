@@ -1,529 +1,1232 @@
-# DESIGN.md
+# DESIGN.md — TILARA
 
-Sumber kebenaran untuk tampilan, rasa, sistem interaksi, token desain, spesifikasi antarmuka, dan sistem anti-slop.
-Aturan kode, aturan bisnis, arsitektur teknis, otorisasi, dan keamanan ada di `AGENTS.md`.
+> Panduan desain untuk seluruh antarmuka TILARA. Berlaku bersama `AGENTS.md` (aturan data & produk menang jika ada konflik).
 
-Terakhir diperbarui: 2026-11-19.
+## 1. Arah Visual
 
----
+TILARA = **dokumentasi jurnalistik + pemetaan geospasial + transparansi kemanusiaan**.
 
-## 1. Konteks dan filosofi desain
+| Pilar | Wujud |
+|---|---|
+| Editorial documentary | Homepage bercerita lewat kondisi nyata, tipografi editorial, ruang napas lega |
+| Geospatial intelligence | Peta sebagai alat memahami wilayah, bukan hiasan |
+| Data storytelling | Kebutuhan, bantuan, dan kekurangan jelas dalam sekali lihat |
+| Field documentation | Informasi lapangan transparan, bersumber, dan dapat ditelusuri |
 
-### 1.1 Arah: Humanitarian Intelligence Platform
-Platform ini adalah instrumen operasional kemanusiaan yang digunakan relawan, koordinator lapangan, dan masyarakat untuk mengambil keputusan taktis yang cepat, akurat, dan transparan.
-- **Bukan situs penggalangan dana**: Tidak ada tombol donasi uang, tidak ada visualisasi kartu rekening bank, dan tidak ada dramatisasi penderitaan.
-- **Bukan media sosial**: Tidak ada umpan (*feed*) algoritma yang tak berujung, tidak ada tombol suka (*like*), dan tidak ada metrik popularitas yang dangkal.
-- **Berorientasi tindakan nyata**: Menjawab kebutuhan langsung lapangan dengan mengedepankan data selisih logistik dan verifikasi faktual.
+**Dua mode tampilan:**
+- **Publik** (`/`, `/laporan`, `/tentang`, `/darurat`): editorial, lapang, bercerita.
+- **Operasional** (`/dashboard`, `/verifikasi`, `/distribusi`, dll.): padat, fungsional, cepat dipindai.
 
-### 1.2 Karakter visual dan operasional
-- **Tenang & Profesional**: Memberikan rasa kendali dan kepastian di tengah situasi krisis yang panik.
-- **Berpusat pada Manusia**: Menghargai martabat pihak terdampak tanpa mengekspos identitas pribadi mereka.
-- **Tepercaya & Transparan**: Setiap angka memiliki sumber, tanggal pembaruan, dan status verifikasi yang jelas.
-- **Operasional & Berbasis Data**: Mengutamakan tabel keterbacaan tinggi, penanda peta yang tegas, dan angka tabular yang mudah dibandingkan.
-- **Ringan & Cepat Diakses**: Dirancang untuk ponsel kelas menengah ke bawah dengan koneksi jaringan 3G yang tidak stabil di area bencana.
+Nada: tenang, serius, empatik, faktual. Bukan dramatis berlebihan, bukan eksploitasi penderitaan.
 
-### 1.3 Lima pertanyaan operasional dalam 3 detik
-Setiap layar antarmuka harus mampu menjawab lima pertanyaan mendasar relawan seketika:
-1. **Apa yang sedang terjadi?** (Kategori dan jenis insiden/kebutuhan jelas).
-2. **Di mana lokasinya?** (Nama wilayah administratif dan patokan akses aman).
-3. **Seberapa mendesak?** (Tingkat urgensi operasional: Darurat, Mendesak, atau Terencana).
-4. **Berapa selisih kebutuhan yang belum terpenuhi?** (Kuantitas logistik/tenaga yang riil kurang).
-5. **Bagaimana cara membantu?** (Kontak posko/koordinator atau formulir pencatatan bantuan).
+## 2. Brand & Warna
 
----
+### 2.1 Logo TILARA
+- **Nama:** TILARA — **Tagline:** *Visibility for the Unreached* (padanan Indonesia: *Terlihat. Terlacak. Terjangkau.*)
+- **Simbol:** garis kontur topografi konsentris (wilayah) dengan satu titik solid di tengah (titik lokasi / visibilitas) dan satu garis kecil yang membuka kontur ke luar (hubungan dengan bantuan).
+- **Wordmark:** huruf kapital sans geometris, jarak huruf lebar, huruf A tanpa palang. Gunakan **aset SVG resmi**, jangan mengetik ulang wordmark dengan font.
+- **Varian wajib:** lengkap (horizontal), ikon saja, monokrom hitam, monokrom putih, favicon/app icon (ikon di atas kotak hijau).
+- **Ukuran minimum:** ikon 16px (versi sederhana: 2 kontur + titik, tanpa garis < 2px); logo lengkap 96px lebar.
+- **Area aman:** setinggi titik tengah simbol di semua sisi. Jangan meregangkan, memutar, memberi bayangan, atau mengganti warna di luar palet.
+- Harus tetap terbaca di hitam-putih, sablon seragam relawan, dan papan kegiatan lapangan.
 
-## 2. Prinsip desain utama
+### 2.2 Palet (diambil dari papan logo)
 
-1. **Terbaca dalam 3 Detik**: Status verifikasi dan tingkat kekurangan logistik langsung dikenali tanpa mengharuskan pengguna membaca paragraf narasi panjang.
-2. **Warna Tidak Pernah Bekerja Sendirian**: Setiap indikator warna wajib disertai teks penjelas eksplisit dan ikon penegas untuk memastikan aksesibilitas penuh (ramah buta warna).
-3. **Transparansi Selalu Terlihat**: Tanggal pembaruan data, tingkat verifikasi, dan rincian pembentuk skor kepercayaan diletakkan berdampingan dengan data pokok.
-4. **Ringan pada Jaringan Buruk**: Menghindari beban grafis berat, gambar beresolusi raksasa, font web berlebih, atau pustaka animasi yang tidak esensial.
-5. **Peta dan Tabel Selisih sebagai Pahlawan Utama**: Identitas platform diwakili oleh kejelasan peta Leaflet dan ketegasan tabel perbandingan selisih. Elemen di luar itu tampil tenang dan fungsional.
-6. **Mobile-First Realistis**: Dirancang dengan basis layar terkecil 360 px pada genggaman satu tangan, sebelum diregangkan ke layar tablet dan desktop.
-7. **Setiap Elemen Memiliki Alasan Fungsional**: Segala ornamen visual yang hanya berfungsi sebagai dekorasi tanpa mendukung pengambilan keputusan relawan **wajib dieliminasi**.
-
----
-
-## 3. Referensi desain eksternal
-
-> [!NOTE]
-> **Status:** Seluruh referensi berikut berstatus **KANDIDAT ACUAN / `BELUM DIVERIFIKASI`**. Tim belum melakukan audit langsung pada situs yang bersangkutan. Referensi digunakan sebagai pembanding pola antarmuka dan struktur informasi, bukan untuk disalin mentah identitasnya.
-
-| Platform Referensi | Pola yang Diadaptasi | Pola yang Dilarang Disalin | Halaman yang Memperoleh Manfaat |
-|---|---|---|---|
-| **Ushahidi** | Struktur penyajian laporan berbasis geospasial, filter kategori insiden, panel detail lokasi. | Identitas visual gelap, alur crowdsourcing terbuka tanpa proses kurasi ketat. | Peta interaktif, Detail laporan. |
-| **UNHCR Operational Data Portal** | Hierarki visual statistik agregat, tabel persebaran wilayah, kesederhanaan ringkasan angka. | Warna merek biru UNHCR, logo resmi PBB, grafik makro yang rumit. | Dashboard statistik publik. |
-| **HOT Tasking Manager** | Alur verifikasi antrean kerja, status validasi data bertahap, transparansi progres penyelesaian. | Istilah teknis pemetaan OpenStreetMap yang membingungkan relawan umum. | Dashboard verifikator (`/verifikasi`). |
-| **Our World in Data** | Ketegasan visualisasi grafik batang, tipografi editorial bersih, pemisahan data jelas. | Format artikel naratif yang terlalu panjang untuk penggunaan taktis lapangan. | Tabel & visualisasi selisih logistik. |
-| **PetaBencana.id** | Keselarasan dengan konteks bencana di Indonesia, interaksi peta responsif. | Penekanan warna oranye/kuning cerah yang terlalu dominan pada seluruh bidang layar. | Sistem peta dan kartu ringkasan wilayah. |
-| **GOV.UK Design System** | Struktur formulir bertahap (*one question per screen*), kejelasan teks pesan galat, rasio kontras ekstrem. | Font khusus GDS Transport, ikon mahkota kerajaan, aset resmi pemerintah Inggris. | Formulir pelaporan 5W+1H, formulir masuk (`/login`). |
-
----
-
-## 4. Sistem warna dan token desain
-
-Perhitungan rasio kontras dilakukan menggunakan rumus standar **WCAG 2.2 relative luminance**.
-- Standar teks normal: minimal 4,5:1
-- Standar teks besar (>= 24px atau >= 18.66px bold): minimal 3:1
-- Standar komponen antarmuka dan elemen grafis informatif: minimal 3:1
-
-### 4.1 Palet warna dasar (FINAL)
-
-| Nama Warna | Kode Heksadesimal | Peran & Penggunaan Utama |
+| Token | Hex | Pakai untuk |
 |---|---|---|
-| **Canvas** | `#F5F6F3` | Latar belakang halaman aplikasi; memberikan rasa tenang dan tidak menyilaukan di luar ruangan. |
-| **White** | `#FFFFFF` | Permukaan panel kontrol, latar belakang kartu data, form input, dan kontur pemisah. |
-| **Navy** | `#172B3A` | Teks utama, judul, navigasi induk, kontur batas tombol sekunder, dan klaster peta netral. |
-| **Forest** | `#246B50` | Aksen tindakan utama, tombol konfirmasi, dan indikator "Bantuan Hampir Terpenuhi". |
-| **Amber** | `#E5A13A` | Penanda latar "Kekurangan Sedang". **Hanya untuk warna bidang latar/isi, dilarang untuk warna teks.** |
-| **Alert** | `#D85B52` | Elemen grafis besar non-teks. Dilarang untuk teks kecil. |
-| **Alert Dark** | `#B83E37` | Teks galat, tombol bahaya/darurat, penanda "Kekurangan Besar" (>50% selisih). |
-| **Neutral** | `#8A8D86` | Penanda "Belum Ada Data", batas kontrol form aktif, teks keterangan non-kritis. |
-
-### 4.2 Pemetaan token CSS variables (`SEMENTARA`)
-
-Seluruh token berikut wajib dideklarasikan di satu berkas `app/globals.css`:
+| `--tilara-paper` | `#F5F6F3` | Latar halaman |
+| `--tilara-white` | `#FFFFFF` | Permukaan kartu |
+| `--tilara-navy` | `#172B3A` | Teks utama, wordmark, panel gelap, gate intro |
+| `--tilara-green` | `#246B50` | Warna merek, tombol utama, status terverifikasi |
+| `--tilara-amber` | `#E5A13A` | Menunggu / perhatian ringan, aksen garis |
+| `--tilara-red` | `#D85B52` | Membutuhkan perhatian / kekurangan |
+| `--tilara-red-deep` | `#B83E37` | Kekurangan kritis, teks error (kontras lebih tinggi) |
+| `--tilara-stone` | `#8A8D86` | Teks sekunder, garis, status netral |
 
 ```css
 :root {
-  /* Latar & Permukaan */
-  --color-bg: #F5F6F3;
-  --color-surface: #FFFFFF;
-  --color-surface-hover: #ECEEEA;
-  
-  /* Tipografi */
-  --color-text: #172B3A;             /* Kontras 14,55:1 terhadap White; 13,42:1 terhadap Canvas */
-  --color-text-secondary: #4A5864;   /* Kontras 7,31:1 terhadap White; 6,74:1 terhadap Canvas */
-  --color-text-muted: #6B7077;       /* Kontras 4,99:1 terhadap White */
-  
-  /* Aksi & Status Pokok */
-  --color-primary: #246B50;          /* Kontras teks putih di atasnya: 6,38:1 */
-  --color-primary-hover: #1B5440;    /* Kontras teks putih di atasnya: 8,79:1 */
-  --color-secondary: #172B3A;
-  --color-focus: #172B3A;            /* Cincin fokus 2px dengan offset 2px putih */
-  
-  /* Pembatas & Garis */
-  --color-border: #D3D7D0;           /* Garis pemisah dekoratif */
-  --color-border-strong: #8A8D86;    /* Batas input, radio, checkbox (Kontras 3,37:1 di atas White) */
-  
-  /* Status Fungsional Antarmuka */
-  --color-success-text: #1B5440;
-  --color-success-bg: #E4F0EA;       /* Kontras teks terhadap latar: 7,51:1 */
-  
-  --color-warning-text: #8A5A00;
-  --color-warning-bg: #FBF0DC;       /* Kontras teks terhadap latar: 5,25:1 */
-  
-  --color-danger-text: #B83E37;
-  --color-danger-bg: #F8E5E3;        /* Kontras teks terhadap latar: 4,58:1 */
-  
-  --color-info-text: #245C8A;
-  --color-info-bg: #E3EDF6;          /* Kontras teks terhadap latar: 5,96:1 */
+  --bg: var(--tilara-paper);
+  --surface: var(--tilara-white);
+  --surface-muted: #ECEEE9;
+  --border: #D9DCD5;
+  --text: var(--tilara-navy);
+  --text-muted: #55606A;
+
+  --tilara-paper: #F5F6F3;  --tilara-white: #FFFFFF;
+  --tilara-navy:  #172B3A;  --tilara-green: #246B50;
+  --tilara-amber: #E5A13A;  --tilara-red:   #D85B52;
+  --tilara-red-deep: #B83E37; --tilara-stone: #8A8D86;
+
+  /* Status: selalu ikon + teks + warna */
+  --status-verified:  var(--tilara-green);
+  --status-pending:   var(--tilara-amber);
+  --status-attention: var(--tilara-red-deep);
+  --status-info:      #2B6CB0;
+  --status-demo:      #6B46C1;   /* label DEMO, harus mencolok */
 }
-```
 
-### 4.3 Kombinasi warna yang dilarang keras (Hasil Uji Rasio Kontras)
-
-| Kombinasi yang Diuji | Rasio Kontras | Status Evaluasi | Aturan Larangan |
-|---|---|---|---|
-| Teks Amber (`#E5A13A`) di atas White (`#FFFFFF`) | 2,21:1 | **GAGAL FATAL** | Dilarang keras menggunakan warna Amber sebagai warna teks atau garis tipis. Amber hanya boleh digunakan sebagai latar belakang dengan teks Navy di atasnya (rasio 6,58:1). |
-| Teks Putih (`#FFFFFF`) di atas Alert (`#D85B52`) | 3,79:1 | **GAGAL TEKS NORMAL** | Gagal untuk teks berukuran normal (<24px). Gunakan `Alert Dark` (`#B83E37`) untuk tombol dan teks penanda. |
-| Teks Neutral (`#8A8D86`) di atas White/Canvas | 3,37:1 | **GAGAL TEKS NORMAL** | Tidak memenuhi batas 4,5:1. Dilarang untuk teks bacaan. Gunakan `--color-text-secondary`. |
-| Teks Putih (`#FFFFFF`) di atas Neutral (`#8A8D86`) | 3,37:1 | **GAGAL TEKS NORMAL** | Gagal untuk teks informasi. Gunakan teks Navy di atas Neutral untuk elemen grafis. |
-| Forest (`#246B50`) di atas Navy (`#172B3A`) | 2,28:1 | **GAGAL TOTAL** | Dilarang menempatkan kedua warna aksen ini secara bertumpuk. |
-
-### 4.4 Pewarnaan tingkat kekurangan logistik (Penanda Peta & Tabel)
-
-> [!IMPORTANT]
-> **Skala warna penanda peta hanya diperuntukkan bagi persentase selisih kebutuhan logistik.**
-> Tingkat urgensi laporan (`DARURAT`, `MENDESAK`, `TERENCANA`) **dilarang menggunakan skala warna penanda ini**, melainkan disajikan lewat lencana (*badge*) teks terpisah dengan ikon Lucide spesifik.
-
-| Tingkat Kekurangan | Nilai Heksa | Teks Label Wajib | Ikon Pendamping | Kontras Teks / Ikon |
-|---|---|---|---|---|
-| **Kekurangan Besar** (Selisih > 50%) | `#B83E37` (Alert Dark) | "Kekurangan Besar" | Ikon Segitiga Peringatan (Putih) | 5,55:1 (Lolos AA) |
-| **Kekurangan Sedang** (Selisih 10% - 50%) | `#E5A13A` (Amber) | "Kekurangan Sedang" | Ikon Titik Perhatian (Navy) | 6,58:1 (Lolos AA) |
-| **Hampir Terpenuhi** (Selisih < 10%) | `#246B50` (Forest) | "Hampir Terpenuhi" | Ikon Centang Ganda (Putih) | 6,38:1 (Lolos AA) |
-| **Belum Ada Data Kebutuhan** | `#8A8D86` (Neutral) | "Belum Ada Data" | Ikon Garis Datar / Tanda Tanya | 4,32:1 (Grafis 3:1) |
-
-- **Garis Kontur Penanda Peta:** Seluruh penanda peta Leaflet wajib diberi garis luar (*stroke*) putih solid berketebalan 2 px untuk menjaga keterpisahan visual dari ubin peta.
-
-### 4.5 Lencana status verifikasi laporan
-
-| Status Laporan | Label Tampilan Antarmuka | Token Tampilan | Ikon Lucide |
-|---|---|---|---|
-| `PENDING` | "Menunggu Verifikasi" | Background `--color-info-bg`, Teks `--color-info-text` | `Clock` (Jam) |
-| `VERIFIED` + `COMMUNITY` | "Diverifikasi Komunitas (2 Verifikator)" | Background `--color-success-bg`, Teks `--color-success-text` | `Users` (Dilarang memakai lencana segel resmi garuda/pemerintah) |
-| `VERIFIED` + `OFFICIAL` | "Diverifikasi Lembaga: [Nama]" | Background `--color-success-bg`, Teks `--color-success-text` + Border Forest | `ShieldCheck` |
-| `NEEDS_REVISION` | "Perlu Revisi Pelapor" | Background `--color-warning-bg`, Teks `--color-warning-text` | `RotateCcw` |
-| `REJECTED_FINAL` | "Ditolak Permanen" | Background `--color-danger-bg`, Teks `--color-danger-text` | `XCircle` |
-
-### 4.6 Kebijakan mode gelap (*Dark Mode*)
-Mode gelap **ditunda ke rilis Tingkat 2/3 `[NEEDS DECISION]`**. Seluruh pengembangan versi lomba difokuskan 100% pada keterbacaan mode terang di bawah sinar matahari langsung saat operasional lapangan.
-
----
-
-## 5. Tipografi dan tata angka
-
-### 5.1 Tumpukan font sistem (`SEMENTARA`)
-Guna memangkas beban jaringan dan menghindari lonjakan tata letak (*Cumulative Layout Shift*), aplikasi menggunakan tumpukan font sistem bawaan perangkat:
-```css
---font-sans: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif;
---font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
-```
-
-### 5.2 Skala ukuran tipografi
-
-| Tingkatan Peran | Ukuran Font / Line-Height | Bobot | Aturan Penerapan |
-|---|---|---|---|
-| **Display Title** | 36px / 44px (Mobile), 44px / 52px (Desktop) | 700 (Bold) | Hanya digunakan pada judul pengantar utama platform. |
-| **Heading 1 (H1)** | 28px / 36px (Mobile), 32px / 40px (Desktop) | 700 (Bold) | Satu judul utama per halaman; menjelaskan entitas atau konteks layar. |
-| **Heading 2 (H2)** | 22px / 30px | 600 (Semibold) | Pemisah seksi utama (misal: "Tabel Kebutuhan vs Bantuan"). |
-| **Heading 3 (H3)** | 18px / 26px | 600 (Semibold) | Judul panel samping, kartu ringkasan, atau sub-seksi form. |
-| **Body Utama** | 16px / 24px | 400 (Regular) | Teks bacaan dasar; seluruh masukan form (`<input>`) berukuran minimal 16px agar browser iOS tidak melakukan *auto-zoom* paksa. |
-| **Body Ringkasan** | 18px / 28px | 500 (Medium) | Paragraf pengantar dan narasi ringkas 5W+1H. |
-| **Label & Tombol** | 14px / 20px (Kecil), 16px / 24px (Normal) | 600 (Semibold) | Huruf kapital hanya pada huruf pertama kata; dilarang menggunakan ALL-CAPS berjarak lebar. |
-| **Keterangan / Caption** | 13px / 18px | 400 (Regular) | Tanggal pembaruan, sumber lembaga, dan teks bantuan form (`--color-text-secondary`). |
-| **Data Selisih Menonjol** | 28px / 34px | 700 (Bold) | Angka selisih kuantitas logistik pada tabel dan ringkasan. |
-
-### 5.3 Aturan visualisasi angka operasional
-- Seluruh angka kuantitas, selisih logistik, persentase, tanggal, dan koordinat **wajib mengaktifkan properti CSS `font-variant-numeric: tabular-nums`**.
-- Pada tabel data, angka kuantitas wajib diratakan ke sisi kanan (*text-align: right*).
-- Satuan kuantitas (misal: `karung`, `kotak`, `orang`) ditulis berdampingan dengan angka tanpa singkatan ambigu.
-
----
-
-## 6. Spasi, grid, dan tata letak (*Layout*)
-
-### 6.1 Sistem spasi (Kelipatan 4 px)
-Skala spasi: `4px`, `8px`, `12px`, `16px`, `24px`, `32px`, `48px`, `64px`.
-- Jarak antar-elemen form: `16px` hingga `24px`.
-- Padding dalam kartu data: `16px` (Mobile), `24px` (Desktop).
-
-### 6.2 Titik henti (*Breakpoints*) responsif
-- `360px`: Layar ponsel terkecil yang didukung secara penuh (batas minimum).
-- `480px`: Ponsel berukuran menengah/besar.
-- `768px`: Tablet orientasi portrait.
-- `1024px`: Tablet orientasi landscape / Laptop standar.
-- `1280px`: Desktop lebar (lebar kontainer konten maksimal 1200 px).
-
-### 6.3 Radius sudut (*Border Radius*)
-- `4px`: Tombol kecil, badge lencana status, elemen kontrol form (input, select, checkbox).
-- `8px`: Kartu data, panel samping, modal dialog, dan bottom sheet.
-- `9999px` (Bulat penuh): Hanya untuk penanda peta titik koordinat dan avatar pengguna.
-
-### 6.4 Sistem bayangan (*Shadow Elevation*)
-Platform ini **hanya mengizinkan satu jenis bayangan tunggal** untuk mempertahankan ketajaman tampilan dan performa render perangkat:
-```css
---shadow-elevated: 0 1px 3px rgba(23, 43, 58, 0.12), 0 1px 2px rgba(23, 43, 58, 0.08);
-```
-Dilarang menggunakan bayangan bertingkat (*multi-layered blurred shadows*) atau bayangan berwarna (*colored glow*).
-
-### 6.5 Tingkatan tumpukan lapisan visual (*Z-Index Stack*)
-```css
---z-content: 0;
---z-map: 1;                 /* Lapisan Leaflet diisolasi dengan isolation: isolate */
---z-header: 1000;           /* Navigasi atas tetap */
---z-bottom-sheet: 1100;     /* Panel pengantar / ringkasan lokasi di mobile */
---z-floating-emergency: 1200; /* Tombol darurat melayang */
---z-modal: 1300;            /* Dialog konfirmasi dan direktori darurat */
---z-toast: 1400;            /* Pemberitahuan sinkronisasi offline */
-```
-
----
-
-## 7. Spesifikasi sistem komponen
-
-Setiap komponen dirancang dengan kelengkapan state: *Default, Hover, Focus, Active, Disabled, Loading, Error*.
-
-### 7.1 Tombol (*Button*)
-- **Variasi**:
-  - *Primary*: Latar `--color-primary`, teks putih. Satu tombol per viewport.
-  - *Secondary*: Latar transparan/putih, border 1px `--color-secondary`, teks Navy.
-  - *Danger*: Latar `--color-danger-bg`, teks `--color-danger-text`, border 1px `--color-danger-text`.
-- **Dimensi**: Tinggi minimal 44 px (layar sentuh mobile); tombol besar 48 px.
-- **State Aksesibilitas**: Cincin fokus 2 px `--color-focus` dengan jarak offset 2 px saat navigasi keyboard.
-- **Label Aksi**: Wajib berupa kata kerja nyata (misal: "Simpan Laporan", "Konfirmasi Bantuan", bukan "OK" atau "Submit").
-
-### 7.2 Kontrol formulir (*Input, Textarea, Select*)
-- Label diletakkan di sisi atas kolom input (terhubung menggunakan atribut `id` dan `htmlFor`). Dilarang mengandalkan placeholder sebagai pengganti label.
-- Teks bantuan instruksional diletakkan di bawah label dan sebelum kolom input.
-- Pesan galat tampil di bawah kolom input dengan ikon peringatan dan warna `--color-danger-text`. Dilengkapi atribut `aria-invalid="true"` dan `aria-describedby="[id-error]"`.
-- Batas kontrol input menggunakan `--color-border-strong` (rasio kontras 3,37:1 di atas latar putih).
-
-### 7.3 Tabel selisih kebutuhan vs bantuan
-- Komponen paling penting dalam platform.
-- Menggunakan elemen HTML semantik `<table>`, `<thead>`, `<tbody>`, `<th scope="col">`.
-- Kolom wajib: `Kategori & Barang`, `Satuan`, `Kebutuhan`, `Terkonfirmasi`, **`Selisih Kurang` (Dicetak tebal 700, teks gelap berlatar halus)**.
-- Pada tampilan ponsel (<768px): Tabel otomatis bertransformasi menjadi susunan baris bertumpuk (*stacked row list*) dengan label pasangan nilai di setiap baris, bukan digulir secara horizontal yang rawan terpotong.
-
-### 7.4 Tombol Akses Darurat (Mengambang)
-- Tombol permanen di pojok kanan bawah layar (tinggi 48-56 px, target sentuh >= 56x56 px).
-- Warna kontras tinggi (`#B83E37` Alert Dark, teks putih tebal, ikon `PhoneCall`).
-- Membuka modal direktori nomor darurat nasional dan kontak posko lokal secara instan tanpa ketergantungan sinyal internet.
-
-### 7.5 Kartu ringkasan lokasi peta (*Location Card*)
-- Ditampilkan saat penanda peta ditekan (Desktop: panel samping selebar 380px; Mobile: bottom sheet geser).
-- Menyajikan: Nama desa/wilayah, lencana urgensi, penanda tingkat kekurangan logistik, 2 kebutuhan logistik terbesar, tanggal pembaruan, dan tombol aksi "Buka Rincian Lengkap".
-
----
-
-## 8. Spesifikasi antarmuka halaman
-
-### 8.1 Spesifikasi Rute Root `/`: Peta Operasional + Bottom Sheet Pengantar (FINAL: Opsi C)
-
-> [!NOTE]
-> **Status Keputusan:** **FINAL (Opsi C)**  
-> **Tanggal Disetujui:** 19 November 2026  
-> Halaman utama `/` secara resmi ditetapkan sebagai **Peta Operasional Interaktif yang dilengkapi Lapisan Pengantar (Bottom Sheet)**. Rute root ini bukan halaman pemasaran (*landing page*). Jika kelak dibutuhkan halaman pemasaran khusus, hal tersebut harus diletakkan pada rute terpisah (misal `/tentang`) melalui keputusan tim baru.
-
-#### A. Kontrak Antarmuka & Alur Interaksi
-1. **Peta Konten Utama:** Peta Leaflet langsung dimuat dan membentang penuh (*full viewport*) di latar belakang sejak pengguna pertama kali membuka aplikasi.
-2. **Bottom Sheet Pengantar (*Initial Orientation Layer*):**
-   - Muncul di atas kanvas peta saat kunjungan pertama untuk memberikan orientasi instan kepada pengguna.
-   - **Tampilan Visual:** Permukaan putih `--color-surface`, border 1px `--color-border`, sudut atas membulat 8px (mobile: radius-t 12px), dengan bayangan `--shadow-elevated`.
-   - **Konten Inti:**
-     - *Judul:* "Humanitarian Intelligence Platform" (H2/H3 Navy `#172B3A`, bobot 700).
-     - *Ringkasan Singkat:* 1–2 kalimat pengantar bahwa platform ini adalah alat transparansi logistik lapangan, bukan situs penggalangan dana.
-     - *Panduan 3 Detik:*
-       - **Peta Kebutuhan:** Arti warna penanda logistik (Merah: Selisih >50%, Kuning: 10%-50%, Hijau: <10%).
-       - **Selisih Transparan:** Menjelaskan cara membaca kebutuhan yang belum terpenuhi per satuan barang/tenaga.
-       - **Verifikasi Faktual:** Informasi dikurasi oleh relawan terpercaya dan diverifikasi lembaga resmi.
-3. **Kontrol Penutup yang Jelas:**
-   - Tombol utama: "Jelajahi Peta Langsung" (Primary Forest `#246B50`, teks putih tebal, tinggi 44px).
-   - Ikon tombol silang (`X`) di pojok kanan atas sheet dengan atribut aksesibel `aria-label="Tutup pengantar"`.
-   - Mendukung penutupan via tombol keyboard `Escape`.
-   - Pada layar sentuh mobile: mendukung gestur sapuan ke bawah (*swipe down to dismiss*).
-4. **Peta Penuh Pasca-Penutupan:**
-   - Begitu sheet ditutup, peta membentang penuh tanpa ada sisa ruang kosong atau elemen yang memblokir tampilan data geospasial.
-5. **Mekanisme Buka Ulang (*Reopen Control*):**
-   - Kontrol pemicu permanen (ikon tombol `HelpCircle` atau tombol berlabel "Panduan") disematkan secara konsisten pada bar kontrol peta atau header navigasi atas.
-   - Mengetuk tombol ini memunculkan kembali bottom sheet pengantar seketika.
-6. **Bebas Obstruksi Permanen:**
-   - Bottom sheet tidak boleh menutupi kontrol peta esensial (tombol zoom di sisi kiri/kanan atas, pemilih filter, dan Tombol Akses Darurat di pojok kanan bawah).
-   - Z-index bottom sheet diatur pada `--z-bottom-sheet` (1100), berada di bawah tombol darurat (`1200`).
-7. **Perilaku Responsif:**
-   - **Mobile (<768px):** Menempel di sisi bawah layar (*fixed bottom sheet*). Tinggi sheet fleksibel maksimal 55vh, dilengkapi bilah pegangan geser (*drag handle*) 36x4px abu-abu di bagian atas. Gestur cubit/geser di luar area sheet langsung diterima oleh peta.
-   - **Desktop (>=1024px):** Ditampilkan sebagai panel kartu mengambang proporsional di sisi kiri bawah layar (lebar 380px–420px, offset 24px dari tepi), atau panel bawah terpusat dengan padding aman, sehingga minimal 65% area peta tetap terlihat dan dapat langsung dioperasikan.
-8. **Aksesibilitas (WCAG 2.2 AA):**
-   - Atribut semantik: `role="region"` dengan `aria-label="Pengantar Platform"` dan `aria-expanded="true/false"`.
-   - Kontrol interaktif di dalam sheet dapat dijelajahi dengan urutan `Tab` yang logis.
-   - Saat sheet ditutup via `Escape`, fokus otomatis dikembalikan ke tombol pemicu panduan di kanvas peta.
-   - Seluruh teks memenuhi batas kontras minimum 4,5:1.
-
----
-
-### 8.2 Matriks spesifikasi halaman
-
-| Halaman & Rute | Pengguna Utama | Prioritas Hierarki Konten | Pola Tata Letak Responsif | Ketentuan Khusus & Aksesibilitas |
-|---|---|---|---|---|
-| **Peta Operasional + Pengantar** (`/`) — **FINAL (Opsi C)** | Relawan lapangan, publik | 1) Peta Leaflet penuh langsung aktif, 2) Bottom sheet pengantar (dapat ditutup/dibuka ulang), 3) Bar filter cepat (kategori, status), 4) Panel ringkasan lokasi terpilih, 5) Tombol alternatif tabel teks. | Layar penuh; panel samping pada desktop, bottom-sheet geser pada mobile. | **Wajib menyediakan tombol "Lihat Sebagai Daftar Teks"** untuk pembaca layar & sinyal lambat. Rute `/` bebas dari landing page pemasaran. |
-| **Detail Laporan** (`/laporan/[id]`) | Relawan, publik (laporan `VERIFIED`) | 1) Judul lokasi & waktu kejadian, 2) Lencana verifikasi & skor kepercayaan, 3) **Tabel Selisih Logistik**, 4) Narasi 5W+1H, 5) Kontak koordinator (hanya login). | 1 Kolom sempit di mobile; 2 Kolom asimetris di desktop (Tabel selisih di kiri, riwayat verifikasi di kanan). | Laporan `PEMANTAUAN` dilarang memunculkan tabel selisih. Akses laporan non-`VERIFIED` oleh publik menghasilkan 404. |
-| **Formulir Lapor** (`/lapor`) | Relawan terdaftar | 1) Pemilihan jenis laporan, 2) Isian 5W+1H bertahap, 3) Penambahan item kebutuhan & satuan, 4) Tombol simpan luring. | Formulir satu kolom terpusat (maksimal 680 px) dengan indikator langkah. | Mendukung penyimpanan ke antrean lokal IndexedDB jika koneksi jaringan terputus. |
-| **Dashboard Publik** (`/dashboard`) | Publik, wartawan, koordinator | 1) Metrik agregat nasional/wilayah, 2) Daftar daerah paling kekurangan, 3) Rekap kebutuhan tertinggi. | Grid kartu data ringkas + tabel perbandingan wilayah. | Dilarang menampilkan data mentah non-`VERIFIED`. Angka `PENDING` hanya tampil sebagai total agregat. |
-| **Antrean Verifikasi** (`/verifikasi`) | Peran `VERIFIKATOR` | 1) Daftar tunggu laporan `PENDING`, 2) Panel periksa bukti foto & skor, 3) Tombol aksi Setuju/Minta Revisi/Tolak. | Tampilan daftar-detail (HOT style): List laporan di sisi kiri, lembar periksa bukti di sisi kanan. | Tombol tolak/minta revisi wajib memicu modal pengisian alasan catatan minimal 10 karakter. |
-| **Panel Admin** (`/admin`) | Peran `ADMIN` | 1) Manajemen akun & peran, 2) Master data wilayah, 3) Kontak darurat, 4) Verifikasi lembaga kemanusiaan. | Layout dashboard dengan navigasi samping (*sidebar*) desktop. | Tindakan destruktif (hapus/blokir) wajib konfirmasi ganda teks. |
-| **Masuk / Login** (`/login`) | Seluruh pengguna terdaftar | 1) Kolom pengenal (email/nomor), 2) Kata sandi, 3) Tombol masuk, 4) Tautan registrasi relawan. | Kotak form terpusat sederhana tanpa elemen visual dekoratif yang mengganggu. | Pesan galat autentikasi bersifat netral ("Identitas atau kata sandi tidak cocok") demi mencegah kebocoran user. |
-| **Antrean Offline** (`/antrean`) | Relawan lapangan | 1) Status antrean lokal perangkat, 2) Daftar draf tersimpan, 3) Tombol paksa sinkronisasi. | Daftar kartu draf berstatus: Menunggu, Mengirim, Gagal. | Draf gagal menyertakan tombol edit perbaikan data dan pesan galat server. |
-
----
-
-## 9. Sistem desain peta interaktif (Leaflet)
-
-1. **Pewarnaan Penanda Geospasial**:
-   - Ditentukan secara ketat oleh persentase selisih kebutuhan logistik (bagian 4.4).
-   - Bentuk penanda laporan `KEBUTUHAN`: Lingkaran solid berdiameter 32px dengan kontur putih 2px dan ikon Lucide kategori di dalamnya.
-2. **Penanda Khusus Laporan `PEMANTAUAN`**:
-   - Laporan pemantauan lingkungan/sosial yang tidak memiliki selisih logistik ditampilkan dengan **bentuk geometris belah ketupat (*diamond*) berkontur tanpa latar penuh**, menggunakan warna Navy/Neutral. Dilarang menggunakan warna merah atau hijau tingkat kekurangan logistik.
-3. **Klasterisasi Titik (*Clustering*)**:
-   - Klaster menggunakan warna netral Navy (`#172B3A`) dengan angka penunjuk jumlah titik di tengahnya.
-   - Klaster dilarang diberi warna merah/kuning/hijau agar tidak disalahartikan sebagai level bahaya regional.
-4. **Interaksi Penanda**:
-   - Mengetuk penanda tidak membuka tooltip bawaan Leaflet yang kecil, melainkan membuka kartu ringkasan lokasi terstruktur.
-5. **Aksesibilitas Alternatif Peta**:
-   - Di atas kanvas peta disediakan tombol yang selalu terlihat: *"Tampilkan data peta dalam format tabel teks"*. Tombol ini membuka daftar lokasi terurut tingkat kebutuhan untuk pembaca layar atau pengguna dengan koneksi data lambat.
-6. **Lisensi & Atribusi Ubin Peta**:
-   - Menampilkan atribusi legal penyedia ubin peta di pojok kanan bawah kanvas peta.
-   - Penyedia yang digunakan: **OpenStreetMap Standard** (bebas watermark, tanpa API key, 100% terbuka dan kaya detail wilayah Indonesia).
-
----
-
-## 10. Visualisasi data selisih
-
-- **Diagram Batang Selisih Horizontal**:
-  - Batang terbagi menjadi dua segmen: Bagian terkonfirmasi (Warna Forest `#246B50`) dan bagian selisih kekurangan (Warna Alert Dark `#B83E37`).
-  - Setiap batang wajib mencantumkan angka nilai riil di atas/dalamnya, tidak hanya mengandalkan skala sumbu grafis.
-- **Tabel Selisih adalah Sumber Utama**: Diagram grafis hanya pelengkap visual; tabel teks terstruktur tetap menjadi elemen primer pembacaan data.
-- **Pembedaan Data Kosong vs Nol**:
-  - Jika suatu kebutuhan bernilai 0 (sudah terpenuhi), tuliskan secara gamblang `0 [satuan] (Terpenuhi)`.
-  - Jika data belum tercatat atau belum dilaporkan, tuliskan tanda pisah `—` atau label `Belum ada data`, **dilarang menampilkan angka 0** yang menyesatkan.
-- **Indikator Data Basi (*Stale Data Warning*)**:
-  - Angka yang tidak diperbarui selama lebih dari batas waktu yang ditentukan diberi ikon jam pasir dan label peringatan latar kuning `--color-warning-bg`.
-
----
-
-## 11. Interaksi, gerak (*Motion*), dan micro-interactions
-
-Penerapan gerak mengacu pada aturan performa `AGENTS.md` bagian 14.
-
-### 11.1 Parameter transisi antarmuka (`SEMENTARA`)
-- **Durasi Mikro**: 150 ms – 200 ms untuk respon tombol, toggle, dan hover.
-- **Durasi Makro**: 250 ms – 300 ms untuk pergeseran panel samping, modal masuk, dan bottom-sheet.
-- **Kurva Easing**: `cubic-bezier(0.16, 1, 0.3, 1)` (Transisi keluar halus tanpa pantulan elastis berlebihan).
-- **Properti yang Boleh Dianimasikan**: Hanya `opacity` dan `transform` (`translateY`, `scale`).
-
-### 11.2 Sinkronisasi implementasi animasi (Tingkat 1 vs Tingkat 2)
-- **Tingkat 1 (Wajib & Default)**: Seluruh indikator pemuatan (*loading*), konfirmasi sukses, dan transisi modal **wajib menggunakan komponen CSS native atau animasi SVG ringan bawaan**.
-- **Tingkat 2 (Opsional)**: Animasi dotLottie/Lottie (<50 KB) hanya diterapkan sebagai peningkatan kosmetik halus jika aset berkas telah disediakan oleh tim. **Dilarang menahan penyelesaian fitur Tingkat 1 hanya demi menunggu aset Lottie.**
-
-### 11.3 Kepatuhan preferensi gerak (*Reduced Motion*)
-```css
-@media (prefers-reduced-motion: reduce) {
-  *, ::before, ::after {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
-    scroll-behavior: auto !important;
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #0F1D28; --surface: #172B3A; --surface-muted: #1E3547;
+    --border: #2B4457; --text: #F5F6F3; --text-muted: #A9B4BC;
   }
 }
 ```
 
+Aturan: kontras teks minimal **WCAG AA (4.5:1)**. Amber `#E5A13A` **tidak boleh** dipakai sebagai warna teks di atas latar terang (kontras kurang); pakai sebagai latar badge dengan teks navy. Hindari hitam/putih murni untuk latar besar.
+
+## 3. Tipografi
+
+| Peran | Saran | Fallback |
+|---|---|---|
+| Judul editorial (publik) | Serif ekspresif, mis. *Fraunces* / *Source Serif 4* | Georgia, serif |
+| UI & isi | Sans humanis, mis. *Inter* / *Source Sans 3* | system-ui, sans-serif |
+| Angka & data | Sans dengan angka tabular (`font-variant-numeric: tabular-nums`) | monospace |
+
+Skala (rem): 0.75 · 0.875 · 1 · 1.125 · 1.25 · 1.5 · 2 · 3 · 4.
+Isi minimal 16px di mobile. Panjang baris teks 60–75 karakter.
+
+## 4. Layout & Spasi
+
+- Grid 4/8px; kontainer publik max ±1200px, operasional boleh lebih lebar.
+- Radius: 8px (kartu/input), 999px (badge/pill).
+- Bayangan halus; utamakan garis tipis `--border` untuk tampilan operasional.
+- Mobile-first: relawan memakai ponsel di lapangan. Target sentuh ≥ 44×44px.
+
+## 5. Komponen Kunci
+
+### 5.1 Kartu Kesenjangan Bantuan (komponen inti)
+Menampilkan per wilayah & kategori:
+- Kebutuhan total · Bantuan terkonfirmasi · **Kekurangan**
+- Progress bar (terkonfirmasi vs kebutuhan) dengan label angka + satuan
+- Badge status laporan, sumber, tanggal pembaruan terakhir
+- Bantuan **PENDING** boleh ditampilkan hanya di area operasional, ditandai jelas "belum dikonfirmasi", dan **tidak** dihitung ke bar utama
+
+Contoh (WAJIB berlabel DEMO bila dipakai sebagai ilustrasi):
+`Desa A — Beras: 500 kg dibutuhkan · 150 kg diterima · 350 kg belum terpenuhi`
+
+### 5.2 Badge Status
+Terverifikasi (hijau) · Menunggu (kuning) · Membutuhkan perhatian (merah) · Ditolak (abu) · **DEMO** (ungu, selalu mencolok).
+Selalu: ikon + teks + warna.
+
+### 5.3 Trust Score
+Tampilkan ringkas (angka/tingkat) dengan penjelasan "apa artinya" melalui tooltip/halaman metodologi. Jangan memberi kesan kepastian absolut.
+
+### 5.4 Linimasa Riwayat
+Daftar kronologis perubahan status & distribusi: waktu, aktor (peran), perubahan, alasan. Versi publik hanya memuat entri publik.
+
+### 5.5 Formulir Lapor
+- Satu kolom, langkah pendek, label di atas input (bukan placeholder-as-label)
+- Simpan draf otomatis; indikator **offline / antre / terkirim** yang jelas
+- Ambil lokasi dengan fallback pin manual; jelaskan privasi lokasi
+
+### 5.6 Tabel Operasional
+Kolom dapat diurutkan, filter status/wilayah/kategori, baris padat, aksi massal hanya untuk role berhak. Di mobile berubah menjadi kartu.
+
+## 6. Peta Operasional (Leaflet + OpenStreetMap)
+
+- Penanda berbeda per status verifikasi dan tingkat kekurangan (bentuk + warna, bukan warna saja)
+- Klaster saat zoom jauh; panel samping/bottom-sheet berisi ringkasan wilayah
+- Filter: jenis bencana, status, kategori kebutuhan, rentang waktu
+- **Posisi sudah di-mask dari server** — UI tidak boleh meminta/menyimpan koordinat presisi untuk publik
+- Atribusi OpenStreetMap wajib tampil
+- Wilayah pelosok harus tetap terlihat (jangan sembunyikan titik jarang di balik klaster tanpa indikasi)
+- Fallback bila tile gagal dimuat atau offline: tampilkan daftar wilayah
+
+## 7. Homepage Story-First
+
+Urutan:
+1. **Hero**: pernyataan prinsip + satu kondisi nyata terverifikasi (bila ada), atau ilustrasi berlabel DEMO
+2. **Kondisi terkini**: cerita wilayah terdampak (data VERIFIED saja)
+3. **Kesenjangan**: ringkasan kebutuhan vs bantuan terkonfirmasi
+4. **Peta singkat** → CTA ke `/peta`
+5. **Cara kerja & verifikasi** (6 langkah alur transparansi)
+6. **Terlibat**: lapor sebagai relawan / masuk sebagai petugas
+7. **Footer**: metodologi, darurat, privasi
+
+Larangan: tidak ada tombol "Donasi". Tidak ada angka/foto rekaan sebagai fakta.
+
+### 7.1 Beranda vs Tentang (keputusan: tetap dua halaman)
+
+| | Beranda `/` | Tentang `/tentang` |
+|---|---|---|
+| Tujuan | Memperlihatkan kondisi wilayah dan mengajak bertindak (lihat peta, lapor) | Membangun kepercayaan: apa TILARA, bagaimana bekerja, siapa yang bertanggung jawab |
+| Pembaca | Pengunjung pertama, masyarakat, relawan | Lembaga, jurnalis, mitra, peneliti, orang yang meragukan data |
+| Isi | Cerita kondisi, angka kesenjangan, peta singkat, teaser 3–6 langkah, CTA | Misi dan ruang lingkup (bukan donasi), metodologi verifikasi, arti Trust Score, definisi status, privasi lokasi, sumber data, audit, kontak, FAQ |
+| Panjang | Pendek (≤ 7 seksi), cepat dimuat | Boleh panjang, punya anchor (`#metodologi`, `#trust-score`, `#privasi`) |
+| Perubahan | Sering (mengikuti data) | Jarang |
+
+Alasan tidak digabung: platform transparansi butuh halaman metodologi yang **stabil, dapat ditautkan, dan dapat dikutip** (media, lembaga, mesin pencari). Menumpuk metodologi di beranda membuat beranda panjang dan lambat, dan memecah fokus dari cerita dan aksi.
+
+Aturan:
+- Beranda hanya memuat **teaser** "Cara kerja dan verifikasi" dengan tautan ke `/tentang#metodologi`.
+- `/tentang` tidak boleh mengulang cerita atau data beranda.
+- Jika isi `/tentang` belum mencapai satu layar, boleh sementara dibuat sebagai seksi di beranda dengan anchor, tetapi route `/tentang` tetap ada (redirect ke anchor tersebut).
+- `/statistik` dipertahankan hanya bila isinya berbeda dari `/laporan` dan `/peta` (agregat per provinsi/jenis/kategori, hanya data VERIFIED). Jika hanya ringkasan angka, jadikan tab di `/laporan`.
+
+### 7.2 Hero beranda
+- Hero **gelap** (navy `#172B3A` + garis kontur SVG statis < 6 KB; atau foto lapangan bersumber jelas dengan overlay navy ≥ 60%) agar header transparan dan teks putih terbaca AA.
+- Eyebrow hero memakai positioning resmi ("Transparansi Bantuan Fisik" / "Disaster & Humanitarian Aid Transparency Platform"), bukan frasa lain.
+- Sisi kanan hero tidak dibiarkan kosong: tampilkan kartu kesenjangan teratas (data nyata, atau berlabel DEMO) atau pratinjau peta.
+- Tombol "Jelajahi Laporan (n)" hanya menampilkan jumlah nyata dari data VERIFIED.
+
+## 8. Motion Kit TILARA
+
+Terinspirasi pola gerak situs properti premium (gate intro, reveal saat scroll, parallax gambar, rel horizontal, penanda peta berdenyut, header yang menyembunyikan diri), tetapi **diimplementasikan ulang dari nol dan ringan**. Kode acuan: **Lampiran B**.
+
+### 8.1 Pemetaan gerak ke halaman TILARA
+
+| Pola gerak | Dipakai di TILARA | Teknik (ringan) |
+|---|---|---|
+| Gate intro dua panel | Beranda, sekali per sesi (Bagian 12) | CSS keyframes |
+| Hero masuk bertahap | Judul, subjudul, CTA beranda | CSS keyframes + `--i` stagger |
+| Reveal saat scroll | Semua seksi publik | CSS transition + 1 IntersectionObserver |
+| Parallax gambar | Banner "wilayah belum terjangkau", CTA lapor | CSS `animation-timeline: view()` (progressive) |
+| Zoom hero saat scroll | Hero beranda | CSS `animation-timeline: scroll()` (progressive) |
+| Rel horizontal kartu | Laporan unggulan, ringkasan wilayah | CSS `scroll-snap`, tanpa library |
+| Kartu terangkat saat hover | Kartu laporan & wilayah | CSS, hanya `(hover: hover)` |
+| Penanda peta berdenyut | Hanya wilayah "membutuhkan perhatian" | CSS pseudo-element, maks. ±20 penanda |
+| Bar kesenjangan terisi | Kartu kebutuhan vs bantuan | `scaleX` saat terlihat |
+| Count-up angka | Angka kekurangan (nilai nyata dari data) | ±0,5 KB JS, rAF |
+| Header transparan → solid saat scroll | Header publik (Bagian 13) | IntersectionObserver pada sentinel, tanpa listener scroll |
+| Menu mobile geser | Navigasi mobile | `transform` + `visibility` |
+| Sheet/dialog | Form cepat, filter peta | `<dialog>` + CSS |
+| Transisi antar halaman | Halaman publik saja | View Transitions API (progressive) |
+| Bab cerita saat scroll (story-first) | Beranda dan halaman cerita wilayah | **GSAP + ScrollTrigger** (lazy, Lampiran C) |
+| Transisi peta ↔ detail wilayah | `/peta` → `/laporan/[id]` (publik) | GSAP timeline pendek, hanya bila perlu |
+| Parallax/zoom untuk browser tanpa `animation-timeline` | Fallback Safari/Firefox lama | GSAP ScrollTrigger, hanya bila `CSS.supports` gagal |
+
+### 8.2 Aturan performa (wajib)
+- Hanya animasikan `transform` dan `opacity` (skeleton shimmer pengecualian kecil).
+- **Motion Kit (Lampiran B): total JS ≤ 3 KB gzip**, tanpa dependensi.
+- **GSAP (core + ScrollTrigger, via `@gsap/react`)** hanya untuk gerak naratif yang tidak cukup dengan CSS. Wajib dimuat **lazy** (dynamic import di client component) **hanya di rute publik yang memakainya**. Anggaran ±40 KB gzip untuk GSAP + ScrollTrigger, diukur nyata dan dilaporkan. **Dilarang** di area operasional dan jalur pelaporan, serta tidak boleh masuk bundel utama.
+- Satu `IntersectionObserver` untuk semua reveal; elemen di-`unobserve` setelah tampil.
+- Tidak ada listener `scroll` sama sekali; gunakan IntersectionObserver (termasuk untuk header, lihat Lampiran D).
+- Fitur modern (`animation-timeline`, `@view-transition`) dibungkus `@supports`/progressive: bila tidak didukung, halaman tetap benar tanpa efek.
+- `content-visibility: auto` untuk seksi jauh di bawah lipatan (dengan `contain-intrinsic-size`).
+- Gambar: AVIF/WebP, `loading="lazy"` di bawah lipatan, hero di-preload, dimensi eksplisit (tanpa CLS).
+- **Area operasional** (`/dashboard`, `/verifikasi`, `/distribusi`, `/lapor`, dll.): tanpa reveal, parallax, atau transisi halaman. Hanya transisi UI kecil (hover, dialog).
+
+### 8.3 Aksesibilitas gerak
+- `prefers-reduced-motion: reduce`: matikan reveal, parallax, zoom, denyut, count-up (tampilkan nilai akhir), dan transisi geser.
+- Konten harus terbaca penuh tanpa JavaScript: angka asli ada di HTML, JS hanya menganimasikannya.
+- Jangan menahan informasi penting di balik animasi. Jangan ada gerak berkedip > 3 kali per detik.
+- Count-up dan bar kesenjangan **hanya** menganimasikan data nyata; animasi tidak boleh mengubah atau menyiratkan angka yang berbeda.
+
+### 8.4 Peran GSAP dan skill `gsap-skills`
+
+Proyek ini sudah memasang skill resmi GreenSock (`npx skills add https://github.com/greensock/gsap-skills`). **Sebelum menulis atau mengubah kode GSAP apa pun, agen wajib membaca skill tersebut dan mengikuti panduannya**; bila skill bertentangan dengan Bagian 8.2 atau 8.3, aturan TILARA yang menang.
+
+Pembagian tugas:
+| Pakai CSS (Motion Kit) | Pakai GSAP |
+|---|---|
+| Gate intro, hero masuk, reveal sederhana | Bab cerita berurutan dengan scrub/pin (desktop) |
+| Hover, dialog, menu, rel horizontal | Timeline koreografi beberapa elemen |
+| Parallax via `animation-timeline` | Fallback parallax bila CSS tidak didukung |
+| Denyut penanda, bar kesenjangan | Transisi peta ↔ detail yang melibatkan banyak elemen |
+
+Aturan penggunaan GSAP:
+- React: gunakan `useGSAP` (`@gsap/react`) dengan `scope` agar animasi otomatis dibersihkan saat komponen dilepas.
+- Reduced motion dan breakpoint lewat `gsap.matchMedia()`: tanpa gerak bila `prefers-reduced-motion: reduce`; `pin`/`scrub` hanya di layar ≥ 900px.
+- Animasikan hanya `transform` dan `opacity` (`x`, `y`, `scale`, `autoAlpha`); jangan `top/left/width/height`.
+- Untuk ScrollTrigger: seksi di bawah lipatan saja, `once: true` bila tidak perlu bolak-balik, panggil `ScrollTrigger.refresh()` setelah gambar besar selesai dimuat, dan jangan menumpuk `pin` di mobile.
+- Konten harus tetap lengkap tanpa JavaScript; GSAP hanya menambah gerak, tidak menyembunyikan informasi di HTML awal.
+- Tidak boleh memakai GSAP untuk gerak yang bisa dibuat CSS dengan hasil setara.
+- Jangan menambah plugin GSAP lain tanpa persetujuan; laporkan efek ukuran bundel.
+
+## 9. Aksesibilitas (WCAG 2.2 AA)
+
+- Fokus keyboard terlihat; urutan tab logis; skip-link
+- Semua gambar bermakna punya alt; peta punya alternatif daftar/tabel
+- Status tidak hanya warna; form punya error teks yang spesifik
+- Dukungan layar kecil & teks diperbesar hingga 200%
+- Bahasa utama Indonesia (`lang="id"`)
+
+## 10. Konten & Suara
+
+- Bahasa Indonesia yang jelas dan hormat; hindari istilah teknis tanpa penjelasan
+- Gunakan kata kerja spesifik pada tombol: "Kirim laporan", "Setujui laporan", "Konfirmasi penerimaan" (hindari "Submit", "OK")
+- Empty state menjelaskan apa yang bisa dilakukan berikutnya
+- Pesan error: apa yang salah + cara memperbaikinya
+- Foto: hanya yang bersumber jelas, cantumkan kredit; hindari gambar korban yang mengeksploitasi; hormati martabat dan privasi
+- Semua konten simulasi: label **DEMO**
+
+## 11. Checklist Desain per Halaman
+
+- [ ] Mengikuti token warna/tipografi di atas
+- [ ] Mobile 360px aman, tanpa scroll horizontal
+- [ ] Status memakai ikon + teks + warna
+- [ ] Tidak ada data PENDING pada tampilan publik
+- [ ] Kondisi loading / kosong / error / offline ditangani
+- [ ] Motion menghormati reduced-motion
+- [ ] Label DEMO terpasang pada data simulasi
+- [ ] Gate intro (bila ada di halaman) memenuhi anggaran performa Bagian 12
+- [ ] Header publik mengikuti Bagian 13 (overlay → solid, mobile dialog, Darurat satu ketukan)
+
+## 12. Gate Intro (animasi pembuka "gerbang")
+
+Terinspirasi pola pembuka dua panel yang membelah ke kiri dan kanan lalu memperlihatkan situs (seperti situs properti internestrealty.com). Untuk TILARA, maknanya: **gerbang yang membuka wilayah yang tadinya tak terlihat**, sejalan dengan tagline *Visibility for the Unreached*.
+
+### Urutan (total ≈ 2,2 detik)
+| Waktu | Kejadian |
+|---|---|
+| 0,15 s | Simbol kontur muncul (garis tergambar + fade) tepat di tengah, melintasi belahan kedua panel |
+| 0,5 s | Garis tipis amber tumbuh vertikal di celah tengah |
+| 1,25 s | Dua panel navy bergeser keluar (kiri ke -100%, kanan ke +100%) selama ±0,95 s, simbol ikut terbelah |
+| 1,25 s | Hero di bawahnya turun dari skala 1,06 ke 1 (efek "mendekat") |
+| 2,2 s | Overlay disembunyikan (`visibility: hidden`, tidak menghalangi klik) |
+
+### Anggaran performa (wajib)
+- **Nol JavaScript animasi.** Murni CSS `transform` dan `opacity` (dipercepat GPU). Tidak memakai GSAP/Motion/video untuk intro ini.
+- Simbol berupa **SVG inline < 4 KB**; tanpa gambar, font tambahan, atau video.
+- `will-change` hanya pada dua panel dan hanya selama animasi.
+- Tidak ada layout shift (overlay `position: fixed`). Konten halaman tetap ada di HTML (SEO dan pembaca layar tidak terpengaruh); overlay `aria-hidden`.
+- Hero image tetap di-*preload*; intro tidak boleh menunda render konten di bawahnya.
+
+### Aturan penggunaan
+- Hanya di **beranda publik (`/`)**, **sekali per sesi** (`sessionStorage`). Tidak pernah di area operasional, `/lapor`, atau `/darurat` (relawan di lapangan dan pengguna darurat tidak boleh menunggu animasi).
+- Dilewati otomatis bila `prefers-reduced-motion: reduce`.
+- Dilewati bila kunjungan ulang dalam sesi yang sama.
+- Pada koneksi lambat (`navigator.connection.saveData`) boleh dilewati (opsional).
+- Implementasi acuan: lihat **Lampiran A** di bawah (`GateIntro.tsx` + `gate-intro.css`). Ganti SVG sementara dengan aset logo resmi.
+
+## 13. Navbar (Site Header)
+
+Referensi perilaku: header yang **transparan di atas hero**, lalu saat scroll sedikit menjadi **solid dan ringkas**, dengan utility bar yang menghilang. Diimplementasikan ulang untuk TILARA. Kode acuan: **Lampiran D**.
+
+### 13.1 Anatomi (desktop ≥ 1024px)
+
+| Bagian | Isi |
+|---|---|
+| Utility bar (40px, hanya varian overlay) | Kiri: "Data terverifikasi diperbarui {waktu}" (waktu nyata dari server). Kanan: "Metodologi verifikasi" (`/tentang#metodologi`) dan email kontak (dari konfigurasi). **Dilarang mengarang** nomor atau email. |
+| Bar utama (72px) | Kiri: logo. Tengah: **Peta · Laporan · Statistik · Tentang** (tautan teks, huruf kapital, jarak huruf lebar, garis bawah untuk aktif). Kanan: tombol **Darurat**, tombol **Lapor**, ikon **Masuk / Dashboard**. |
+
+### 13.2 Dua keadaan
+
+| | Di puncak halaman (overlay) | Setelah scroll > ±32px |
+|---|---|---|
+| Latar | Transparan + scrim gradien navy di atas hero | Putih solid (`rgb(255 255 255 / .97)`) + garis dan bayangan halus |
+| Teks & logo | Putih; titik logo putih | Navy; titik logo hijau; simbol mengecil ke 90% |
+| Utility bar | Tampil | Hilang (header bergeser `-40px`, tanpa mengubah layout) |
+| Transisi | — | ±0,3–0,45 s, hanya `transform` dan `opacity` |
+
+Varian `solid` (semua halaman selain beranda): langsung keadaan kedua, tanpa utility bar; konten diberi `padding-top: var(--main-h)`.
+
+### 13.3 Aturan visual
+- Header **fixed**, tidak pernah disembunyikan saat scroll. Tidak memakai `backdrop-filter` (mahal di perangkat menengah).
+- Logo **tanpa kotak bergaris**; satu SVG `currentColor` untuk kedua keadaan (tanpa dua file logo).
+- Tautan navigasi berupa **teks**, bukan tombol bergaris. Hanya **Darurat** (merah dalam `#B83E37`, teks putih, kontras ≥ 5:1) dan **Lapor** (hijau `#246B50`) yang berbentuk tombol: tinggi 40px (44px di mobile), radius 8px.
+- Pill "Transparansi Bantuan Fisik" **dihapus dari header**; dipindah ke eyebrow hero.
+- Maksimal 4 tautan utama; tanpa dropdown.
+- Status aktif: garis bawah 2px + `aria-current="page"`.
+
+### 13.4 Mobile (< 1024px)
+- Utility bar disembunyikan. Bar: logo kiri; kanan: tombol **Darurat** (ikon telepon + teks) dan **Lapor** ringkas, lalu hamburger.
+- Menu: **`<dialog>` native** yang membuka dari kanan (fokus terkunci, Esc menutup, klik backdrop menutup, scroll halaman dikunci). Isi: tautan besar, Darurat dan Lapor sebagai tombol penuh di bawah, lalu Masuk/Dashboard.
+- **Darurat harus selalu dapat dicapai dengan satu ketukan.**
+
+### 13.5 Aksesibilitas dan performa
+- `<header>`, `<nav aria-label="Utama">`, skip-link "Lewati ke konten", tombol menu dengan `aria-expanded` dan `aria-controls`, area sentuh ≥ 44px, fokus terlihat.
+- Tanpa JavaScript: header tampil solid (fallback `<noscript>`), semua tautan tetap berfungsi.
+- Perubahan keadaan lewat **IntersectionObserver pada elemen sentinel**, bukan listener scroll; atribut `data-scrolled` diubah langsung di DOM (tanpa re-render React).
+- `prefers-reduced-motion`: tanpa transisi, perubahan keadaan tetap terjadi.
+
+### 13.6 Area operasional
+Memakai **header aplikasi terpisah** yang ringkas (logo, menu per role, notifikasi, akun): tanpa utility bar, tanpa transparansi, tanpa animasi. Jangan memakai `SiteHeader` di sana.
+
+### 13.7 Evaluasi navbar saat ini dan perbaikannya
+
+| Temuan | Perbaikan |
+|---|---|
+| Logo di dalam kotak bergaris dan terlihat sempit | Hapus kotak; simbol + wordmark lepas dengan jarak yang lega |
+| Pill "Transparansi Bantuan Fisik" berdampingan dengan logo | Pindah ke eyebrow hero |
+| Semua tautan berbentuk tombol bergaris, hierarkinya datar | Tautan teks; hanya Darurat dan Lapor yang berbentuk tombol |
+| Tidak ada indikator halaman aktif yang jelas | Garis bawah + `aria-current` |
+| Tidak ada perubahan saat scroll, hero terang kosong di kanan | Hero gelap + header transparan → solid (Bagian 7.2 dan 13.2) |
+| Badge hero "Environmental & Humanitarian Intelligence" tidak sama dengan positioning | Samakan dengan positioning resmi |
+
 ---
 
-## 12. Aksesibilitas komprehensif (Target: WCAG 2.2 Level AA)
+## Lampiran A — Kode Acuan Gate Intro
 
-1. **Rasio Kontras Terkalibrasi**: Seluruh pasangan warna teks dan latar belakang mematuhi tabel pengujian pada bagian 4.
-2. **Ukuran Target Sentuh (WCAG 2.5.8)**: Seluruh elemen interaktif memiliki bidang klik minimal 44x44 px dengan jarak aman antar-elemen minimal 8 px.
-3. **Fokus Tidak Tertutup (WCAG 2.4.11)**: Elemen tetap di layar (*sticky header*, *floating emergency button*, *bottom sheet*) tidak boleh menutupi elemen masukan yang sedang menerima fokus navigasi keyboard.
-4. **Navigasi Keyboard Penuh**:
-   - Seluruh form, filter peta, dan modal dialog dapat dioperasikan penuh via tombol `Tab`, `Panah`, `Spasi`, `Enter`, dan `Escape`.
-   - Disediakan tautan pintas *"Lompat ke konten utama"* (*Skip to content*) di baris teratas dokumen HTML.
-5. **Dukungan Pembaca Layar (*Screen Reader*)**:
-   - Menggunakan elemen semantik (`<main>`, `<nav>`, `<header>`, `<article>`, `<section>`).
-   - Ikon yang tidak memiliki teks pendamping wajib diberi atribut `aria-label` yang bermakna. Ikon dekoratif diberi `aria-hidden="true"`.
-   - Status pembaruan jaringan dan antrean offline diumumkan secara sopan menggunakan kontainer `aria-live="polite"`.
+Simpan sebagai `components/GateIntro.tsx` dan `components/gate-intro.css` (sesuaikan path dengan struktur repo).
+
+### GateIntro.tsx
+```tsx
+import "./gate-intro.css";
+
+/**
+ * Gate Intro TILARA — dua panel membuka ke kiri & kanan.
+ * - Murni CSS (0 KB JavaScript animasi), hanya transform + opacity.
+ * - Tampil sekali per sesi, hanya di tempat komponen ini dipasang (beranda "/").
+ * - Konten halaman tetap ada di HTML; overlay aria-hidden.
+ *
+ * PASANG:
+ * 1) Tambahkan suppressHydrationWarning pada <html> di app/layout.tsx
+ *    (skrip kecil di bawah menambahkan atribut data-intro ke <html>).
+ * 2) Render <GateIntro /> sebagai elemen PERTAMA di <body> halaman beranda.
+ * 3) Beri className="gate-reveal" pada pembungkus hero agar ikut "mendekat".
+ * 4) GANTI <Mark /> dengan SVG logo resmi TILARA (ini hanya placeholder kontur).
+ */
+
+const SKIP_SCRIPT = `try{var d=document.documentElement;if(sessionStorage.getItem("tilara-intro")){d.dataset.intro="seen"}else{sessionStorage.setItem("tilara-intro","1")}}catch(e){}`;
+
+function Mark() {
+  return (
+    <svg viewBox="0 0 100 100" width="84" height="84" fill="none" aria-hidden="true">
+      <g stroke="currentColor" strokeWidth="1.6" strokeLinecap="round">
+        <path pathLength={1} d="M50 6C68 4 90 16 93 38C96 60 84 90 56 94C30 98 8 80 7 54C6 28 28 8 50 6Z" />
+        <path pathLength={1} d="M50 15C65 14 83 24 85 41C87 59 76 83 54 86C34 89 16 74 16 54C15 34 33 16 50 15Z" />
+        <path pathLength={1} d="M50 25C62 24 75 32 76 45C77 58 68 75 52 77C38 79 25 67 25 53C25 38 38 26 50 25Z" />
+        <path pathLength={1} d="M50 35C58 34 66 40 66 48C66 57 60 66 51 67C42 68 35 60 35 52C35 43 41 35 50 35Z" />
+      </g>
+      <circle cx="50" cy="50" r="6.5" fill="#246B50" />
+    </svg>
+  );
+}
+
+function LogoBlock() {
+  return (
+    <div className="gate-logo">
+      <Mark />
+      <span className="gate-word">TILARA</span>
+      <span className="gate-tag">Visibility for the Unreached</span>
+    </div>
+  );
+}
+
+export default function GateIntro() {
+  return (
+    <>
+      <script dangerouslySetInnerHTML={{ __html: SKIP_SCRIPT }} />
+      <div className="gate-intro" aria-hidden="true">
+        <div className="gate-panel gate-panel--l">
+          <LogoBlock />
+        </div>
+        <div className="gate-panel gate-panel--r">
+          <LogoBlock />
+        </div>
+        <div className="gate-seam" />
+      </div>
+    </>
+  );
+}
+```
+
+### gate-intro.css
+```css
+/* TILARA Gate Intro — murni CSS, transform + opacity saja. Total ≈ 2,2 s */
+
+.gate-intro {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  /* setelah animasi selesai: sembunyikan & jangan blokir klik */
+  animation: gate-hide 0s linear 2.2s forwards;
+}
+
+.gate-panel {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 50%;
+  overflow: hidden;
+  background: var(--tilara-navy, #172b3a);
+  will-change: transform;
+  animation: 0.95s cubic-bezier(0.77, 0, 0.18, 1) 1.25s forwards;
+}
+.gate-panel--l { left: 0;  animation-name: gate-left; }
+.gate-panel--r { right: 0; animation-name: gate-right; }
+
+/* Logo yang sama di kedua panel, pusatnya tepat di celah tengah */
+.gate-logo {
+  position: absolute;
+  top: 50%;
+  width: 240px;
+  margin-top: -80px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  color: var(--tilara-paper, #f5f6f3);
+  opacity: 0;
+  animation: gate-fade 0.7s ease-out 0.15s forwards;
+}
+.gate-panel--l .gate-logo { right: -120px; }
+.gate-panel--r .gate-logo { left: -120px; }
+
+.gate-logo path {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  animation: gate-draw 1s ease-out 0.2s forwards;
+}
+.gate-word {
+  font: 600 1.6rem/1 system-ui, sans-serif;
+  letter-spacing: 0.42em;
+  padding-left: 0.42em; /* kompensasi letter-spacing agar tetap simetris */
+}
+.gate-tag {
+  font: 500 0.62rem/1 system-ui, sans-serif;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--tilara-amber, #e5a13a);
+}
+
+/* Garis tipis di celah tengah */
+.gate-seam {
+  position: absolute;
+  left: 50%;
+  top: 0;
+  bottom: 0;
+  width: 1px;
+  background: linear-gradient(to bottom, transparent, var(--tilara-amber, #e5a13a), transparent);
+  transform: translateX(-0.5px) scaleY(0);
+  animation:
+    gate-seam 0.6s ease-out 0.5s forwards,
+    gate-fade-out 0.25s ease-in 1.2s forwards;
+}
+
+/* Hero di bawahnya "mendekat" saat gerbang membuka (opsional: class gate-reveal) */
+.gate-reveal {
+  animation: gate-reveal 1.3s cubic-bezier(0.2, 0.7, 0.2, 1) 1.25s both;
+}
+
+@keyframes gate-left   { to { transform: translate3d(-100%, 0, 0); } }
+@keyframes gate-right  { to { transform: translate3d(100%, 0, 0); } }
+@keyframes gate-fade   { to { opacity: 1; } }
+@keyframes gate-fade-out { to { opacity: 0; } }
+@keyframes gate-draw   { to { stroke-dashoffset: 0; } }
+@keyframes gate-seam   { to { transform: translateX(-0.5px) scaleY(1); } }
+@keyframes gate-hide   { to { visibility: hidden; pointer-events: none; } }
+@keyframes gate-reveal { from { transform: scale(1.06); } to { transform: scale(1); } }
+
+/* Lewati: kunjungan ulang dalam sesi, atau pengguna meminta gerak dikurangi */
+html[data-intro="seen"] .gate-intro { display: none; }
+html[data-intro="seen"] .gate-reveal { animation: none; }
+
+@media (prefers-reduced-motion: reduce) {
+  .gate-intro { display: none; }
+  .gate-reveal { animation: none; }
+}
+
+/* Layar sempit: logo sedikit lebih kecil */
+@media (max-width: 480px) {
+  .gate-logo { width: 200px; }
+  .gate-panel--l .gate-logo { right: -100px; }
+  .gate-panel--r .gate-logo { left: -100px; }
+  .gate-word { font-size: 1.3rem; }
+}
+```
 
 ---
 
-## 13. Perilaku responsif lintas perangkat
+## Lampiran B — Kode Acuan Motion Kit
 
-- **Ponsel Lebar 360 px**:
-  - Tata letak satu kolom penuh.
-  - Peta membentang penuh layar dengan panel informasi berupa bottom-sheet yang dapat disapu (*swipeable*).
-  - Tabel data bertransformasi menjadi daftar kartu pasangan kunci-nilai.
-  - Tombol Darurat tetap berada di posisi aman tanpa menutupi tombol simpan form.
-- **Tablet (768 px – 1023 px)**:
-  - Tata letak 8 kolom. Filter peta tampil sebagai panel laci samping yang dapat disembunyikan.
-- **Desktop (>= 1024 px)**:
-  - Tata letak 12 kolom dengan lebar kontainer maksimal 1200 px.
-  - Peta berdampingan dengan panel informasi stasioner.
-  - Antrean verifikasi menggunakan tata letak dua bilah terpisah (daftar antrean di kiri, lembar periksa bukti di kanan).
-- **Layar Pendek (Tinggi < 600 px / Ponsel Lanskap)**:
-  - Header navigasi menciut (*compact*), modal dialog membatasi tinggi maksimal 85vh dengan bilah gulir vertikal internal yang jelas.
+Simpan sebagai `components/motion/motion.css`, `motion.ts`, dan `MotionInit.tsx`. Impor `motion.css` hanya di layout publik. Nilai pada contoh bertanda DEMO bukan data nyata.
+
+### motion.css
+```css
+/* motion.css — TILARA Motion Kit (ringan, transform + opacity) */
+:root {
+  --ease-out: cubic-bezier(0.2, 0.7, 0.2, 1);
+  --ease-gate: cubic-bezier(0.77, 0, 0.18, 1);
+  --t-fast: 0.18s;
+  --t-base: 0.45s;
+  --t-slow: 0.8s;
+}
+
+/* 1) Hero masuk bertahap (CSS saja, tidak menunggu JS) */
+.hero-in > * {
+  animation: rise 0.9s var(--ease-out) both;
+  animation-delay: calc(var(--i, 0) * 90ms + var(--hero-delay, 0s));
+}
+/* Beranda dengan gate intro: tunda sampai gerbang membuka */
+.hero-in--after-gate { --hero-delay: 1.6s; }
+html[data-intro="seen"] .hero-in--after-gate { --hero-delay: 0s; }
+@keyframes rise { from { opacity: 0; transform: translate3d(0, 20px, 0); } }
+
+/* 2) Reveal saat scroll (aktif hanya setelah JS siap) */
+.motion-ready [data-reveal] {
+  opacity: 0;
+  transform: translate3d(0, 24px, 0);
+  transition: opacity var(--t-slow) var(--ease-out), transform var(--t-slow) var(--ease-out);
+  transition-delay: calc(var(--i, 0) * 70ms);
+}
+.motion-ready [data-reveal="left"]  { transform: translate3d(-24px, 0, 0); }
+.motion-ready [data-reveal="right"] { transform: translate3d(24px, 0, 0); }
+.motion-ready [data-reveal="fade"]  { transform: none; }
+.motion-ready [data-reveal].is-in   { opacity: 1; transform: none; }
+
+/* 3) Parallax gambar & zoom hero (progressive enhancement) */
+@supports (animation-timeline: view()) {
+  .parallax { overflow: hidden; }
+  .parallax > img, .parallax > .parallax__media {
+    animation: parallax linear both;
+    animation-timeline: view();
+    animation-range: cover;
+  }
+  @keyframes parallax {
+    from { transform: translate3d(0, -8%, 0) scale(1.12); }
+    to   { transform: translate3d(0, 8%, 0) scale(1.12); }
+  }
+  .hero-zoom {
+    animation: hero-zoom linear both;
+    animation-timeline: scroll(root block);
+    animation-range: 0 80vh;
+  }
+  @keyframes hero-zoom { to { transform: scale(1.08); } }
+}
+
+/* 4) Kartu terangkat (hanya perangkat dengan hover) */
+@media (hover: hover) {
+  .card-lift { transition: transform var(--t-base) var(--ease-out), box-shadow var(--t-base) var(--ease-out); }
+  .card-lift:hover { transform: translate3d(0, -4px, 0); box-shadow: 0 12px 28px rgb(23 43 58 / 0.12); }
+  .card-lift .media img { transition: transform 0.9s var(--ease-out); }
+  .card-lift:hover .media img { transform: scale(1.04); }
+}
+
+/* 5) Rel horizontal (tanpa library) */
+.rail {
+  display: flex; gap: 1rem; overflow-x: auto;
+  scroll-snap-type: x mandatory; overscroll-behavior-x: contain;
+  scrollbar-width: none; -webkit-overflow-scrolling: touch;
+}
+.rail::-webkit-scrollbar { display: none; }
+.rail > * { flex: 0 0 min(82%, 380px); scroll-snap-align: start; }
+
+/* 6) Penanda peta berdenyut: hanya "membutuhkan perhatian" */
+.marker { position: relative; }
+.marker--attention::after {
+  content: ""; position: absolute; inset: 0; border-radius: 50%;
+  border: 2px solid var(--tilara-red, #d85b52);
+  animation: pulse 2.2s ease-out infinite; pointer-events: none;
+}
+@keyframes pulse { from { transform: scale(1); opacity: 0.7; } to { transform: scale(2.4); opacity: 0; } }
+
+/* 7) Bar kesenjangan: lebar = data nyata (--pct), animasi hanya scaleX */
+.gap-bar__fill {
+  width: calc(var(--pct, 0) * 1%);
+  transform-origin: left center;
+}
+.motion-ready .gap-bar__fill { transform: scaleX(0); transition: transform 1.1s var(--ease-out) 0.15s; }
+.motion-ready .gap-bar.is-in .gap-bar__fill { transform: scaleX(1); }
+
+/* 8) Header: lihat Lampiran D (site-header.css). Header TIDAK disembunyikan saat scroll. */
+
+/* 9) Menu mobile geser */
+.menu-panel {
+  position: fixed; inset: 0 0 0 auto; width: min(88%, 360px);
+  transform: translate3d(100%, 0, 0); visibility: hidden;
+  transition: transform 0.45s var(--ease-gate), visibility 0s 0.45s;
+}
+.menu-panel[data-open="true"] { transform: none; visibility: visible; transition-delay: 0s; }
+
+/* 10) Dialog / bottom sheet */
+dialog.sheet { border: 0; padding: 0; border-radius: 16px; max-width: min(92vw, 520px); }
+dialog.sheet[open] { animation: sheet-in 0.4s var(--ease-out); }
+dialog.sheet::backdrop { background: rgb(23 43 58 / 0.55); animation: fade-in 0.3s ease-out; }
+@keyframes sheet-in { from { opacity: 0; transform: translate3d(0, 24px, 0); } }
+@keyframes fade-in  { from { opacity: 0; } }
+@media (max-width: 640px) {
+  dialog.sheet { margin: auto 0 0; width: 100%; max-width: none; border-radius: 16px 16px 0 0; }
+}
+
+/* 11) Transisi antar halaman (HALAMAN PUBLIK SAJA; jangan muat di layout operasional) */
+@view-transition { navigation: auto; }
+::view-transition-old(root), ::view-transition-new(root) { animation-duration: 0.28s; }
+
+/* 12) Skeleton */
+.skeleton {
+  background: linear-gradient(90deg, var(--surface-muted) 25%, var(--surface) 50%, var(--surface-muted) 75%);
+  background-size: 200% 100%; animation: shimmer 1.4s linear infinite; border-radius: 8px;
+}
+@keyframes shimmer { to { background-position: -200% 0; } }
+
+/* 13) Seksi jauh di bawah lipatan */
+.defer-render { content-visibility: auto; contain-intrinsic-size: auto 600px; }
+
+/* Gerak dikurangi */
+@media (prefers-reduced-motion: reduce) {
+  .hero-in > * { animation: none; }
+  .motion-ready [data-reveal] { opacity: 1; transform: none; transition: none; }
+  .parallax > *, .hero-zoom { animation: none !important; }
+  .marker--attention::after { animation: none; }
+  .motion-ready .gap-bar__fill { transform: none; transition: none; }
+  .site-header, .menu-panel, .card-lift, .card-lift .media img { transition: none; }
+  .skeleton { animation: none; }
+  @view-transition { navigation: none; }
+}
+```
+
+### motion.ts
+```ts
+// motion.ts — TILARA Motion Kit (vanilla, ±1 KB gzip, tanpa dependensi)
+const fmt = new Intl.NumberFormat("id-ID");
+
+function countUp(el: HTMLElement, to: number) {
+  const t0 = performance.now();
+  const dur = 1100;
+  const step = (t: number) => {
+    const p = Math.min((t - t0) / dur, 1);
+    el.textContent = fmt.format(Math.round(to * (1 - Math.pow(1 - p, 3))));
+    if (p < 1) requestAnimationFrame(step);
+  };
+  requestAnimationFrame(step);
+}
+
+/** Panggil sekali di layout PUBLIK (bukan layout operasional). Mengembalikan fungsi cleanup. */
+export function initMotion(): () => void {
+  const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const targets = document.querySelectorAll<HTMLElement>("[data-reveal], .gap-bar, [data-count]");
+
+  // Reduced motion / browser lama: tampilkan semuanya apa adanya (HTML sudah berisi nilai akhir).
+  if (reduce || !("IntersectionObserver" in window)) {
+    targets.forEach((el) => el.classList.add("is-in"));
+    return () => {};
+  }
+
+  document.documentElement.classList.add("motion-ready");
+
+  // Angka: HTML berisi nilai nyata. Animasi hanya dari 0 menuju nilai itu.
+  const counts = new Map<HTMLElement, number>();
+  targets.forEach((el) => {
+    const to = Number(el.dataset.count);
+    if (el.dataset.count !== undefined && Number.isFinite(to)) {
+      counts.set(el, to);
+      el.setAttribute("aria-label", fmt.format(to)); // pembaca layar tetap mendengar nilai akhir
+      el.textContent = "0";
+    }
+  });
+
+  const io = new IntersectionObserver(
+    (entries) => {
+      for (const e of entries) {
+        if (!e.isIntersecting) continue;
+        const el = e.target as HTMLElement;
+        el.classList.add("is-in");
+        const to = counts.get(el);
+        if (to !== undefined) countUp(el, to);
+        io.unobserve(el);
+      }
+    },
+    { rootMargin: "0px 0px -10% 0px", threshold: 0.12 }
+  );
+  targets.forEach((el) => io.observe(el));
+
+  return () => {
+    io.disconnect();
+    document.documentElement.classList.remove("motion-ready");
+  };
+}
+```
+
+### MotionInit.tsx
+```tsx
+"use client";
+// MotionInit.tsx — pasang di layout PUBLIK saja (app/(public)/layout.tsx)
+import { useEffect } from "react";
+import { usePathname } from "next/navigation";
+import { initMotion } from "./motion";
+
+export default function MotionInit() {
+  const pathname = usePathname(); // jalankan ulang saat pindah halaman
+  useEffect(() => initMotion(), [pathname]);
+  return null;
+}
+```
+
+### Contoh pemakaian
+```html
+<!-- Contoh pemakaian -->
+<section class="hero-in hero-in--after-gate">
+  <h1 style="--i:0">Wilayah yang jauh tetap terlihat.</h1>
+  <p  style="--i:1">…</p>
+  <a  style="--i:2" class="btn">Lihat peta</a>
+</section>
+
+<section class="defer-render">
+  <h2 data-reveal>Kesenjangan bantuan</h2>
+  <article class="card-lift" data-reveal style="--i:1">
+    <div class="gap-bar" style="--pct:30"> <!-- pct = bantuan terkonfirmasi / kebutuhan × 100, dari data nyata -->
+      <div class="gap-bar__fill"></div>
+    </div>
+    <strong data-count="350">350</strong> kg belum terpenuhi  <!-- contoh DEMO -->
+  </article>
+</section>
+
+<div class="parallax"><img src="/img/wilayah.webp" alt="…" width="1600" height="900" loading="lazy"></div>
+<div class="rail"><article class="card-lift">…</article>…</div>
+```
 
 ---
 
-## 14. Sistem Anti-Slop Design (Keputusan Berbobot, Bukan Dekorasi Generik)
+## Lampiran C — Kode Acuan GSAP (seksi cerita, lazy)
 
-### 14.1 Filosofi Anti-Slop
-Antarmuka Humanitarian Intelligence Platform harus mencerminkan kepedulian manusia dan ketepatan instrumen lapangan. Desain harus terlihat **dibuat berdasarkan keputusan desain yang matang**, bukan sekadar susunan template otomatis generator AI.
+Simpan sebagai `components/story/StoryScroll.tsx`. Instal hanya `gsap` dan `@gsap/react` (ScrollTrigger sudah termasuk dalam paket `gsap`). Selalu cocokkan dengan panduan skill `gsap-skills` yang terpasang.
 
-### 14.2 Matriks skill penjamin kualitas visual yang terpasang dan aktif (TERVERIFIKASI)
+### StoryScroll.tsx
+```tsx
+"use client";
+// StoryScroll.tsx — bab cerita saat scroll (publik, beranda/halaman cerita).
+// Muat LAZY, mis. di client component pembungkus:
+//   const StoryScroll = dynamic(() => import("./StoryScroll"), { ssr: false });
+// Baca skill gsap-skills terlebih dahulu; sesuaikan bila skill menyarankan pola lain.
+import { useRef, type ReactNode } from "react";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { useGSAP } from "@gsap/react";
 
-> [!NOTE]
-> Skill telah terpasang di direktori `.agents/skills/` (proyek) dan `~/.gemini/config/skills/` (global). Skill berfungsi sebagai alat bantu evaluasi (*advisor*), bukan penentu aturan baru. Jika saran skill bertentangan dengan token `DESIGN.md`, dokumen ini memegang kendali mutlak.
+gsap.registerPlugin(useGSAP, ScrollTrigger);
 
-| Skill | Lokasi / Sumber | Tanggung Jawab Evaluasi | Status |
-|---|---|---|---|
-| `frontend-design` | `anthropics/skills` (`.agents/skills`) | Menghasilkan struktur antarmuka yang memiliki identitas kuat dan fungsional. | **TERPASANG (Proyek)** |
-| `web-design-guidelines` | `vercel-labs/agent-skills` (`.agents/skills`) | Memeriksa kepatuhan teknis DOM, standar CSS modern, dan performa peramban. | **TERPASANG (Proyek)** |
-| `accessibility-engineering` | `addyosmani/agent-skills` (`.agents/skills`) | Mengaudit pemenuhan standar aksesibilitas WCAG 2.2 AA. | **TERPASANG (Proyek)** |
-| `impeccable` | `pbakaus/impeccable` (`~/.gemini/config/skills`) | Mengaudit ketepatan copywriting mikro, ritme hierarki visual, dan polesan akhir UX. | **TERPASANG (Global)** |
-| `antislop` (Suite) | `~/.gemini/config/skills/antislop*` | Filter komprehensif pencegah generic AI-slop (UI, copywriting, layout mobile, human). | **TERPASANG (Global)** |
+export default function StoryScroll({ children }: { children: ReactNode }) {
+  const root = useRef<HTMLDivElement>(null);
 
-### 14.3 Daftar periksa Anti-Slop Design Review
-Sebelum suatu halaman antarmuka dinyatakan selesai dikerjakan, jalankan pemeriksaan 7 dimensi berikut:
+  useGSAP(
+    () => {
+      const mm = gsap.matchMedia();
 
-1. **Visual Identity**: Apakah tampilan terasa seperti instrumen kemanusiaan yang berwibawa, ataukah tampak seperti dashboard SaaS komersial generik?
-2. **Layout**: Apakah seluruh informasi dibungkus secara seragam ke dalam kotak-kotak kartu identik? (Gunakan variasi tabel data, lembar panel, dan daftar pembatas garis bersih).
-3. **Typography**: Apakah perbedaan hierarki judul, isi, dan angka data terlihat kontras secara proporsional tanpa menggunakan trik warna-warni yang ramai?
-4. **Color**: Apakah setiap warna memiliki makna operasional fungsional yang jelas? Apakah rasio kontras telah memenuhi syarat?
-5. **Components**: Apakah tombol memiliki tujuan tindakan yang gamblang? Apakah komponen memiliki state interaktif yang lengkap?
-6. **Motion**: Apakah animasi hanya hadir untuk memperjelas konteks perubahan data tanpa memperlambat interaksi relawan?
-7. **Content Quality & Copywriting**: Apakah istilah bahasa Indonesia yang digunakan mudah dipahami warga dan relawan tanpa jargon teknis yang kaku?
+      mm.add(
+        {
+          ok: "(prefers-reduced-motion: no-preference)",
+          desktop: "(min-width: 900px)",
+        },
+        (ctx) => {
+          const { ok, desktop } = ctx.conditions as { ok: boolean; desktop: boolean };
+          if (!ok) return; // reduced motion: biarkan konten statis apa adanya
 
-### 14.4 Karakter visual khusus per halaman
-Setiap modul halaman memiliki spesialisasi peruntukan:
-- **Peta Interaktif + Pengantar**: Visual geospasial yang dingin, fokus pada penandaan titik kebutuhan dan kemudahan filtrasi cepat, didukung lapisan pengantar yang bersahabat namun tidak menghalangi.
-- **Detail Laporan**: Gaya editorial operasional yang menonjolkan data selisih logistik dan transparansi verifikasi.
-- **Dashboard Relawan**: Padat informasi, menyajikan tabel perbandingan daerah prioritas tanpa grafik hiasan yang tak bermakna.
-- **Dashboard Verifikator**: Tata letak dua panel (*split-view*) yang mengutamakan kecepatan evaluasi bukti foto dan kemudahan pengetikan alasan catatan.
-- **Panel Admin**: Tata letak tabel terstruktur untuk efisiensi audit data dalam jumlah besar.
-- **Formulir Lapor**: Langkah pengisian bertahap yang tenang, fokus, dan bebas dari distraksi elemen lain.
+          // 1) Tiap bab: elemen masuk bertahap saat bab mendekati viewport
+          gsap.utils.toArray<HTMLElement>("[data-chapter]").forEach((chapter) => {
+            const items = chapter.querySelectorAll("[data-chapter-item]");
+            if (!items.length) return;
+            gsap.from(items, {
+              y: 32,
+              autoAlpha: 0,
+              duration: 0.8,
+              ease: "power3.out",
+              stagger: 0.12,
+              scrollTrigger: { trigger: chapter, start: "top 75%", once: true },
+            });
+          });
 
-### 14.5 Daftar larangan keras Anti-Slop
-Dilarang menyematkan pola-pola generik AI berikut:
-- ❌ **Dilarang menggunakan latar belakang gradasi dekoratif** ungu/biru neon (*SaaS glow gradients*).
-- ❌ **Dilarang menggunakan efek kaca berlebih (*glassmorphism*)** yang mengaburkan teks di bawahnya.
-- ❌ **Dilarang memaksakan tata letak Bento Grid** pada data yang lebih cocok disajikan dalam bentuk tabel perbandingan.
-- ❌ **Dilarang menampilkan angka statistik raksasa tanpa label konteks**, sumber tanggal, dan satuan yang jelas.
-- ❌ **Dilarang menggunakan karakter emoji sebagai ikon antarmuka**. Gunakan ikon resmi Lucide secara konsisten.
-- ❌ **Dilarang membuat seluruh lencana status berbentuk kapsul (*pill shape*)**. Gunakan radius terkalibrasi 4 px.
-- ❌ **Dilarang menyematkan animasi scroll berlebihan** yang memicu *jank* pada ponsel kelas menengah ke bawah.
-- ❌ **Dilarang membungkus seluruh konten ke dalam kartu (*card soup*)**. Padukan tabel semantik, panel pemisah, dan ruang kosong terukur.
-- ❌ **Dilarang menggunakan ilustrasi kartun generik AI** tanpa lisensi dan persetujuan tim manusia.
+          // 2) Desktop saja: media sticky berubah halus mengikuti scroll bab
+          if (desktop) {
+            gsap.utils.toArray<HTMLElement>("[data-chapter-media]").forEach((media) => {
+              gsap.fromTo(
+                media,
+                { scale: 1.08 },
+                {
+                  scale: 1,
+                  ease: "none",
+                  scrollTrigger: {
+                    trigger: media.closest("[data-chapter]") ?? media,
+                    start: "top bottom",
+                    end: "bottom top",
+                    scrub: true,
+                  },
+                }
+              );
+            });
+          }
+        }
+      );
 
-### 14.6 Gerbang Kualitas Anti-Slop (*Anti-Slop Quality Gate*)
-Sebelum halaman UI dinyatakan selesai, wajib menjawab **YA** pada seluruh pertanyaan berikut:
-- [ ] Apakah antarmuka memiliki karakter khas instrumen kemanusiaan yang tenang dan fungsional?
-- [ ] Apakah tata letak terbebas dari jebakan *card soup* dan bento-grid artifisial?
-- [ ] Apakah seluruh elemen visual memiliki fungsi nyata bagi relawan atau publik?
-- [ ] Apakah seluruh rasio kontras teks dan kontrol memenuhi standar WCAG 2.2 AA?
-- [ ] Apakah antarmuka terbukti nyaman dibaca dan dioperasikan pada layar ponsel 360 px?
+      return () => mm.revert();
+    },
+    { scope: root }
+  );
+
+  return <div ref={root}>{children}</div>;
+}
+```
+
+### Contoh pemakaian
+```html
+<!-- Contoh pemakaian -->
+<StoryScroll>
+  <section data-chapter>
+    <h2 data-chapter-item>Desa yang belum terlihat</h2>
+    <p data-chapter-item>…cerita dari laporan VERIFIED…</p>
+    <figure data-chapter-media><img src="/img/wilayah.webp" alt="…" width="1600" height="900" /></figure>
+  </section>
+</StoryScroll>
+```
 
 ---
 
-## 15. Manajemen aset visual
+## Lampiran D — Kode Acuan Header Publik
 
-Seluruh aset grafis (foto bukti lapangan, logo aplikasi, favicon, gambar pratinjau media sosial / Open Graph, GeoJSON batas wilayah) **disediakan secara eksklusif oleh tim manusia** (`AGENTS.md` bagian 16).
-- Agen AI dilarang menghasilkan gambar ilustrasi mandiri.
-- Selama aset resmi belum diserahkan, gunakan elemen placeholder berlabel ukuran geometris netral.
-- Pustaka ikon antarmuka dikunci tunggal menggunakan **Lucide Icons** dengan ketebalan garis konsisten (1,75 px – 2 px).
+Simpan sebagai `components/layout/SiteHeader.tsx` dan `components/layout/site-header.css` (sesuaikan path). Ganti `<Logo />` dengan SVG logo resmi. Isi `lastUpdated` dan `contactEmail` hanya dari data/konfigurasi nyata.
 
----
+### SiteHeader.tsx
+```tsx
+"use client";
+// SiteHeader.tsx — header publik TILARA (layout PUBLIK saja).
+// Layout operasional memakai header aplikasi yang lebih ringkas.
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { useEffect, useRef, useState } from "react";
+import "./site-header.css";
 
-## 16. Tata kelola saran skill desain
+type Props = {
+  /** overlay: transparan di atas hero GELAP lalu solid saat scroll. solid: halaman lain. */
+  variant?: "overlay" | "solid";
+  isAuthenticated?: boolean;
+  /** Teks siap tampil dari server, mis. "26 Nov 2026, 08:10 WIB". Jangan dikarang. */
+  lastUpdated?: string;
+  /** Dari konfigurasi. Jangan dikarang; bila kosong tidak ditampilkan. */
+  contactEmail?: string;
+};
 
-- `DESIGN.md` adalah sumber kebenaran tertinggi untuk segala keputusan visual dan interaksi.
-- Skill agen AI tidak memiliki wewenang untuk menimpa palet warna dasar, tumpukan font sistem, skala spasi, atau token yang telah ditetapkan.
-- Jika rekomendasi suatu skill berpotensi meningkatkan kualitas desain namun memerlukan perubahan token pokok, usulan tersebut wajib dicatat sebagai butir `[NEEDS DECISION]` baru kepada tim.
+const NAV = [
+  { href: "/peta", label: "Peta" },
+  { href: "/laporan", label: "Laporan" },
+  { href: "/statistik", label: "Statistik" },
+  { href: "/tentang", label: "Tentang" },
+];
 
----
+// Placeholder kontur: GANTI dengan SVG logo resmi (gunakan currentColor + class "logo-dot" untuk titik).
+function Logo() {
+  return (
+    <svg className="logo-mark" viewBox="0 0 100 100" width="38" height="38" fill="none" aria-hidden="true">
+      <g stroke="currentColor" strokeWidth="2.2" strokeLinecap="round">
+        <path d="M50 6C68 4 90 16 93 38C96 60 84 90 56 94C30 98 8 80 7 54C6 28 28 8 50 6Z" />
+        <path d="M50 15C65 14 83 24 85 41C87 59 76 83 54 86C34 89 16 74 16 54C15 34 33 16 50 15Z" />
+        <path d="M50 25C62 24 75 32 76 45C77 58 68 75 52 77C38 79 25 67 25 53C25 38 38 26 50 25Z" />
+        <path d="M50 35C58 34 66 40 66 48C66 57 60 66 51 67C42 68 35 60 35 52C35 43 41 35 50 35Z" />
+      </g>
+      <circle className="logo-dot" cx="50" cy="50" r="6.5" />
+    </svg>
+  );
+}
 
-## 17. Standar evaluasi penyelesaian antarmuka
+const Icon = ({ d, size = 18 }: { d: string; size?: number }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+    <path d={d} />
+  </svg>
+);
+const PHONE = "M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z";
+const USER = "M20 21a8 8 0 0 0-16 0M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8z";
+const BURGER = "M4 7h16M4 12h16M4 17h16";
+const CLOSE = "M6 6l12 12M18 6L6 18";
 
-Sebelum suatu pekerjaan antarmuka diserahkan:
-1. **Inspeksi Hierarki**: Apakah elemen terpenting pada halaman tersebut menjadi hal pertama yang tertangkap oleh mata pengguna?
-2. **Kepatuhan Token**: Memastikan tidak ada kode CSS atau kelas styling yang menggunakan nilai warna heksadesimal atau ukuran piksel di luar token resmi.
-3. **Uji Responsif**: Memeriksa tampilan antarmuka secara teliti pada lebar 360px, 768px, dan 1280px.
-4. **Uji Fungsional Lengkap**: Memastikan semua tombol memicu aksi riil, formulir memiliki validasi pesan galat, dan state pemuatan/kosong telah terdesain rapi.
-5. **Kepatuhan Anti-Slop**: Lolos 100% pemeriksaan *Anti-Slop Quality Gate* (bagian 14.6).
+export default function SiteHeader({
+  variant = "overlay",
+  isAuthenticated = false,
+  lastUpdated,
+  contactEmail,
+}: Props) {
+  const pathname = usePathname();
+  const headerRef = useRef<HTMLElement>(null);
+  const sentinelRef = useRef<HTMLDivElement>(null);
+  const dialogRef = useRef<HTMLDialogElement>(null);
+  const [menuOpen, setMenuOpen] = useState(false);
 
----
+  // Transparan → solid: IntersectionObserver pada sentinel (tanpa listener scroll, tanpa re-render)
+  useEffect(() => {
+    const header = headerRef.current;
+    const sentinel = sentinelRef.current;
+    if (!header) return;
+    if (variant === "solid" || !sentinel || !("IntersectionObserver" in window)) {
+      header.dataset.scrolled = "true";
+      return;
+    }
+    const io = new IntersectionObserver(
+      ([entry]) => {
+        header.dataset.scrolled = String(!entry.isIntersecting);
+      },
+      { threshold: 0 }
+    );
+    io.observe(sentinel);
+    return () => io.disconnect();
+  }, [variant]);
 
-## 18. Daftar keputusan terbuka desain antarmuka (`[NEEDS DECISION]`)
+  // Tutup menu mobile saat pindah halaman
+  useEffect(() => {
+    dialogRef.current?.close();
+  }, [pathname]);
 
-> [!NOTE]
-> **Catatan Keputusan Final:** Keputusan Rute Root `/` telah ditetapkan secara **FINAL** pada 19 November 2026 sebagai **Opsi C — Peta Operasional + Bottom Sheet Pengantar** (lihat Bagian 8.1).  
-> Tersisa **10 butir keputusan terbuka visual** di bawah ini yang memerlukan konfirmasi tertulis dari tim (tersinkronisasi penuh dengan `AGENTS.md` Bagian 19):
+  const isActive = (href: string) => pathname === href || pathname.startsWith(href + "/");
+  const account = isAuthenticated
+    ? { href: "/dashboard", label: "Dashboard" }
+    : { href: "/login", label: "Masuk" };
 
-| # | Butir Keputusan Desain | Alternatif Pilihan | Rekomendasi Desain |
-|---|---|---|---|
-| 1 | Persetujuan token warna status tambahan | Menyetujui nilai heksa `--color-surface-hover`, `--color-warning-text`, dll. pada bagian 4.2. | **Setujui** (Telah terbukti lolos uji kontras WCAG 2.2 AA). |
-| 2 | Pilihan tumpukan font antarmuka | Tumpukan font sistem (gratis, instan, ringan) vs Font web Google Fonts (Inter / Plus Jakarta Sans). | **Font Sistem** (Performa terbaik pada jaringan 3G darurat). |
-| 3 | Penyedia ubin peta (Tile Provider) & atribusi | CartoDB Positron vs OpenStreetMap Standard vs Mapbox. | **OpenStreetMap Standard** (100% Terbuka, Tanpa Watermark, Bebas API Key). |
-| 4 | Ambang persentase tingkat kekurangan penanda | Merah (>50% selisih), Kuning (10%-50%), Hijau (<10% selisih). | **Setujui** formula batas persentase selisih tersebut. |
-| 5 | Penandaan visual data basi (*stale data*) | Ambang waktu pembaruan: 3 hari, 5 hari, atau 7 hari. | **7 hari** (Laporan umum) / **48 jam** (Bencana darurat). |
-| 6 | Geometri penanda peta tipe `PEMANTAUAN` | Bentuk belah ketupat tanpa latar penuh vs bentuk heksagon. | **Belah ketupat kontur Navy** (Pembeda bentuk tegas tanpa warna). |
-| 7 | Evaluasi referensi desain oleh tim | Tim membuka dan memvalidasi langsung 6 situs referensi bagian 3. | Tunggu masukan tim mengenai pola spesifik yang disukai. |
-| 8 | Pendekatan pustaka styling kode | Tailwind CSS dengan CSS variables vs CSS Modules murni. | **Tailwind CSS** (Kecepatan penataan dan konsistensi token). |
-| 9 | Identitas visual logo dan favicon resmi | Menunggu kiriman berkas SVG/PNG resmi dari tim. | Gunakan tipografi teks minimalis sementara waktu. |
-| 10 | Penerapan mode gelap (*Dark Mode*) | Dikerjakan pada versi lomba vs Ditunda ke Tingkat 2/3. | **Ditunda ke Tingkat 2/3** (Fokus pada kontras tajam mode terang). |
+  const openMenu = () => {
+    dialogRef.current?.showModal();
+    setMenuOpen(true);
+  };
+  const closeMenu = () => dialogRef.current?.close();
+
+  return (
+    <>
+      <a className="skip-link" href="#konten">Lewati ke konten</a>
+      <div ref={sentinelRef} className="header-sentinel" aria-hidden="true" />
+      <noscript>
+        <style>{`.site-header{color:#172b3a}.site-header__main::before{opacity:1}.site-header::before{opacity:0}`}</style>
+      </noscript>
+
+      <header
+        ref={headerRef}
+        className="site-header"
+        data-variant={variant}
+        data-scrolled={variant === "solid" ? "true" : "false"}
+      >
+        {variant === "overlay" && (
+          <div className="site-header__util">
+            <div className="hdr-container">
+              <span>
+                {lastUpdated
+                  ? `Data terverifikasi diperbarui ${lastUpdated}`
+                  : "Transparansi bantuan fisik untuk wilayah terdampak bencana"}
+              </span>
+              <span className="util-links">
+                <Link href="/tentang#metodologi">Metodologi verifikasi</Link>
+                {contactEmail && <a href={`mailto:${contactEmail}`}>{contactEmail}</a>}
+              </span>
+            </div>
+          </div>
+        )}
+
+        <div className="site-header__main">
+          <div className="hdr-container site-header__row">
+            <Link href="/" className="brand" aria-label="TILARA, beranda">
+              <Logo />
+              <span className="brand__text">
+                <span className="brand__name">TILARA</span>
+                <span className="brand__tag">Visibility for the Unreached</span>
+              </span>
+            </Link>
+
+            <nav aria-label="Utama" className="nav">
+              {NAV.map((item) => (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  className="nav__link"
+                  aria-current={isActive(item.href) ? "page" : undefined}
+                >
+                  {item.label}
+                </Link>
+              ))}
+            </nav>
+
+            <div className="actions">
+              <Link href="/darurat" className="btn btn--danger">
+                <Icon d={PHONE} size={16} />
+                <span>Darurat</span>
+              </Link>
+              <Link href="/lapor" className="btn btn--primary">Lapor</Link>
+              <Link href={account.href} className="icon-btn account" aria-label={account.label}>
+                <Icon d={USER} />
+              </Link>
+              <button
+                type="button"
+                className="icon-btn burger"
+                aria-label="Buka menu"
+                aria-expanded={menuOpen}
+                aria-controls="menu-mobile"
+                onClick={openMenu}
+              >
+                <Icon d={BURGER} />
+              </button>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <dialog
+        id="menu-mobile"
+        ref={dialogRef}
+        className="menu-dialog"
+        aria-label="Menu navigasi"
+        onClose={() => setMenuOpen(false)}
+        onClick={(e) => {
+          if (e.target === e.currentTarget) closeMenu(); // klik backdrop
+        }}
+      >
+        <div className="menu-inner">
+          <div className="menu-top">
+            <Link href="/" className="brand" aria-label="TILARA, beranda"><Logo /><span className="brand__name">TILARA</span></Link>
+            <button type="button" className="icon-btn" aria-label="Tutup menu" onClick={closeMenu}>
+              <Icon d={CLOSE} />
+            </button>
+          </div>
+          {NAV.map((item) => (
+            <Link key={item.href} href={item.href} className="menu-link" aria-current={isActive(item.href) ? "page" : undefined}>
+              {item.label}
+            </Link>
+          ))}
+          <Link href={account.href} className="menu-link">{account.label}</Link>
+          <div className="menu-cta">
+            <Link href="/darurat" className="btn btn--danger"><Icon d={PHONE} size={16} /><span>Darurat</span></Link>
+            <Link href="/lapor" className="btn btn--primary">Lapor</Link>
+          </div>
+        </div>
+      </dialog>
+    </>
+  );
+}
+```
+
+### site-header.css
+```css
+/* site-header.css — Header publik TILARA (transparan → solid, ringan) */
+:root {
+  --util-h: 40px;
+  --main-h: 72px;
+  --hdr-ease: cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+@media (max-width: 1023px) { :root { --util-h: 0px; } }
+
+/* Offset konten: halaman solid memakai .page-offset; hero gelap memakai .hero-offset */
+.page-offset { padding-top: var(--main-h); }
+.hero-offset { padding-top: calc(var(--util-h) + var(--main-h) + 3rem); }
+
+.hdr-container { width: min(100% - 2rem, 1200px); margin-inline: auto; }
+
+/* Sentinel untuk IntersectionObserver (di puncak dokumen) */
+.header-sentinel { position: absolute; top: 0; left: 0; width: 1px; height: 32px; pointer-events: none; }
+
+/* Skip link (di luar header agar tidak ikut transform) */
+.skip-link {
+  position: fixed; top: -100px; left: 1rem; z-index: 60;
+  padding: 0.5rem 1rem; border-radius: 8px; background: #fff; color: #172b3a; font-weight: 600;
+}
+.skip-link:focus { top: 0.5rem; }
+
+/* ---------- Header ---------- */
+.site-header {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 50;
+  color: #fff;
+  transition: transform 0.45s var(--hdr-ease), color 0.3s var(--hdr-ease);
+}
+.site-header[data-variant="solid"] { --util-h: 0px; }
+.site-header[data-scrolled="true"] {
+  color: var(--tilara-navy, #172b3a);
+  transform: translate3d(0, calc(var(--util-h) * -1), 0); /* utility bar keluar layar */
+}
+
+/* Scrim gradien di atas hero (hilang saat scroll) */
+.site-header::before {
+  content: ""; position: absolute; left: 0; right: 0; top: 0; pointer-events: none;
+  height: calc(var(--util-h) + var(--main-h) + 32px);
+  background: linear-gradient(rgb(23 43 58 / 0.7), transparent);
+  transition: opacity 0.3s var(--hdr-ease);
+}
+.site-header[data-scrolled="true"]::before { opacity: 0; }
+
+/* Utility bar */
+.site-header__util { height: var(--util-h); font-size: 0.75rem; letter-spacing: 0.02em; border-bottom: 1px solid rgb(255 255 255 / 0.18); }
+.site-header__util .hdr-container { height: 100%; display: flex; align-items: center; justify-content: space-between; gap: 1rem; }
+.util-links { display: flex; gap: 1.5rem; }
+.util-links a { color: inherit; text-decoration: none; opacity: 0.85; }
+.util-links a:hover { opacity: 1; text-decoration: underline; }
+
+/* Bar utama + latar solid (hanya opacity yang dianimasikan) */
+.site-header__main { position: relative; isolation: isolate; height: var(--main-h); }
+.site-header__main::before {
+  content: ""; position: absolute; inset: 0; z-index: -1; opacity: 0;
+  background: rgb(255 255 255 / 0.97);
+  box-shadow: 0 1px 0 var(--border, #d9dcd5), 0 10px 30px rgb(23 43 58 / 0.08);
+  transition: opacity 0.3s var(--hdr-ease);
+}
+.site-header[data-scrolled="true"] .site-header__main::before { opacity: 1; }
+.site-header__row { height: 100%; display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 1rem; }
+
+/* Brand */
+.brand { display: inline-flex; align-items: center; gap: 0.65rem; color: inherit; text-decoration: none; justify-self: start; }
+.brand__text { display: flex; flex-direction: column; line-height: 1; }
+.brand__name { font-weight: 700; font-size: 1.05rem; letter-spacing: 0.32em; }
+.brand__tag { margin-top: 0.4rem; font-size: 0.5625rem; letter-spacing: 0.24em; text-transform: uppercase; opacity: 0.8; }
+.logo-mark { transition: transform 0.45s var(--hdr-ease); }
+.site-header[data-scrolled="true"] .logo-mark { transform: scale(0.9); }
+.logo-dot { fill: currentColor; transition: fill 0.3s var(--hdr-ease); }
+.site-header[data-scrolled="true"] .logo-dot { fill: var(--tilara-green, #246b50); }
+
+/* Navigasi tengah (tautan teks) */
+.nav { display: flex; gap: 2rem; }
+.nav__link {
+  position: relative; padding: 0.5rem 0.125rem; color: inherit; text-decoration: none;
+  font-size: 0.8125rem; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase;
+}
+.nav__link::after {
+  content: ""; position: absolute; left: 0; right: 0; bottom: -4px; height: 2px; background: currentColor;
+  transform: scaleX(0); transform-origin: center; transition: transform 0.35s var(--hdr-ease);
+}
+.nav__link:hover::after, .nav__link[aria-current="page"]::after { transform: scaleX(1); }
+
+/* Aksi kanan */
+.actions { display: flex; align-items: center; gap: 0.5rem; justify-self: end; }
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 0.4rem;
+  height: 40px; padding: 0 1rem; border-radius: 8px; color: #fff; text-decoration: none;
+  font-size: 0.875rem; font-weight: 600; line-height: 1; transition: transform 0.2s var(--hdr-ease), filter 0.2s;
+}
+.btn--primary { background: var(--tilara-green, #246b50); }
+.btn--danger  { background: var(--tilara-red-deep, #b83e37); }
+.btn:hover { filter: brightness(1.08); }
+@media (hover: hover) { .btn:hover { transform: translateY(-1px); } }
+.icon-btn {
+  display: inline-grid; place-items: center; width: 40px; height: 40px; border-radius: 8px;
+  border: 1px solid currentColor; background: transparent; color: inherit; cursor: pointer; opacity: 0.9;
+}
+.icon-btn:hover { opacity: 1; }
+.burger { display: none; }
+
+.site-header :focus-visible, .menu-dialog :focus-visible { outline: 2px solid currentColor; outline-offset: 3px; border-radius: 6px; }
+
+/* ---------- Mobile ---------- */
+@media (max-width: 1023px) {
+  .site-header__util, .nav, .account, .brand__tag { display: none; }
+  .site-header__row { grid-template-columns: 1fr auto; }
+  .burger { display: inline-grid; }
+  .btn, .icon-btn { height: 44px; }
+  .icon-btn { width: 44px; }
+}
+
+/* ---------- Menu mobile (dialog native) ---------- */
+.menu-dialog {
+  margin: 0 0 0 auto; padding: 0; border: 0; height: 100dvh; max-height: none;
+  width: min(88vw, 360px); max-width: none;
+  background: var(--tilara-navy, #172b3a); color: var(--tilara-paper, #f5f6f3);
+}
+.menu-dialog[open] { animation: menu-in 0.4s var(--hdr-ease); }
+.menu-dialog::backdrop { background: rgb(0 0 0 / 0.55); }
+@keyframes menu-in { from { transform: translate3d(100%, 0, 0); } }
+.menu-inner { display: flex; flex-direction: column; height: 100%; padding: 1rem 1.25rem 1.5rem; overflow-y: auto; }
+.menu-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem; }
+.menu-link {
+  padding: 1rem 0; color: inherit; text-decoration: none;
+  font-size: 1.125rem; font-weight: 600; border-bottom: 1px solid rgb(255 255 255 / 0.12);
+}
+.menu-link[aria-current="page"] { color: var(--tilara-amber, #e5a13a); }
+.menu-cta { margin-top: auto; display: grid; gap: 0.75rem; padding-top: 1.5rem; }
+.menu-cta .btn { height: 48px; }
+html:has(dialog.menu-dialog[open]) { overflow: hidden; }
+@media (min-width: 1024px) { .menu-dialog { display: none; } }
+
+/* ---------- Mode gelap & gerak dikurangi ---------- */
+@media (prefers-color-scheme: dark) {
+  .site-header[data-scrolled="true"] { color: var(--tilara-paper, #f5f6f3); }
+  .site-header__main::before { background: rgb(23 43 58 / 0.97); box-shadow: 0 1px 0 #2b4457, 0 10px 30px rgb(0 0 0 / 0.3); }
+  .site-header[data-scrolled="true"] .logo-dot { fill: #4fae86; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .site-header, .site-header::before, .site-header__main::before, .logo-mark, .logo-dot,
+  .nav__link::after, .btn { transition: none; }
+  .menu-dialog[open] { animation: none; }
+}
+```
+
+### Contoh pemakaian
+```tsx
+// Layout publik — beranda (hero GELAP):
+<SiteHeader variant="overlay" isAuthenticated={!!session} lastUpdated={fmtLastUpdated} contactEmail={config.contactEmail} />
+<main id="konten">
+  <section className="hero hero-offset hero-in hero-in--after-gate">…hero gelap…</section>
+</main>
+
+// Halaman publik lainnya (/peta, /laporan, /tentang, /statistik, /laporan/[id], /darurat):
+<SiteHeader variant="solid" isAuthenticated={!!session} />
+<main id="konten" className="page-offset">…</main>
+```
+Catatan: `variant="overlay"` hanya boleh dipakai bila hero di bawahnya **gelap**. Jika hero terang, pakai `variant="solid"`.

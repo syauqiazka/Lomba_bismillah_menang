@@ -97,7 +97,7 @@ export function EmergencyDirectoryView({ contacts }: EmergencyDirectoryViewProps
               PERHATIAN KESELAMATAN JIWA: Aplikasi ini BUKAN pengganti layanan darurat negara!
             </h2>
             <p className="leading-relaxed">
-              Platform TRASEC merupakan sistem intelijen data dan transparansi logistik kemanusiaan relawan. Jika Anda atau keluarga berada dalam situasi darurat bencana alam, kebakaran, atau ancaman keselamatan jiwa, segera hubungi panggilan darurat terpadu nasional <strong>112</strong>, BASARNAS <strong>115</strong>, atau BNPB <strong>117</strong> di bawah ini.
+              Platform TILARA merupakan sistem intelijen data dan transparansi logistik kemanusiaan relawan. Jika Anda atau keluarga berada dalam situasi darurat bencana alam, kebakaran, atau ancaman keselamatan jiwa, segera hubungi panggilan darurat terpadu nasional <strong>112</strong>, BASARNAS <strong>115</strong>, atau BNPB <strong>117</strong> di bawah ini.
             </p>
           </div>
         </div>

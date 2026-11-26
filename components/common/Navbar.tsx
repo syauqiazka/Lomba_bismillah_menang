@@ -1,7 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import { HelpCircle, PlusCircle, List, PhoneCall, User, LogIn, BarChart3, Info } from "lucide-react";
+import Image from "next/image";
+import { HelpCircle, PlusCircle, List, PhoneCall, User, LogIn, BarChart3, Info, MapPin, FileText } from "lucide-react";
 import type { SessionData } from "@/lib/session-options";
 
 interface NavbarProps {
@@ -33,25 +34,30 @@ export function Navbar({
           <Link
             href="/"
             data-tour="brand-logo"
-            className="flex items-center gap-2 group focus:outline-none focus:ring-2 focus:ring-[var(--color-focus)] rounded"
-            aria-label="TRASEC Beranda Peta"
+            className="flex items-center gap-2.5 group focus:outline-none focus:ring-2 focus:ring-[var(--color-focus)] rounded"
+            aria-label="TILARA Beranda"
           >
-            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-emerald-700 to-emerald-900 flex items-center justify-center text-white font-black text-sm tracking-wider shadow-xs border border-emerald-600/40">
-              TR
-            </div>
+            <Image
+              src="/brand/tilara-symbol.svg"
+              alt="Logo TILARA"
+              width={32}
+              height={32}
+              className="w-8 h-8 shrink-0"
+              priority
+            />
             <div className="flex flex-col">
-              <span className="font-black text-sm md:text-base text-slate-900 tracking-tight leading-none group-hover:text-emerald-700 transition-colors">
-                TRASEC
+              <span className="font-black text-sm md:text-base text-[var(--tilara-navy)] tracking-[0.18em] leading-none group-hover:text-[var(--tilara-green)] transition-colors">
+                TILARA
               </span>
-              <span className="text-[10px] md:text-xs text-emerald-800 tracking-wider font-bold uppercase">
-                Humanitarian Intel
+              <span className="text-[9px] md:text-[10px] text-[var(--tilara-green)] tracking-wider font-bold uppercase">
+                Visibility for the Unreached
               </span>
             </div>
           </Link>
 
           {/* Badge Pengingat Integritas */}
           <span className="hidden lg:inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-emerald-50 text-emerald-800 border border-emerald-300">
-            Transparansi Bantuan Riil
+            Transparansi Bantuan Fisik
           </span>
         </div>
 
@@ -92,11 +98,31 @@ export function Navbar({
             </button>
           )}
 
-          {/* Tautan Informasi & Prinsip Platform */}
+          {/* Tautan Peta Operasional */}
+          <Link
+            href="/peta"
+            className="inline-flex items-center gap-1.5 px-2.5 py-1.5 text-xs font-semibold rounded text-[var(--color-text-secondary)] hover:text-[var(--color-text)] hover:bg-[var(--color-surface-hover)] border border-[var(--color-border)] focus:outline-none focus:ring-2 focus:ring-[var(--color-focus)] transition-colors"
+            title="Buka Peta Operasional Selisih Logistik"
+          >
+            <MapPin className="w-3.5 h-3.5 text-[var(--color-primary)]" />
+            <span className="hidden sm:inline">Peta</span>
+          </Link>
+
+          {/* Tautan Direktori Laporan Terverifikasi */}
+          <Link
+            href="/laporan"
+            className="inline-flex items-center gap-1.5 px-2.5 py-1.5 text-xs font-semibold rounded text-[var(--color-text-secondary)] hover:text-[var(--color-text)] hover:bg-[var(--color-surface-hover)] border border-[var(--color-border)] focus:outline-none focus:ring-2 focus:ring-[var(--color-focus)] transition-colors"
+            title="Direktori Laporan Terverifikasi"
+          >
+            <FileText className="w-3.5 h-3.5 text-[var(--color-primary)]" />
+            <span className="hidden md:inline">Laporan</span>
+          </Link>
+
+          {/* Tautan Informasi & Metodologi Platform */}
           <Link
             href="/tentang"
             className="inline-flex items-center gap-1.5 px-2.5 py-1.5 text-xs font-semibold rounded text-[var(--color-text-secondary)] hover:text-[var(--color-text)] hover:bg-[var(--color-surface-hover)] border border-[var(--color-border)] focus:outline-none focus:ring-2 focus:ring-[var(--color-focus)] transition-colors"
-            title="Tentang Misi & Transparansi TRASEC"
+            title="Tentang Misi & Metodologi TILARA"
           >
             <Info className="w-3.5 h-3.5 text-[var(--color-secondary)]" />
             <span className="hidden sm:inline">Tentang</span>
@@ -143,14 +169,16 @@ export function Navbar({
                 <User className="w-3 h-3 text-[var(--color-text-muted)]" />
                 <span className="max-w-[100px] truncate">{session?.name}</span>
               </span>
-              <Link
-                href="/antrean"
-                className="px-2 py-1 text-[11px] font-bold rounded bg-slate-100 hover:bg-slate-200 text-[var(--color-text)] transition-colors"
-                title="Antrean Pengiriman Luring"
-              >
-                Antrean
-              </Link>
-              {session?.role === "VERIFIKATOR" && (
+              {(session?.role === "RELAWAN" || session?.role === "ADMIN") && (
+                <Link
+                  href="/antrean"
+                  className="px-2 py-1 text-[11px] font-bold rounded bg-slate-100 hover:bg-slate-200 text-[var(--color-text)] transition-colors"
+                  title="Antrean Pengiriman Luring"
+                >
+                  Antrean
+                </Link>
+              )}
+              {(session?.role === "VERIFIKATOR" || session?.role === "ADMIN") && (
                 <Link
                   href="/verifikasi"
                   className="px-2 py-1 text-[11px] font-bold rounded bg-[var(--color-info-bg)] text-[var(--color-info-text)] hover:underline"

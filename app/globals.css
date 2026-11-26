@@ -43,6 +43,29 @@
   --color-info-text: #245C8A;
   --color-info-bg: #E3EDF6;          /* Kontras teks terhadap latar: 5,96:1 */
 
+  /* Token DESIGN.md — Palet TILARA */
+  --tilara-paper: #F5F6F3;
+  --tilara-white: #FFFFFF;
+  --tilara-navy: #172B3A;
+  --tilara-green: #246B50;
+  --tilara-amber: #E5A13A;
+  --tilara-red: #D85B52;
+  --tilara-red-deep: #B83E37;
+  --tilara-stone: #8A8D86;
+
+  --bg: var(--tilara-paper);
+  --surface: var(--tilara-white);
+  --surface-muted: #ECEEE9;
+  --border: #D9DCD5;
+  --text: var(--tilara-navy);
+  --text-muted: #55606A;
+
+  --status-verified: var(--tilara-green);
+  --status-pending: var(--tilara-amber);
+  --status-attention: var(--tilara-red-deep);
+  --status-info: #2B6CB0;
+  --status-demo: #6B46C1;
+
   /* Bayangan Tunggal */
   --shadow-elevated: 0 1px 3px rgba(23, 43, 58, 0.12), 0 1px 2px rgba(23, 43, 58, 0.08);
 
@@ -54,6 +77,17 @@
   --z-floating-emergency: 1200;
   --z-modal: 1300;
   --z-toast: 1400;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #0F1D28;
+    --surface: #172B3A;
+    --surface-muted: #1E3547;
+    --border: #2B4457;
+    --text: #F5F6F3;
+    --text-muted: #A9B4BC;
+  }
 }
 
 body {
@@ -200,6 +234,16 @@ body {
 
 .torn-svg-fill-white {
   fill: #FFFFFF;
+}
+
+/* Kepatuhan prefers-reduced-motion (DESIGN.md Bagian 8 & 11.3) */
+@media (prefers-reduced-motion: reduce) {
+  *, ::before, ::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }
 
 .torn-svg-fill-dark {

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import {
   ArrowLeft,
@@ -19,6 +19,8 @@ import {
   ShieldCheck,
   X,
   Check,
+  Wifi,
+  WifiOff,
 } from "lucide-react";
 import type { RegionOption } from "@/lib/fallback-data";
 import { createReportAction } from "@/app/actions/report-actions";
@@ -55,6 +57,21 @@ function formatBytes(bytes: number): string {
 
 export function ReportForm({ regions, userSessionName }: ReportFormProps) {
   const [step, setStep] = useState<number>(1);
+  const [isOnline, setIsOnline] = useState<boolean>(() =>
+    typeof navigator !== "undefined" ? navigator.onLine : true
+  );
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const onOnline = () => setIsOnline(true);
+    const onOffline = () => setIsOnline(false);
+    window.addEventListener("online", onOnline);
+    window.addEventListener("offline", onOffline);
+    return () => {
+      window.removeEventListener("online", onOnline);
+      window.removeEventListener("offline", onOffline);
+    };
+  }, []);
 
   // Field Data Laporan
   const [title, setTitle] = useState("");
@@ -421,7 +438,7 @@ export function ReportForm({ regions, userSessionName }: ReportFormProps) {
 
         <div className="pt-2 flex flex-col sm:flex-row gap-3 justify-center">
           <Link
-            href="/"
+            href="/peta"
             className="px-5 py-2.5 rounded-xl bg-[var(--color-primary)] hover:bg-[var(--color-primary-hover)] text-white font-bold text-xs transition-colors"
           >
             Kembali ke Peta Operasional
@@ -450,10 +467,33 @@ export function ReportForm({ regions, userSessionName }: ReportFormProps) {
     <div className="max-w-[680px] mx-auto bg-white border border-[var(--color-border)] rounded-2xl shadow-sm overflow-hidden">
       {/* Header Formulir & Stepper */}
       <div className="p-5 border-b border-[var(--color-border)] bg-[var(--color-bg)]">
-        <div className="flex items-center justify-between mb-3">
-          <span className="text-[11px] font-bold text-[var(--color-primary)] uppercase tracking-wider">
-            Formulir Lapangan Relawan
-          </span>
+        <div className="flex flex-wrap items-center justify-between gap-2 mb-3">
+          <div className="flex items-center gap-2">
+            <span className="text-[11px] font-bold text-[var(--color-primary)] uppercase tracking-wider">
+              Formulir Lapangan Relawan
+            </span>
+            <span
+              role="status"
+              aria-live="polite"
+              className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold ${
+                isOnline
+                  ? "bg-[var(--color-success-bg)] text-[var(--status-verified)]"
+                  : "bg-[var(--color-warning-bg)] text-[var(--status-pending)]"
+              }`}
+            >
+              {isOnline ? (
+                <>
+                  <Wifi className="w-3 h-3" aria-hidden="true" />
+                  <span>Online</span>
+                </>
+              ) : (
+                <>
+                  <WifiOff className="w-3 h-3" aria-hidden="true" />
+                  <span>Offline (Antrean Lokal)</span>
+                </>
+              )}
+            </span>
+          </div>
           <span className="text-xs text-[var(--color-text-muted)] font-semibold">
             Pelapor: <strong>{userSessionName}</strong>
           </span>

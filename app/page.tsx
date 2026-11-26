@@ -1,18 +1,19 @@
 import { getPublicMapReports, getPublicAggregates } from "@/lib/public-queries";
 import { getSession } from "@/lib/session";
-import { RootOperationalView } from "@/components/map/RootOperationalView";
+import { StoryFirstHomeView } from "@/components/home/StoryFirstHomeView";
 import { FALLBACK_REPORTS, FALLBACK_AGGREGATES } from "@/lib/fallback-data";
 
 export const metadata = {
-  title: "Peta Operasional Kebutuhan & Bantuan Relawan | TRASEC",
+  title: "TILARA | Environmental & Humanitarian Intelligence Platform",
   description:
-    "Peta interaktif transparansi selisih logistik kebutuhan vs bantuan terkonfirmasi di seluruh wilayah operasional kemanusiaan Indonesia.",
+    "Ketahui apa yang terjadi dan pahami dampaknya. Informasi lapangan, kondisi lingkungan, dan selisih kebutuhan masyarakat Indonesia secara transparan dan terverifikasi.",
 };
 
 export default async function HomePage() {
   let reports = FALLBACK_REPORTS;
   let aggregates = FALLBACK_AGGREGATES;
   let session = null;
+  let isDemoMode = true;
 
   const isPlaceholderDb =
     !process.env.DATABASE_URL ||
@@ -27,6 +28,7 @@ export default async function HomePage() {
 
       if (dbReports && dbReports.length > 0) {
         reports = dbReports;
+        isDemoMode = false;
       }
       if (dbAggregates) {
         aggregates = dbAggregates;
@@ -48,10 +50,11 @@ export default async function HomePage() {
   }
 
   return (
-    <RootOperationalView
-      initialReports={reports}
+    <StoryFirstHomeView
+      reports={reports}
       aggregates={aggregates}
       session={session}
+      isDemoMode={isDemoMode}
     />
   );
 }

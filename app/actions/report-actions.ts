@@ -6,6 +6,7 @@ import { prisma } from "@/lib/prisma";
 import { createReportSchema, type CreateReportInput } from "@/lib/validators";
 import { calculateTrustScore } from "@/lib/trust-score";
 import { isTrustedVolunteer } from "@/lib/trust";
+import { checkRateLimit } from "@/lib/rate-limit";
 import type { ActionResponse } from "@/lib/types";
 
 export interface CreateReportResponseData {
@@ -29,6 +30,16 @@ export async function createReportAction(
       ok: false,
       code: "UNAUTHORIZED",
       message: "Anda wajib masuk (login) sebagai relawan untuk mengajukan laporan.",
+    };
+  }
+
+  // 0. Rate limiting per pengguna untuk mencegah spam laporan (/lapor)
+  const rateCheck = await checkRateLimit(`lapor:${session.userId}`, 10, 10 * 60 * 1000);
+  if (!rateCheck.allowed) {
+    return {
+      ok: false,
+      code: "RATE_LIMITED",
+      message: "Terlalu banyak pengajuan laporan dalam waktu singkat. Silakan tunggu beberapa menit.",
     };
   }
 

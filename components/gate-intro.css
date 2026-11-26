@@ -1,0 +1,96 @@
+/* TILARA Gate Intro — murni CSS, transform + opacity saja. Total ≈ 2,2 s */
+
+.gate-intro {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  animation: gate-hide 0s linear 2.2s forwards;
+}
+
+.gate-panel {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 50%;
+  overflow: hidden;
+  background: var(--tilara-navy, #172b3a);
+  will-change: transform;
+  animation: 0.95s cubic-bezier(0.77, 0, 0.18, 1) 1.25s forwards;
+}
+.gate-panel--l { left: 0; animation-name: gate-left; }
+.gate-panel--r { right: 0; animation-name: gate-right; }
+
+.gate-logo {
+  position: absolute;
+  top: 50%;
+  width: 240px;
+  margin-top: -80px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  color: var(--tilara-paper, #f5f6f3);
+  opacity: 0;
+  animation: gate-fade 0.7s ease-out 0.15s forwards;
+}
+.gate-panel--l .gate-logo { right: -120px; }
+.gate-panel--r .gate-logo { left: -120px; }
+
+.gate-logo path {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  animation: gate-draw 1s ease-out 0.2s forwards;
+}
+.gate-word {
+  font: 600 1.6rem/1 system-ui, sans-serif;
+  letter-spacing: 0.42em;
+  padding-left: 0.42em;
+}
+.gate-tag {
+  font: 500 0.62rem/1 system-ui, sans-serif;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--tilara-amber, #e5a13a);
+}
+
+.gate-seam {
+  position: absolute;
+  left: 50%;
+  top: 0;
+  bottom: 0;
+  width: 1px;
+  background: linear-gradient(to bottom, transparent, var(--tilara-amber, #e5a13a), transparent);
+  transform: translateX(-0.5px) scaleY(0);
+  animation:
+    gate-seam 0.6s ease-out 0.5s forwards,
+    gate-fade-out 0.25s ease-in 1.2s forwards;
+}
+
+.gate-reveal {
+  animation: gate-reveal 1.3s cubic-bezier(0.2, 0.7, 0.2, 1) 1.25s both;
+}
+
+@keyframes gate-left   { to { transform: translate3d(-100%, 0, 0); } }
+@keyframes gate-right  { to { transform: translate3d(100%, 0, 0); } }
+@keyframes gate-fade   { to { opacity: 1; } }
+@keyframes gate-fade-out { to { opacity: 0; } }
+@keyframes gate-draw   { to { stroke-dashoffset: 0; } }
+@keyframes gate-seam   { to { transform: translateX(-0.5px) scaleY(1); } }
+@keyframes gate-hide   { to { visibility: hidden; pointer-events: none; } }
+@keyframes gate-reveal { from { transform: scale(1.06); } to { transform: scale(1); } }
+
+html[data-intro="seen"] .gate-intro { display: none; }
+html[data-intro="seen"] .gate-reveal { animation: none; }
+
+@media (prefers-reduced-motion: reduce) {
+  .gate-intro { display: none; }
+  .gate-reveal { animation: none; }
+}
+
+@media (max-width: 480px) {
+  .gate-logo { width: 200px; }
+  .gate-panel--l .gate-logo { right: -100px; }
+  .gate-panel--r .gate-logo { left: -100px; }
+  .gate-word { font-size: 1.3rem; }
+}
+

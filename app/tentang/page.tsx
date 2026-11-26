@@ -4,7 +4,7 @@ import { EditorialLandingView } from "@/components/landing/EditorialLandingView"
 import { FALLBACK_AGGREGATES } from "@/lib/fallback-data";
 
 export const metadata = {
-  title: "Tentang Platform Kemanusiaan | TRASEC",
+  title: "Tentang Platform Kemanusiaan | TILARA",
   description:
     "Transparansi kebutuhan dan bantuan relawan di Indonesia. Menghubungkan informasi kebutuhan, bantuan terkonfirmasi, dan proses verifikasi berlapis.",
 };

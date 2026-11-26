@@ -3,8 +3,8 @@ import { LoginForm } from "@/components/auth/LoginForm";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Masuk ke Sistem | TRASEC",
-  description: "Akses masuk akun relawan, verifikator, dan administrator TRASEC.",
+  title: "Masuk ke Sistem | TILARA",
+  description: "Akses masuk akun relawan, verifikator, dan administrator TILARA.",
   robots: { index: false, follow: false },
 };
 

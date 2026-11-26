@@ -9,6 +9,7 @@ interface OperationalMapProps {
   reports: PublicReportItem[];
   onSelectReport: (report: PublicReportItem) => void;
   selectedReportId?: string | null;
+  onOpenTextView?: () => void;
 }
 
 /**
@@ -82,10 +83,12 @@ export default function OperationalMap({
   reports,
   onSelectReport,
   selectedReportId,
+  onOpenTextView,
 }: OperationalMapProps) {
   const mapContainerRef = useRef<HTMLDivElement>(null);
   const mapInstanceRef = useRef<LeafletMap | null>(null);
   const markersLayerRef = useRef<LayerGroup | null>(null);
+  const [hasTileError, setHasTileError] = useState(false);
 
   // Filter Lokal Peta
   const [categoryFilter, setCategoryFilter] = useState<string>("ALL");
@@ -143,12 +146,20 @@ export default function OperationalMap({
       });
 
       // Ubin OpenStreetMap Standard (100% Gratis, Terbuka, Tanpa Watermark & Tanpa API Key)
-      L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+      const tileLayer = L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
         attribution:
           '&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener noreferrer">OpenStreetMap</a> contributors',
         subdomains: ["a", "b", "c"],
         maxZoom: 19,
       }).addTo(map);
+
+      let tileErrors = 0;
+      tileLayer.on("tileerror", () => {
+        tileErrors += 1;
+        if (tileErrors >= 3 && isMounted) {
+          setHasTileError(true);
+        }
+      });
 
       // Tambahkan zoom control di kanan atas agar tidak tertutup bottom sheet
       L.control.zoom({ position: "topright" }).addTo(map);
@@ -277,6 +288,24 @@ export default function OperationalMap({
             <span>{filteredReports.length} lokasi aktif</span>
           </div>
         </div>
+
+        {/* Fallback Daftar Wilayah jika Ubin Peta Gagal Dimuat / Offline */}
+        {hasTileError && (
+          <div className="mt-2 pointer-events-auto bg-[var(--color-warning-bg)] border border-[var(--color-warning-text)]/30 text-[var(--color-warning-text)] rounded-lg px-3.5 py-2 text-xs flex flex-wrap items-center justify-between gap-2 shadow-sm">
+            <span>
+              Ubin peta gagal dimuat (jaringan terbatas). Gunakan tampilan daftar wilayah agar tetap dapat memantau titik laporan.
+            </span>
+            {onOpenTextView && (
+              <button
+                type="button"
+                onClick={onOpenTextView}
+                className="px-2.5 py-1 rounded bg-[var(--color-secondary)] text-white font-semibold cursor-pointer"
+              >
+                Buka Daftar Wilayah
+              </button>
+            )}
+          </div>
+        )}
       </div>
     </div>
   );

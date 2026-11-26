@@ -1,7 +1,9 @@
 import "server-only";
+import { prisma } from "@/lib/prisma";
 import { getPublicMapReports, getPublicAggregates } from "@/lib/public-queries";
 import { FALLBACK_REPORTS, FALLBACK_AGGREGATES } from "@/lib/fallback-data";
 import type { DeficitStatus } from "@/lib/calculations";
+import type { SessionData } from "@/lib/session-options";
 
 export interface RegionPriorityStat {
   regionId: string;
@@ -246,5 +248,181 @@ export async function getDashboardData(): Promise<DashboardData> {
     logisticsStats,
     lastUpdated: new Date(),
   };
+}
+
+export interface RoleWorkspaceData {
+  role: "RELAWAN" | "VERIFIKATOR" | "ADMIN";
+  isDemoMode: boolean;
+  myReports: Array<{
+    id: string;
+    title: string;
+    status: string;
+    urgency: string;
+    updatedAt: string;
+  }>;
+  pendingSlaQueue: Array<{
+    id: string;
+    title: string;
+    urgency: string;
+    regionName: string;
+    ageHours: number;
+  }>;
+  adminAuditSummary?: {
+    totalUsers: number;
+    totalVerifiedOrgs: number;
+    recentActions: Array<{
+      id: string;
+      decision: string;
+      note: string | null;
+      actorName: string;
+      reportTitle: string;
+      createdAt: string;
+    }>;
+  };
+}
+
+/**
+ * Mengambil ringkasan ruang kerja operasional berbasis role untuk pengguna terautentikasi di /dashboard.
+ */
+export async function getRoleWorkspaceData(
+  session: SessionData
+): Promise<RoleWorkspaceData> {
+  const role: "RELAWAN" | "VERIFIKATOR" | "ADMIN" = session.role ?? "RELAWAN";
+  const dbUrl = process.env.DATABASE_URL || "";
+  const isPlaceholderDb =
+    !dbUrl ||
+    dbUrl.includes("placeholder") ||
+    dbUrl.includes("ep-example") ||
+    dbUrl.includes("localhost:5432/trasec_dev");
+
+  const nowMs = Date.now();
+
+  if (isPlaceholderDb) {
+    return {
+      role,
+      isDemoMode: true,
+      myReports: FALLBACK_REPORTS.slice(0, 2).map((r) => ({
+        id: r.id,
+        title: r.title,
+        status: r.status,
+        urgency: r.urgency,
+        updatedAt: new Date(r.updatedAt).toISOString(),
+      })),
+      pendingSlaQueue:
+        session.role === "VERIFIKATOR" || session.role === "ADMIN"
+          ? [
+              {
+                id: "rep-jayapura-pending-005",
+                title: "Kebutuhan Buku Bacaan dan Alat Tulis Sekolah Rimba Skouw",
+                urgency: "TERENCANA",
+                regionName: "Kota Jayapura",
+                ageHours: 18,
+              },
+            ]
+          : [],
+      adminAuditSummary:
+        session.role === "ADMIN"
+          ? {
+              totalUsers: 4,
+              totalVerifiedOrgs: 1,
+              recentActions: [
+                {
+                  id: "audit-demo-1",
+                  decision: "APPROVE",
+                  note: "Data validasi lapangan telah dikonfirmasi melalui ketua RW dan bukti foto geolokasi.",
+                  actorName: "Budi Santoso (VERIFIKATOR)",
+                  reportTitle: FALLBACK_REPORTS[0].title,
+                  createdAt: new Date(FALLBACK_REPORTS[0].updatedAt).toISOString(),
+                },
+              ],
+            }
+          : undefined,
+    };
+  }
+
+  try {
+    const myReportsRaw = await prisma.report.findMany({
+      where: { reporterId: session.userId },
+      orderBy: { updatedAt: "desc" },
+      take: 5,
+      select: { id: true, title: true, status: true, urgency: true, updatedAt: true },
+    });
+
+    const pendingSlaRaw =
+      session.role === "VERIFIKATOR" || session.role === "ADMIN"
+        ? await prisma.report.findMany({
+            where: { status: { in: ["PENDING", "NEEDS_REVISION"] } },
+            orderBy: { createdAt: "asc" },
+            take: 5,
+            select: {
+              id: true,
+              title: true,
+              urgency: true,
+              createdAt: true,
+              region: { select: { name: true } },
+            },
+          })
+        : [];
+
+    let adminAuditSummary: RoleWorkspaceData["adminAuditSummary"];
+    if (session.role === "ADMIN") {
+      const [totalUsers, totalVerifiedOrgs, recentVerifs] = await Promise.all([
+        prisma.user.count(),
+        prisma.organization.count({ where: { isVerified: true } }),
+        prisma.verification.findMany({
+          orderBy: { createdAt: "desc" },
+          take: 5,
+          select: {
+            id: true,
+            decision: true,
+            note: true,
+            createdAt: true,
+            user: { select: { name: true, role: true } },
+            report: { select: { title: true } },
+          },
+        }),
+      ]);
+
+      adminAuditSummary = {
+        totalUsers,
+        totalVerifiedOrgs,
+        recentActions: recentVerifs.map((v) => ({
+          id: v.id,
+          decision: v.decision,
+          note: v.note,
+          actorName: `${v.user.name} (${v.user.role})`,
+          reportTitle: v.report.title,
+          createdAt: v.createdAt.toISOString(),
+        })),
+      };
+    }
+
+    return {
+      role,
+      isDemoMode: false,
+      myReports: myReportsRaw.map((r) => ({
+        id: r.id,
+        title: r.title,
+        status: r.status,
+        urgency: r.urgency,
+        updatedAt: r.updatedAt.toISOString(),
+      })),
+      pendingSlaQueue: pendingSlaRaw.map((p) => ({
+        id: p.id,
+        title: p.title,
+        urgency: p.urgency,
+        regionName: p.region.name,
+        ageHours: Math.max(1, Math.round((nowMs - p.createdAt.getTime()) / (1000 * 60 * 60))),
+      })),
+      adminAuditSummary,
+    };
+  } catch {
+    return {
+      role,
+      isDemoMode: true,
+      myReports: [],
+      pendingSlaQueue: [],
+    };
+  }
 }
 

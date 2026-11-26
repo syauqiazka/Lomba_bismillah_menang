@@ -11,7 +11,7 @@ import type { Metadata } from "next";
 export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
-  title: "Antrean Verifikasi Laporan Kemanusiaan | TRASEC",
+  title: "Antrean Verifikasi Laporan Kemanusiaan | TILARA",
   description: "Antrean kurasi dan validasi faktual laporan kemanusiaan serta konfirmasi catatan bantuan relawan.",
   robots: { index: false, follow: false },
 };

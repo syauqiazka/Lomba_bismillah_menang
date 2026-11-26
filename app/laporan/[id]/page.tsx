@@ -27,12 +27,12 @@ export async function generateMetadata({
 
   if (!report) {
     return {
-      title: "Laporan Tidak Ditemukan | TRASEC",
+      title: "Laporan Tidak Ditemukan | TILARA",
     };
   }
 
   return {
-    title: `${report.title} | TRASEC`,
+    title: `${report.title} | TILARA`,
     description: `Kebutuhan kemanusiaan di ${report.region.name}, ${report.region.province}. Pantau selisih logistik dan salurkan bantuan secara transparan.`,
   };
 }
@@ -44,6 +44,7 @@ export default async function ReportDetailPage({
   const session = await getSession().catch(() => null);
 
   let report = null;
+  let isDemoMode = false;
 
   const isPlaceholderDb =
     !process.env.DATABASE_URL ||
@@ -55,12 +56,15 @@ export default async function ReportDetailPage({
 
   if (!report) {
     report = getFallbackReportDetail(id, session);
+    if (report) {
+      isDemoMode = true;
+    }
   }
 
   if (!report) {
     notFound();
   }
 
-  return <ReportDetailView report={report} session={session} />;
+  return <ReportDetailView report={report} session={session} isDemoMode={isDemoMode} />;
 }
 

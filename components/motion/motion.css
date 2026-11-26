@@ -1,0 +1,131 @@
+/* motion.css — TILARA Motion Kit (ringan, transform + opacity) */
+:root {
+  --ease-out: cubic-bezier(0.2, 0.7, 0.2, 1);
+  --ease-gate: cubic-bezier(0.77, 0, 0.18, 1);
+  --t-fast: 0.18s;
+  --t-base: 0.45s;
+  --t-slow: 0.8s;
+}
+
+/* 1) Hero masuk bertahap (CSS saja, tidak menunggu JS) */
+.hero-in > * {
+  animation: rise 0.9s var(--ease-out) both;
+  animation-delay: calc(var(--i, 0) * 90ms + var(--hero-delay, 0s));
+}
+/* Beranda dengan gate intro: tunda sampai gerbang membuka */
+.hero-in--after-gate { --hero-delay: 1.6s; }
+html[data-intro="seen"] .hero-in--after-gate { --hero-delay: 0s; }
+@keyframes rise { from { opacity: 0; transform: translate3d(0, 20px, 0); } }
+
+/* 2) Reveal saat scroll (aktif hanya setelah JS siap) */
+.motion-ready [data-reveal] {
+  opacity: 0;
+  transform: translate3d(0, 24px, 0);
+  transition: opacity var(--t-slow) var(--ease-out), transform var(--t-slow) var(--ease-out);
+  transition-delay: calc(var(--i, 0) * 70ms);
+}
+.motion-ready [data-reveal="left"]  { transform: translate3d(-24px, 0, 0); }
+.motion-ready [data-reveal="right"] { transform: translate3d(24px, 0, 0); }
+.motion-ready [data-reveal="fade"]  { transform: none; }
+.motion-ready [data-reveal].is-in   { opacity: 1; transform: none; }
+
+/* 3) Parallax gambar & zoom hero (progressive enhancement) */
+@supports (animation-timeline: view()) {
+  .parallax { overflow: hidden; }
+  .parallax > img, .parallax > .parallax__media {
+    animation: parallax linear both;
+    animation-timeline: view();
+    animation-range: cover;
+  }
+  @keyframes parallax {
+    from { transform: translate3d(0, -8%, 0) scale(1.12); }
+    to   { transform: translate3d(0, 8%, 0) scale(1.12); }
+  }
+  .hero-zoom {
+    animation: hero-zoom linear both;
+    animation-timeline: scroll(root block);
+    animation-range: 0 80vh;
+  }
+  @keyframes hero-zoom { to { transform: scale(1.08); } }
+}
+
+/* 4) Kartu terangkat (hanya perangkat dengan hover) */
+@media (hover: hover) {
+  .card-lift { transition: transform var(--t-base) var(--ease-out), box-shadow var(--t-base) var(--ease-out); }
+  .card-lift:hover { transform: translate3d(0, -4px, 0); box-shadow: 0 12px 28px rgb(23 43 58 / 0.12); }
+  .card-lift .media img { transition: transform 0.9s var(--ease-out); }
+  .card-lift:hover .media img { transform: scale(1.04); }
+}
+
+/* 5) Rel horizontal (tanpa library) */
+.rail {
+  display: flex; gap: 1rem; overflow-x: auto;
+  scroll-snap-type: x mandatory; overscroll-behavior-x: contain;
+  scrollbar-width: none; -webkit-overflow-scrolling: touch;
+}
+.rail::-webkit-scrollbar { display: none; }
+.rail > * { flex: 0 0 min(82%, 380px); scroll-snap-align: start; }
+
+/* 6) Penanda peta berdenyut: hanya "membutuhkan perhatian" */
+.marker { position: relative; }
+.marker--attention::after {
+  content: ""; position: absolute; inset: 0; border-radius: 50%;
+  border: 2px solid var(--tilara-red, #d85b52);
+  animation: pulse 2.2s ease-out infinite; pointer-events: none;
+}
+@keyframes pulse { from { transform: scale(1); opacity: 0.7; } to { transform: scale(2.4); opacity: 0; } }
+
+/* 7) Bar kesenjangan: lebar = data nyata (--pct), animasi hanya scaleX */
+.gap-bar__fill {
+  width: calc(var(--pct, 0) * 1%);
+  transform-origin: left center;
+}
+.motion-ready .gap-bar__fill { transform: scaleX(0); transition: transform 1.1s var(--ease-out) 0.15s; }
+.motion-ready .gap-bar.is-in .gap-bar__fill { transform: scaleX(1); }
+
+/* 8) Header: lihat components/layout/site-header.css (header tidak disembunyikan saat scroll) */
+
+/* 9) Menu mobile geser */
+.menu-panel {
+  position: fixed; inset: 0 0 0 auto; width: min(88%, 360px);
+  transform: translate3d(100%, 0, 0); visibility: hidden;
+  transition: transform 0.45s var(--ease-gate), visibility 0s 0.45s;
+}
+.menu-panel[data-open="true"] { transform: none; visibility: visible; transition-delay: 0s; }
+
+/* 10) Dialog / bottom sheet */
+dialog.sheet { border: 0; padding: 0; border-radius: 16px; max-width: min(92vw, 520px); }
+dialog.sheet[open] { animation: sheet-in 0.4s var(--ease-out); }
+dialog.sheet::backdrop { background: rgb(23 43 58 / 0.55); animation: fade-in 0.3s ease-out; }
+@keyframes sheet-in { from { opacity: 0; transform: translate3d(0, 24px, 0); } }
+@keyframes fade-in  { from { opacity: 0; } }
+@media (max-width: 640px) {
+  dialog.sheet { margin: auto 0 0; width: 100%; max-width: none; border-radius: 16px 16px 0 0; }
+}
+
+/* 11) Transisi antar halaman (HALAMAN PUBLIK SAJA; jangan muat di layout operasional) */
+@view-transition { navigation: auto; }
+::view-transition-old(root), ::view-transition-new(root) { animation-duration: 0.28s; }
+
+/* 12) Skeleton */
+.skeleton {
+  background: linear-gradient(90deg, var(--surface-muted) 25%, var(--surface) 50%, var(--surface-muted) 75%);
+  background-size: 200% 100%; animation: shimmer 1.4s linear infinite; border-radius: 8px;
+}
+@keyframes shimmer { to { background-position: -200% 0; } }
+
+/* 13) Seksi jauh di bawah lipatan */
+.defer-render { content-visibility: auto; contain-intrinsic-size: auto 600px; }
+
+/* Gerak dikurangi */
+@media (prefers-reduced-motion: reduce) {
+  .hero-in > * { animation: none; }
+  .motion-ready [data-reveal] { opacity: 1; transform: none; transition: none; }
+  .parallax > *, .hero-zoom { animation: none !important; }
+  .marker--attention::after { animation: none; }
+  .motion-ready .gap-bar__fill { transform: none; transition: none; }
+  .site-header, .menu-panel, .card-lift, .card-lift .media img { transition: none; }
+  .skeleton { animation: none; }
+  @view-transition { navigation: none; }
+}
+

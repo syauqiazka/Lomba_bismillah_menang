@@ -26,9 +26,10 @@ import { RecordAidModal } from "@/components/report/RecordAidModal";
 interface ReportDetailViewProps {
   report: PublicReportDetail;
   session?: SessionData | null;
+  isDemoMode?: boolean;
 }
 
-export function ReportDetailView({ report, session }: ReportDetailViewProps) {
+export function ReportDetailView({ report, session, isDemoMode = false }: ReportDetailViewProps) {
   const [isAidModalOpen, setIsAidModalOpen] = useState(false);
   const isLoggedIn = Boolean(session && session.userId);
   const isNeedsType = report.type === "KEBUTUHAN";
@@ -49,7 +50,7 @@ export function ReportDetailView({ report, session }: ReportDetailViewProps) {
   function handleExportReportCSV() {
     const lines: string[] = [];
 
-    lines.push(`LEMBAR BRIEFING LAPANGAN POSKO DARURAT (TRASEC)`);
+    lines.push(`LEMBAR BRIEFING LAPANGAN POSKO DARURAT (TILARA)`);
     lines.push(`ID Laporan,${report.id}`);
     lines.push(`Judul Laporan,"${report.title.replace(/"/g, '""')}"`);
     lines.push(`Tipe Laporan,${report.type}`);
@@ -106,7 +107,7 @@ export function ReportDetailView({ report, session }: ReportDetailViewProps) {
       <div className="bg-white border-b border-[var(--color-border)] py-3 px-4 sm:px-6 print:hidden">
         <div className="max-w-6xl mx-auto flex flex-wrap items-center justify-between gap-3">
           <Link
-            href="/"
+            href="/peta"
             className="inline-flex items-center gap-1.5 text-xs font-bold text-[var(--color-text-secondary)] hover:text-[var(--color-primary)] transition-colors"
           >
             <ArrowLeft className="w-4 h-4" />
@@ -114,6 +115,11 @@ export function ReportDetailView({ report, session }: ReportDetailViewProps) {
           </Link>
 
           <div className="flex items-center gap-2">
+            {isDemoMode && (
+              <span className="px-2.5 py-1 rounded-full text-[11px] font-bold bg-[var(--status-demo)] text-white">
+                DEMO
+              </span>
+            )}
             <button
               type="button"
               onClick={handleExportReportCSV}
@@ -533,6 +539,16 @@ export function ReportDetailView({ report, session }: ReportDetailViewProps) {
                           {v.decision === "APPROVE" ? "DISETUJUI" : "DITOLAK"}
                         </span>
                       </div>
+                      <span className="block text-[10px] text-[var(--color-text-muted)] tabular-numbers">
+                        {new Date(v.createdAt).toLocaleString("id-ID", {
+                          day: "numeric",
+                          month: "short",
+                          year: "numeric",
+                          hour: "2-digit",
+                          minute: "2-digit",
+                        })}{" "}
+                        WIB
+                      </span>
                       {v.note && (
                         <p className="text-xs text-[var(--color-text-secondary)] italic leading-relaxed">
                           &ldquo;{v.note}&rdquo;

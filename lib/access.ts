@@ -97,6 +97,30 @@ export function evaluateRouteAccess(
     return { allowed: false, isForbidden: true };
   }
 
+  // 4. Rute Antrean Offline (/antrean) & Pemantauan Kebutuhan (/kebutuhan)
+  if (
+    pathname === "/antrean" ||
+    pathname.startsWith("/antrean/") ||
+    pathname === "/kebutuhan" ||
+    pathname.startsWith("/kebutuhan/")
+  ) {
+    if (!isAuth) {
+      return { allowed: false, redirectUrl: `/login?next=${encodeURIComponent(pathname)}` };
+    }
+    return { allowed: true };
+  }
+
+  // 5. Rute Distribusi Bantuan (/distribusi) — Khusus Koordinator/Verifikator & Admin
+  if (pathname === "/distribusi" || pathname.startsWith("/distribusi/")) {
+    if (!isAuth) {
+      return { allowed: false, redirectUrl: `/login?next=${encodeURIComponent(pathname)}` };
+    }
+    if (role === "VERIFIKATOR" || role === "ADMIN") {
+      return { allowed: true };
+    }
+    return { allowed: false, isForbidden: true };
+  }
+
   // Rute publik lainnya (misal: /, /laporan/:id, /darurat)
   return { allowed: true };
 }

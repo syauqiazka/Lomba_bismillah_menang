@@ -84,6 +84,18 @@ describe("Security & Authorization: RBAC & IDOR Protection (access.ts)", () => {
       expect(evaluateRouteAccess("/darurat", null).allowed).toBe(true);
       expect(evaluateRouteAccess("/laporan/rep-1", null).allowed).toBe(true);
     });
+
+    it("harus mengarahkan anonim ke login saat mengakses /antrean, /kebutuhan, dan /distribusi", () => {
+      expect(evaluateRouteAccess("/antrean", null).redirectUrl).toBe("/login?next=%2Fantrean");
+      expect(evaluateRouteAccess("/kebutuhan", null).redirectUrl).toBe("/login?next=%2Fkebutuhan");
+      expect(evaluateRouteAccess("/distribusi", null).redirectUrl).toBe("/login?next=%2Fdistribusi");
+    });
+
+    it("harus membatasi /distribusi hanya untuk VERIFIKATOR atau ADMIN", () => {
+      expect(evaluateRouteAccess("/distribusi", relawanSession).isForbidden).toBe(true);
+      expect(evaluateRouteAccess("/distribusi", verifikatorSession).allowed).toBe(true);
+      expect(evaluateRouteAccess("/distribusi", adminSession).allowed).toBe(true);
+    });
   });
 
   describe("assertEntityAccessOr404 (Proteksi IDOR & 404 vs 403)", () => {

@@ -7,7 +7,7 @@ import { ArrowLeft } from "lucide-react";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Buat Laporan Kemanusiaan 5W+1H | TRASEC",
+  title: "Buat Laporan Kemanusiaan 5W+1H | TILARA",
   robots: { index: false, follow: false },
 };
 
@@ -24,7 +24,7 @@ export default async function LaporPage() {
     <div className="min-h-screen bg-[var(--color-bg)] py-6 sm:py-10 px-4 sm:px-6">
       <div className="max-w-[680px] mx-auto mb-4 flex items-center justify-between">
         <Link
-          href="/"
+          href="/peta"
           className="inline-flex items-center gap-1.5 text-xs font-bold text-slate-700 hover:text-emerald-800 transition-colors"
         >
           <ArrowLeft className="w-4 h-4" />

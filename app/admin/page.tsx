@@ -11,7 +11,7 @@ import type { Metadata } from "next";
 export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
-  title: "Panel Administrator Sistem | TRASEC",
+  title: "Panel Administrator Sistem | TILARA",
   description: "Manajemen peran pengguna, master data, dan verifikasi lembaga kemanusiaan.",
   robots: { index: false, follow: false },
 };

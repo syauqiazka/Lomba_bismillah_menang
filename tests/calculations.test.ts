@@ -128,5 +128,25 @@ describe("Domain Logic: Kalkulasi Selisih & Satuan (calculations.ts)", () => {
     expect(invalidCheck.remainingQuota).toBe(30);
     expect(invalidCheck.error).toContain("melebihi");
   });
+
+  it("DEMO fixture: 1.000 paket dibutuhkan, 400 PENDING tidak mengurangi, 400 CONFIRMED -> kekurangan 600", () => {
+    const demoNeeds: NeedItem[] = [
+      { itemCategory: "MAKANAN", unit: "paket", qty: 1000 },
+    ];
+
+    // Saat 400 dialokasikan namun masih PENDING (hanya CONFIRMED yang masuk ke confirmedAids)
+    const beforeConfirm = calculateDeficitPerItem(demoNeeds, []);
+    expect(beforeConfirm[0]?.deficit).toBe(1000);
+    expect(beforeConfirm[0]?.totalConfirmedAid).toBe(0);
+
+    // Setelah 400 dikonfirmasi diterima (CONFIRMED)
+    const afterConfirm = calculateDeficitPerItem(demoNeeds, [
+      { itemCategory: "MAKANAN", unit: "paket", qty: 400 },
+    ]);
+    expect(afterConfirm[0]?.totalNeed).toBe(1000);
+    expect(afterConfirm[0]?.totalConfirmedAid).toBe(400);
+    expect(afterConfirm[0]?.deficit).toBe(600);
+    expect(afterConfirm[0]?.percentageFulfilled).toBe(40);
+  });
 });
 

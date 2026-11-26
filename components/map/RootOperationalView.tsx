@@ -54,7 +54,7 @@ export function RootOperationalView({
   };
 
   return (
-    <div className="relative w-screen h-screen overflow-hidden flex flex-col bg-[var(--color-bg)]">
+    <div className="relative w-full h-screen overflow-hidden flex flex-col bg-[var(--color-bg)]">
       {/* 1. Header Navigasi Atas */}
       <Navbar
         session={session}
@@ -64,11 +64,12 @@ export function RootOperationalView({
       />
 
       {/* 2. Peta Operasional Interaktif Membentang Penuh (Konten Utama) */}
-      <main className="relative flex-1 w-full h-full pt-[52px]">
+      <main id="main-content" className="relative flex-1 w-full h-full pt-[52px]">
         <MapWrapper
           reports={initialReports}
           onSelectReport={(rep) => setSelectedReport(rep)}
           selectedReportId={selectedReport?.id}
+          onOpenTextView={() => setIsTextViewOpen(true)}
         />
 
         {/* Status Agregat Ringkas di Sudut Kiri Bawah Peta */}

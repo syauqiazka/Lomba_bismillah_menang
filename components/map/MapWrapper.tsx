@@ -7,6 +7,7 @@ interface MapWrapperProps {
   reports: PublicReportItem[];
   onSelectReport: (report: PublicReportItem) => void;
   selectedReportId?: string | null;
+  onOpenTextView?: () => void;
 }
 
 const DynamicOperationalMap = dynamic(

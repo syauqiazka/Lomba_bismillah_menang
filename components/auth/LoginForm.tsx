@@ -125,7 +125,7 @@ export function LoginForm() {
             <Lock className="w-6 h-6" />
           </div>
           <h1 className="text-xl font-black text-white tracking-tight">
-            {mode === "LOGIN" ? "Masuk ke Sistem TRASEC" : "Daftar Akun Relawan"}
+            {mode === "LOGIN" ? "Masuk ke Sistem TILARA" : "Daftar Akun Relawan"}
           </h1>
           <p className="text-xs text-emerald-200 mt-1">
             Humanitarian Intelligence Platform &bull; Akses Terpadu

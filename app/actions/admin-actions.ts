@@ -4,6 +4,7 @@ import { revalidatePath } from "next/cache";
 import { prisma } from "@/lib/prisma";
 import { getSession } from "@/lib/session";
 import { canAdmin } from "@/lib/access";
+import { recordServerAuditLog } from "@/lib/audit-log";
 import type { ActionResponse } from "@/lib/types";
 
 export interface UpdateUserRoleInput {
@@ -44,6 +45,15 @@ export async function updateUserRoleAction(
       dbUrl.includes("localhost:5432/trasec_dev");
 
     if (isPlaceholderDb) {
+      recordServerAuditLog({
+        actorId: session.userId || "unknown",
+        actorRole: session.role || "ADMIN",
+        action: "ROLE_CHANGE",
+        targetId: userId,
+        fromState: "UNKNOWN",
+        toState: role,
+        reason: "Perubahan peran melalui panel Admin (mode demo)",
+      });
       return {
         ok: true,
         data: {
@@ -52,12 +62,27 @@ export async function updateUserRoleAction(
       };
     }
 
+    const prevUser = await prisma.user.findUnique({
+      where: { id: userId },
+      select: { role: true },
+    });
+
     await prisma.user.update({
       where: { id: userId },
       data: {
         role,
         ...(isVerifiedVolunteer !== undefined ? { isVerifiedVolunteer } : {}),
       },
+    });
+
+    recordServerAuditLog({
+      actorId: session.userId || "unknown",
+      actorRole: session.role || "ADMIN",
+      action: "ROLE_CHANGE",
+      targetId: userId,
+      fromState: prevUser?.role || "UNKNOWN",
+      toState: role,
+      reason: "Pembaruan peran akun oleh Administrator",
     });
 
     revalidatePath("/admin");
