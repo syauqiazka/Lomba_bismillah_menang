@@ -82,7 +82,7 @@ export function PublicDashboardView({ data }: PublicDashboardViewProps) {
         <div className="bg-white p-6 rounded-lg border border-[var(--color-border-subtle)] shadow-xs flex flex-wrap items-center justify-between gap-4">
           <div className="space-y-1">
             <div className="flex items-center gap-2">
-              <span className="w-2.5 h-2.5 rounded-full bg-[var(--color-forest-main)] animate-pulse"></span>
+              <span className="w-2.5 h-2.5 rounded-full bg-[var(--color-forest-main)]"></span>
               <span className="text-[11px] font-bold uppercase tracking-wider text-[var(--color-forest-main)]">
                 Data Kemanusiaan Faktual Nasional
               </span>
@@ -364,7 +364,7 @@ export function PublicDashboardView({ data }: PublicDashboardViewProps) {
                       }`}
                       aria-pressed={isActive}
                     >
-                      {isActive && <span className="w-1.5 h-1.5 rounded-full bg-emerald-300 animate-pulse" />}
+                      {isActive && <span className="w-1.5 h-1.5 rounded-full bg-emerald-300" />}
                       <span>{cat === "ALL" ? "Semua" : cat}</span>
                     </button>
                   );

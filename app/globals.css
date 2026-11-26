@@ -6,18 +6,18 @@
   --color-bg: #F5F6F3;
   --color-surface: #FFFFFF;
   --color-surface-hover: #ECEEEA;
-  
+
   /* Tipografi */
   --color-text: #172B3A;             /* Kontras 14,55:1 terhadap White; 13,42:1 terhadap Canvas */
   --color-text-secondary: #4A5864;   /* Kontras 7,31:1 terhadap White; 6,74:1 terhadap Canvas */
   --color-text-muted: #6B7077;       /* Kontras 4,99:1 terhadap White */
-  
+
   /* Aksi & Status Pokok */
   --color-primary: #246B50;          /* Kontras teks putih di atasnya: 6,38:1 */
   --color-primary-hover: #1B5440;    /* Kontras teks putih di atasnya: 8,79:1 */
   --color-secondary: #172B3A;
   --color-focus: #172B3A;            /* Cincin fokus 2px dengan offset 2px putih */
-  
+
   /* Alias Token Kompatibilitas Desain */
   --color-forest-main: var(--color-primary);
   --color-forest-dark: var(--color-primary-hover);
@@ -25,21 +25,25 @@
   --color-bg-base: var(--color-bg);
   --color-text-main: var(--color-text);
   --color-border-subtle: var(--color-border);
-  
+
   /* Pembatas & Garis */
   --color-border: #D3D7D0;           /* Garis pemisah dekoratif */
   --color-border-strong: #8A8D86;    /* Batas input, radio, checkbox (Kontras 3,37:1 di atas White) */
-  
+
   /* Status Fungsional Antarmuka */
   --color-success-text: #1B5440;
   --color-success-bg: #E4F0EA;       /* Kontras teks terhadap latar: 7,51:1 */
-  
+
   --color-warning-text: #8A5A00;
   --color-warning-bg: #FBF0DC;       /* Kontras teks terhadap latar: 5,25:1 */
-  
+
   --color-danger-text: #B83E37;
   --color-danger-bg: #F8E5E3;        /* Kontras teks terhadap latar: 4,58:1 */
-  
+  --color-brick-main: var(--color-danger-text);
+  --color-brick-dark: #99332D;
+  --color-brick-bg: var(--color-danger-bg);
+  --color-brick-border: #E5B4B0;
+
   --color-info-text: #245C8A;
   --color-info-bg: #E3EDF6;          /* Kontras teks terhadap latar: 5,96:1 */
 
@@ -104,6 +108,7 @@ body {
   font-variant-numeric: tabular-nums;
 }
 
+<<<<<<< HEAD
 /* Animasi & Transisi Editorial Kemanusiaan */
 @keyframes marquee {
   0% {
@@ -254,6 +259,8 @@ body {
   fill: #F5B800;
 }
 
+=======
+>>>>>>> a63b074cf39d1bfa4bc9900720436a223cf040e3
 /* Kepatuhan preferensi gerak (Reduced Motion) */
 @media (prefers-reduced-motion: reduce) {
   *, ::before, ::after {

@@ -55,13 +55,13 @@ export default async function VerificationPage() {
   return (
     <div className="relative min-h-screen bg-[var(--color-bg-base)] flex flex-col">
       <Navbar session={session} />
-      <div className="pt-14 flex-1 flex flex-col">
+      <main id="main-content" className="pt-14 flex-1 flex flex-col">
         <VerificationQueueView
           initialQueue={queue}
           currentUser={session}
           verifierOrgInfo={verifierOrgInfo}
         />
-      </div>
+      </main>
       <FloatingEmergencyButton />
     </div>
   );

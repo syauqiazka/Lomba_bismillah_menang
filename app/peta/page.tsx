@@ -1,8 +1,6 @@
-import { getPublicMapReports, getPublicAggregates } from "@/lib/public-queries";
-import { getSession } from "@/lib/session";
-import { RootOperationalView } from "@/components/map/RootOperationalView";
-import { FALLBACK_REPORTS, FALLBACK_AGGREGATES } from "@/lib/fallback-data";
+import { redirect } from "next/navigation";
 
+<<<<<<< HEAD
 export const metadata = {
   title: "Peta Operasional Kebutuhan & Bantuan Relawan | TILARA",
   description:
@@ -54,4 +52,8 @@ export default async function PetaPage() {
       session={session}
     />
   );
+=======
+export default function PetaRedirectPage() {
+  redirect("/");
+>>>>>>> a63b074cf39d1bfa4bc9900720436a223cf040e3
 }

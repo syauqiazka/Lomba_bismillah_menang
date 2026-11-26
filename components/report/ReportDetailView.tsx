@@ -104,13 +104,18 @@ export function ReportDetailView({ report, session, isDemoMode = false }: Report
   return (
     <div className="min-h-screen bg-[var(--color-bg)] pb-16">
       {/* Top Breadcrumb Bar */}
-      <div className="bg-white border-b border-[var(--color-border)] py-3 px-4 sm:px-6 print:hidden">
-        <div className="max-w-6xl mx-auto flex flex-wrap items-center justify-between gap-3">
+      <div className="bg-[var(--color-surface)] border-b border-[var(--color-border)] py-2.5 px-4 sm:px-6 print:hidden">
+        <div className="max-w-6xl mx-auto flex flex-wrap items-center justify-between gap-2">
           <Link
+<<<<<<< HEAD
             href="/peta"
             className="inline-flex items-center gap-1.5 text-xs font-bold text-[var(--color-text-secondary)] hover:text-[var(--color-primary)] transition-colors"
+=======
+            href="/"
+            className="inline-flex items-center gap-1.5 min-h-[44px] text-xs font-bold text-[var(--color-text-secondary)] hover:text-[var(--color-primary)] transition-colors"
+>>>>>>> a63b074cf39d1bfa4bc9900720436a223cf040e3
           >
-            <ArrowLeft className="w-4 h-4" />
+            <ArrowLeft className="w-4 h-4" aria-hidden="true" />
             <span>Kembali ke Peta Operasional</span>
           </Link>
 
@@ -123,26 +128,26 @@ export function ReportDetailView({ report, session, isDemoMode = false }: Report
             <button
               type="button"
               onClick={handleExportReportCSV}
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-[var(--color-border)] text-xs font-bold text-[var(--color-text-secondary)] hover:bg-[var(--color-surface-hover)] cursor-pointer"
+              className="inline-flex items-center gap-1.5 min-h-[44px] px-3 py-1.5 rounded border border-[var(--color-border-strong)] text-xs font-bold text-[var(--color-text-secondary)] hover:bg-[var(--color-surface-hover)] cursor-pointer"
               title="Unduh format spreadsheet untuk posko lapangan"
             >
-              <Download className="w-3.5 h-3.5" />
+              <Download className="w-3.5 h-3.5" aria-hidden="true" />
               <span className="hidden sm:inline">Unduh CSV Posko</span>
             </button>
             <button
               type="button"
               onClick={handlePrint}
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-[var(--color-border)] text-xs font-bold text-[var(--color-text-secondary)] hover:bg-[var(--color-surface-hover)] cursor-pointer"
+              className="inline-flex items-center gap-1.5 min-h-[44px] px-3 py-1.5 rounded border border-[var(--color-border-strong)] text-xs font-bold text-[var(--color-text-secondary)] hover:bg-[var(--color-surface-hover)] cursor-pointer"
               title="Cetak lembar briefing posko lapangan"
             >
-              <Printer className="w-3.5 h-3.5" />
+              <Printer className="w-3.5 h-3.5" aria-hidden="true" />
               <span>Cetak Lembar Posko</span>
             </button>
           </div>
         </div>
       </div>
 
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 pt-6 space-y-6">
+      <main id="main-content" className="max-w-6xl mx-auto px-4 sm:px-6 pt-6 space-y-6">
         {/* Banner Peringatan Privasi atau Data Basi */}
         {report.isLocationBlurred && (
           <div className="p-3.5 rounded-xl bg-[var(--color-info-bg)] border border-blue-200 text-xs text-[var(--color-info-text)] flex items-start gap-2.5">
@@ -254,72 +259,74 @@ export function ReportDetailView({ report, session, isDemoMode = false }: Report
                     Belum ada rincian item kebutuhan logistik tercatat.
                   </p>
                 ) : (
-                  <div className="space-y-4">
-                    {report.itemDeficits.map((item, idx) => {
-                      const pct = item.percentageFulfilled;
-                      const isLargeDeficit = item.deficit > 0 && pct < 50;
-
-                      return (
-                        <div
-                          key={idx}
-                          className="p-4 rounded-xl border border-[var(--color-border)] bg-[var(--color-bg)]/50 space-y-2"
-                        >
-                          <div className="flex items-center justify-between text-xs">
-                            <span className="font-extrabold text-sm text-[var(--color-text)]">
-                              {item.itemCategory}
-                            </span>
-                            <span className="px-2 py-0.5 rounded bg-white border border-gray-300 font-semibold text-[11px] text-[var(--color-text-secondary)]">
-                              Satuan: {item.unit}
-                            </span>
-                          </div>
-
-                          {/* Horizontal Progress Bar */}
-                          <div className="w-full h-3.5 rounded-md bg-gray-200 flex overflow-hidden border border-gray-300 shadow-2xs">
-                            <div
-                              className="bg-[#246B50] h-full transition-all duration-300"
-                              style={{ width: `${pct}%` }}
-                              title={`Terkonfirmasi: ${item.totalConfirmedAid} ${item.unit} (${pct}%)`}
-                            />
-                            <div
-                              className="bg-[#B83E37] h-full transition-all duration-300"
-                              style={{ width: `${100 - pct}%` }}
-                              title={`Kekurangan: ${item.deficit} ${item.unit}`}
-                            />
-                          </div>
-
-                          {/* Data Angka Tabular */}
-                          <div className="grid grid-cols-3 gap-2 text-xs tabular-numbers pt-1 text-center sm:text-left">
-                            <div className="bg-white p-2 rounded-lg border border-[var(--color-border)]">
-                              <span className="text-[10px] text-[var(--color-text-muted)] block uppercase font-bold">
-                                Kebutuhan
-                              </span>
-                              <span className="font-extrabold text-sm text-[var(--color-text)]">
-                                {item.totalNeed} {item.unit}
-                              </span>
+                  <>
+                    {/* Stacked Row List untuk Mobile (<768px) sesuai DESIGN.md 7.3 */}
+                    <div className="md:hidden divide-y divide-[var(--color-border)] border border-[var(--color-border)] rounded-lg">
+                      {report.itemDeficits.map((item, idx) => {
+                        const pct = item.percentageFulfilled;
+                        const isLargeDeficit = item.deficit > 0 && pct < 50;
+                        return (
+                          <div key={idx} className="p-3.5 space-y-2 text-xs tabular-numbers">
+                            <div className="flex items-center justify-between">
+                              <span className="font-bold text-sm text-[var(--color-text)]">{item.itemCategory}</span>
+                              <span className="text-[var(--color-text-secondary)]">Satuan: {item.unit}</span>
                             </div>
-
-                            <div className="bg-white p-2 rounded-lg border border-[var(--color-border)]">
-                              <span className="text-[10px] text-[#1B5440] block uppercase font-bold">
-                                Terkonfirmasi
-                              </span>
-                              <span className="font-extrabold text-sm text-[#1B5440]">
-                                {item.totalConfirmedAid} {item.unit} ({pct}%)
-                              </span>
+                            <div className="w-full h-2.5 rounded bg-[var(--color-bg)] flex overflow-hidden border border-[var(--color-border)]">
+                              <div className="bg-[var(--color-primary)] h-full" style={{ width: `${pct}%` }} />
+                              <div className="bg-[var(--color-danger-text)] h-full" style={{ width: `${100 - pct}%` }} />
                             </div>
-
-                            <div className="bg-white p-2 rounded-lg border border-[var(--color-border)]">
-                              <span className="text-[10px] text-[#B83E37] block uppercase font-bold">
-                                Sisa Selisih
-                              </span>
-                              <span className={`font-extrabold text-sm ${isLargeDeficit ? "text-[#B83E37]" : "text-[var(--color-text)]"}`}>
-                                {item.deficit === 0 ? "0 (Terpenuhi)" : `${item.deficit} ${item.unit}`}
+                            <div className="flex justify-between">
+                              <span className="text-[var(--color-text-secondary)]">Kebutuhan: <strong>{item.totalNeed}</strong></span>
+                              <span className="text-[var(--color-success-text)]">Masuk: <strong>{item.totalConfirmedAid}</strong></span>
+                              <span className={isLargeDeficit ? "text-[var(--color-danger-text)] font-bold" : "font-bold text-[var(--color-text)]"}>
+                                Kurang: {item.deficit === 0 ? `0 ${item.unit} (Terpenuhi)` : `${item.deficit} ${item.unit}`}
                               </span>
                             </div>
                           </div>
-                        </div>
-                      );
-                    })}
-                  </div>
+                        );
+                      })}
+                    </div>
+
+                    {/* Tabel HTML Semantik untuk Desktop (>=768px) sesuai DESIGN.md 7.3 */}
+                    <div className="hidden md:block overflow-x-auto border border-[var(--color-border)] rounded-lg">
+                      <table className="w-full border-collapse text-left text-xs tabular-numbers">
+                        <thead>
+                          <tr className="bg-[var(--color-bg)] border-b border-[var(--color-border)] text-[var(--color-text)] font-bold">
+                            <th scope="col" className="p-3">Kategori &amp; Barang</th>
+                            <th scope="col" className="p-3">Satuan</th>
+                            <th scope="col" className="p-3 text-right">Kebutuhan</th>
+                            <th scope="col" className="p-3 text-right">Terkonfirmasi</th>
+                            <th scope="col" className="p-3 text-right">Selisih Kurang</th>
+                          </tr>
+                        </thead>
+                        <tbody className="divide-y divide-[var(--color-border)] bg-[var(--color-surface)]">
+                          {report.itemDeficits.map((item, idx) => {
+                            const pct = item.percentageFulfilled;
+                            const isLargeDeficit = item.deficit > 0 && pct < 50;
+                            return (
+                              <tr key={idx}>
+                                <td className="p-3 font-bold text-[var(--color-text)]">
+                                  <div>{item.itemCategory}</div>
+                                  <div className="w-28 h-1.5 rounded bg-[var(--color-bg)] flex overflow-hidden mt-1 border border-[var(--color-border)]">
+                                    <div className="bg-[var(--color-primary)] h-full" style={{ width: `${pct}%` }} />
+                                    <div className="bg-[var(--color-danger-text)] h-full" style={{ width: `${100 - pct}%` }} />
+                                  </div>
+                                </td>
+                                <td className="p-3 text-[var(--color-text-secondary)]">{item.unit}</td>
+                                <td className="p-3 text-right font-semibold text-[var(--color-text)]">{item.totalNeed}</td>
+                                <td className="p-3 text-right font-semibold text-[var(--color-success-text)]">
+                                  {item.totalConfirmedAid} ({pct}%)
+                                </td>
+                                <td className={`p-3 text-right font-bold bg-[var(--color-bg)] ${isLargeDeficit ? "text-[var(--color-danger-text)]" : "text-[var(--color-text)]"}`}>
+                                  {item.deficit === 0 ? `0 ${item.unit} (Terpenuhi)` : `${item.deficit} ${item.unit}`}
+                                </td>
+                              </tr>
+                            );
+                          })}
+                        </tbody>
+                      </table>
+                    </div>
+                  </>
                 )}
               </div>
             ) : (
@@ -565,7 +572,7 @@ export function ReportDetailView({ report, session, isDemoMode = false }: Report
             </div>
           </div>
         </div>
-      </div>
+      </main>
 
       {/* Modal Catat Bantuan */}
       <RecordAidModal

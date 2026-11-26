@@ -29,6 +29,7 @@ export default async function DashboardPage() {
     <div className="relative min-h-screen bg-[var(--color-bg-base)] flex flex-col">
       <Navbar session={session} />
       <main id="main-content" className="pt-14 flex-1">
+<<<<<<< HEAD
         {workspaceData && session && (
           <RoleWorkspacePanel
             workspace={workspaceData}
@@ -36,6 +37,8 @@ export default async function DashboardPage() {
             regionPriorities={dashboardData.regionPriorities}
           />
         )}
+=======
+>>>>>>> a63b074cf39d1bfa4bc9900720436a223cf040e3
         <PublicDashboardView data={dashboardData} />
       </main>
       <FloatingEmergencyButton />

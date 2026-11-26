@@ -1,9 +1,13 @@
+<<<<<<< HEAD
 "use client";
 
+=======
+>>>>>>> a63b074cf39d1bfa4bc9900720436a223cf040e3
 import type { PublicAggregates } from "@/lib/public-queries";
 import type { SessionData } from "@/lib/session-options";
 import SiteHeader from "@/components/layout/SiteHeader";
 import { FloatingEmergencyButton } from "@/components/common/FloatingEmergencyButton";
+<<<<<<< HEAD
 import MotionInit from "@/components/motion/MotionInit";
 import { HeroSection } from "@/components/landing/sections/HeroSection";
 import { MissionVisionSection } from "@/components/landing/sections/MissionVisionSection";
@@ -19,6 +23,11 @@ import { FaqSection } from "@/components/landing/sections/FaqSection";
 import { LatestStoriesSection } from "@/components/landing/sections/LatestStoriesSection";
 import { CtaEmergencySection } from "@/components/landing/sections/CtaEmergencySection";
 import { EditorialFooter } from "@/components/landing/sections/EditorialFooter";
+=======
+import { AboutHero } from "@/components/landing/AboutHero";
+import { AboutMechanism } from "@/components/landing/AboutMechanism";
+import { AboutAggregatesAndFaq } from "@/components/landing/AboutAggregatesAndFaq";
+>>>>>>> a63b074cf39d1bfa4bc9900720436a223cf040e3
 
 interface EditorialLandingViewProps {
   aggregates: PublicAggregates;
@@ -30,6 +39,7 @@ export function EditorialLandingView({
   session,
 }: EditorialLandingViewProps) {
   return (
+<<<<<<< HEAD
     <div className="min-h-screen bg-[#F5F1E6] text-[#172B3A] flex flex-col selection:bg-amber-400 selection:text-slate-950 relative overflow-x-hidden font-sans">
       <MotionInit />
       {/* 1. Header Publik (Solid) */}
@@ -56,6 +66,17 @@ export function EditorialLandingView({
       <EditorialFooter />
 
       {/* 4. Tombol Panggilan Darurat Mengambang */}
+=======
+    <div className="min-h-screen bg-[var(--color-bg)] text-[var(--color-text)] flex flex-col font-sans">
+      <Navbar session={session} isSticky />
+
+      <main id="main-content" className="flex-1 flex flex-col">
+        <AboutHero />
+        <AboutMechanism />
+        <AboutAggregatesAndFaq aggregates={aggregates} />
+      </main>
+
+>>>>>>> a63b074cf39d1bfa4bc9900720436a223cf040e3
       <FloatingEmergencyButton />
     </div>
   );

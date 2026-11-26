@@ -23,11 +23,16 @@ export default async function DaruratPage() {
 
   return (
     <div className="relative min-h-screen bg-[var(--color-bg-base)] flex flex-col">
+<<<<<<< HEAD
       <MotionInit />
       <SiteHeader variant="solid" isAuthenticated={Boolean(session?.userId)} />
       <div className="page-offset flex-1">
+=======
+      <Navbar session={session} />
+      <main id="main-content" className="pt-14 flex-1">
+>>>>>>> a63b074cf39d1bfa4bc9900720436a223cf040e3
         <EmergencyDirectoryView contacts={contacts} />
-      </div>
+      </main>
       <FloatingEmergencyButton />
     </div>
   );

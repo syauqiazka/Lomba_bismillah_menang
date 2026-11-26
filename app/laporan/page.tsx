@@ -1,6 +1,7 @@
 import { getPublicMapReports } from "@/lib/public-queries";
 import { getSession } from "@/lib/session";
 import { FALLBACK_REPORTS } from "@/lib/fallback-data";
+<<<<<<< HEAD
 import { sortReportsDeterministically } from "@/lib/featured-incident";
 import SiteHeader from "@/components/layout/SiteHeader";
 import { FloatingEmergencyButton } from "@/components/common/FloatingEmergencyButton";
@@ -21,6 +22,23 @@ export default async function LaporanDirectoryPage() {
   let reports = FALLBACK_REPORTS;
   let session = null;
   let isDemoMode = true;
+=======
+import { Navbar } from "@/components/common/Navbar";
+import { FloatingEmergencyButton } from "@/components/common/FloatingEmergencyButton";
+import { PublicReportListView } from "@/components/report/PublicReportListView";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Daftar Laporan Kebutuhan Terverifikasi | TRASEC",
+  description:
+    "Daftar lengkap laporan kebutuhan logistik dan pemantauan kemanusiaan yang telah terverifikasi di Indonesia.",
+  robots: { index: true, follow: true },
+};
+
+export default async function LaporanListPage() {
+  let reports = FALLBACK_REPORTS;
+  let session = null;
+>>>>>>> a63b074cf39d1bfa4bc9900720436a223cf040e3
 
   const isPlaceholderDb =
     !process.env.DATABASE_URL ||
@@ -31,7 +49,10 @@ export default async function LaporanDirectoryPage() {
       const dbReports = await getPublicMapReports().catch(() => null);
       if (dbReports && dbReports.length > 0) {
         reports = dbReports;
+<<<<<<< HEAD
         isDemoMode = false;
+=======
+>>>>>>> a63b074cf39d1bfa4bc9900720436a223cf040e3
       }
     }
 
@@ -45,6 +66,7 @@ export default async function LaporanDirectoryPage() {
         isVerifiedVolunteer: currentSession.isVerifiedVolunteer,
       };
     }
+<<<<<<< HEAD
   } catch (err) {
     console.warn("Menggunakan data demonstrasi fallback untuk direktori laporan:", err);
   }
@@ -61,9 +83,23 @@ export default async function LaporanDirectoryPage() {
           reports={verifiedReports}
           isDemoMode={isDemoMode}
         />
+=======
+  } catch {
+    // Gunakan data fallback demonstrasi jika DB belum tersedia
+  }
+
+  return (
+    <div className="min-h-screen bg-[var(--color-bg)] flex flex-col">
+      <Navbar session={session} isSticky />
+      <main id="main-content" className="flex-1 pt-20 pb-16 px-4 sm:px-6">
+        <PublicReportListView reports={reports} />
+>>>>>>> a63b074cf39d1bfa4bc9900720436a223cf040e3
       </main>
       <FloatingEmergencyButton />
     </div>
   );
 }
+<<<<<<< HEAD
 
+=======
+>>>>>>> a63b074cf39d1bfa4bc9900720436a223cf040e3

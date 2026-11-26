@@ -1,10 +1,18 @@
 import { getPublicMapReports, getPublicAggregates } from "@/lib/public-queries";
 import { getSession } from "@/lib/session";
+<<<<<<< HEAD
 import { StoryFirstHomeView } from "@/components/home/StoryFirstHomeView";
 import { FALLBACK_REPORTS, FALLBACK_AGGREGATES } from "@/lib/fallback-data";
 
 export const metadata = {
   title: "TILARA | Environmental & Humanitarian Intelligence Platform",
+=======
+import { RootOperationalView } from "@/components/map/RootOperationalView";
+import { FALLBACK_REPORTS, FALLBACK_AGGREGATES } from "@/lib/fallback-data";
+
+export const metadata = {
+  title: "Peta Operasional Kebutuhan & Bantuan Relawan | TRASEC",
+>>>>>>> a63b074cf39d1bfa4bc9900720436a223cf040e3
   description:
     "Ketahui apa yang terjadi dan pahami dampaknya. Informasi lapangan, kondisi lingkungan, dan selisih kebutuhan masyarakat Indonesia secara transparan dan terverifikasi.",
 };
@@ -28,7 +36,10 @@ export default async function HomePage() {
 
       if (dbReports && dbReports.length > 0) {
         reports = dbReports;
+<<<<<<< HEAD
         isDemoMode = false;
+=======
+>>>>>>> a63b074cf39d1bfa4bc9900720436a223cf040e3
       }
       if (dbAggregates) {
         aggregates = dbAggregates;
@@ -45,13 +56,18 @@ export default async function HomePage() {
         isVerifiedVolunteer: currentSession.isVerifiedVolunteer,
       };
     }
-  } catch (err) {
-    console.warn("Menggunakan data demonstrasi kemanusiaan fallback:", err);
+  } catch {
+    // Gunakan data demonstrasi fallback jika basis data belum siap
   }
 
   return (
+<<<<<<< HEAD
     <StoryFirstHomeView
       reports={reports}
+=======
+    <RootOperationalView
+      initialReports={reports}
+>>>>>>> a63b074cf39d1bfa4bc9900720436a223cf040e3
       aggregates={aggregates}
       session={session}
       isDemoMode={isDemoMode}
